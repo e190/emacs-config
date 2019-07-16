@@ -1,0 +1,160 @@
+;; core-keybindings.el --- Core key bindings.
+
+
+;;; Commentary:
+;;
+
+;;; Code:
+(eval-when-compile
+  (require 'init-constants))
+
+(defvar shadow-leader-map (make-sparse-keymap)
+  "Base keymap for all leader key commands.")
+
+(use-package which-key
+  :diminish which-key-mode
+  :demand
+  :init
+  (setq which-key-idle-delay 0.5)
+  ;; Minibuffer feels much faster than using windows.
+  (setq which-key-popup-type 'minibuffer)
+  :config
+  ;; Shows available keybindings after you start typing.
+  (which-key-mode 1))
+
+;; I always hit this by mistake to get to `describe-char' and I'm tired of
+;; seeing the GNU license.
+(global-set-key (kbd "C-h C-c") 'describe-key-briefly)
+
+;; Make bindings that stick around
+;;(use-package hydra :ensure t)
+
+(defun shadow-declare-prefix (prefix name)
+  "Declare a which-key PREFIX.
+PREFIX is a string describing a key sequence.  NAME is a string
+used as the prefix command."
+  (let* ((command name)
+	 (full-prefix (concat shadow-leader-key " " prefix))
+	 (full-prefix-emacs (concat shadow-emacs-leader-key " " prefix))
+	 (full-prefix-lst (listify-key-sequence (kbd full-prefix)))
+	 (full-prefix-emacs-lst (listify-key-sequence
+				 (kbd full-prefix-emacs))))
+    (which-key-declare-prefixes
+      full-prefix-emacs name
+      full-prefix name)))
+(put 'shadow-declare-prefix 'lisp-indent-function 'defun)
+
+(defun shadow/declare-prefix-for-mode (mode prefix name)
+  "Declare a prefix PREFIX. MODE is the mode in which this prefix command should
+be added. PREFIX is a string describing a key sequence. NAME is a symbol name
+used as the prefix command."
+  (let  ((command (intern (concat (symbol-name mode) name)))
+	 (full-prefix (concat shadow-leader-key " " prefix))
+	 (full-prefix-emacs (concat shadow-emacs-leader-key " " prefix)))
+
+    (which-key-declare-prefixes-for-mode mode
+      full-prefix-emacs name
+      full-prefix name)))
+
+(put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
+
+(defun shadow//init-major-mode-map (mode)
+  "Returns a keymap for major MODE that's activated by the leader keys."
+  (let* ((mode-map-sym (intern (format "%s-map" mode)))
+         (abn-map-sym (intern (format "abn-%s-map" mode)))
+         abn-map-val)
+
+    ;; Use existing keymap if it exists.
+    (unless (boundp abn-map-sym)
+      (set abn-map-sym (make-sparse-keymap)))
+    (setq abn-map-val (symbol-value abn-map-sym))
+
+    (eval-after-load 'evil
+      `(progn
+         ;; All evil states with `M-m m'
+         (evil-define-key '(normal insert visual operator motion emacs)
+           ,mode-map-sym
+           (kbd (concat shadow-emacs-leader-key " m")) ,abn-map-sym)
+         ;; Non inserting evil states with SPC-m
+         (evil-define-key '(normal visual operator motion)
+           ,mode-map-sym
+           (kbd (concat shadow-leader-key " m")) ,abn-map-sym)))
+
+    abn-map-val))
+
+(defun shadow//define-keys (keymap key def &rest bindings)
+  "In KEYMAP define KEY to DEF as well as all BINDINGS.
+`kbd' is applied to all KEYs.  BINDINGS is additional KEY-DEF pairs.
+Always defines C-g as `keyboard-quit'."
+  (declare (indent 1))
+  (define-key keymap (kbd "C-g") 'keyboard-quit)
+  (while key
+    (define-key keymap (kbd key) def)
+    (setq key (pop bindings))
+    (setq def (pop bindings))))
+
+(defun shadow/define-leader-keys (key def &rest bindings)
+  "Set KEY to DEF in `abn-leader-map'.
+BINDINGS is additional key-definition pairs.  `kbd' is used for
+every KEY."
+  (declare (indent 0))
+  (apply 'shadow//define-keys shadow-leader-map key def bindings))
+
+(defun shadow/define-leader-keys-for-major-mode (mode key def &rest bindings)
+  "Add KEY and DEF as key bindings in major-MODE.
+The keymap used for KEY is activated by SPC-m and under `M-m m'
+for the major-mode MODE.
+
+BINDINGS are additions KEY-DEF pairs. `kbd' is applied to every KEY."
+  (declare (indent defun))
+  (apply 'shadow//define-keys (shadow//init-major-mode-map mode) key def bindings))
+
+;; Instantly display current keystrokes in mini buffer
+(setq echo-keystrokes 0.02)
+
+;; Auto-indent on RET
+(define-key global-map (kbd "RET") 'newline-and-indent)
+
+;; Makes <escape> quit as much as possible.
+(define-key minibuffer-local-map
+  (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-ns-map
+  (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-completion-map
+  (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-must-match-map
+  (kbd "<escape>") 'keyboard-escape-quit)
+(define-key minibuffer-local-isearch-map
+  (kbd "<escape>") 'keyboard-escape-quit)
+
+(setq shadow-key-binding-prefixes
+      '((","   "leader")
+	("a"   "applications")
+	("b"   "buffers")
+	("c"   "compile/comments")
+	("e"   "flycheck")
+	("f"   "files")
+	("h"   "help")
+	("j"   "jump")
+	("g"   "magit")
+	("p"   "projectile")
+	("q"   "quit")
+	("s"   "search/symbol")
+	("sa"  "ag")
+	("sg"  "grep")
+	("sk"  "ack")
+	("st"  "pt")
+	("t"   "toggles")
+	("w"   "windows")
+	("z"   "zoom")))
+(mapc (lambda (x) (apply #'shadow-declare-prefix x))
+      shadow-key-binding-prefixes)
+
+(use-package restart-emacs
+  :bind
+  (:map shadow-leader-map
+        ("qr" . restart-emacs)))
+
+
+(provide 'init-keybindings)
+;;; core-keybindings.el ends here
