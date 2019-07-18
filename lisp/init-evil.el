@@ -124,7 +124,7 @@
 (use-package evil-mc
   :ensure t
   :after evil
-  :diminish evil-mc-mode
+  :diminish evil-mc-mode "ⓜ"
   :init
   (defun kevin/toggle-evil-mc ()
     (interactive)
@@ -136,7 +136,8 @@
       (progn
         (evil-mc-mode 1)
         (message "evil mc mode enabled"))))
-  (shadow/define-leader-keys "tm" #'kevin/toggle-evil-mc)
+  ;; (shadow/define-leader-keys "tm" #'kevin/toggle-evil-mc)
+  (shadow/define-leader-keys "tm" 'evil-mc-mode)
   (defun kevin/reset-evil-mc-key-map ()
     (let ((keys '(("ma" . evil-mc-make-all-cursors)
                   ("mu" . evil-mc-undo-all-cursors)
@@ -154,7 +155,14 @@
         ;; (evil-define-key 'normal 'evil-mc-key-map (kbd (car key-data)) (cdr key-data))
         (evil-define-key 'visual 'evil-mc-key-map (kbd (car key-data)) (cdr key-data)))))
   :config
-  (kevin/reset-evil-mc-key-map))
+  (kevin/reset-evil-mc-key-map)
+  (evil-mc-mode -1))
+
+(use-package ace-mc
+ :defer t
+ :init
+ (define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
+ (define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor))
 
 (provide 'init-evil)
 ;;; config-evil.el ends here

@@ -1,6 +1,5 @@
 ;; core-keybindings.el --- Core key bindings.
 
-
 ;;; Commentary:
 ;;
 
@@ -58,30 +57,6 @@ used as the prefix command."
 
 (put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
 
-(defun shadow//init-major-mode-map (mode)
-  "Returns a keymap for major MODE that's activated by the leader keys."
-  (let* ((mode-map-sym (intern (format "%s-map" mode)))
-         (abn-map-sym (intern (format "abn-%s-map" mode)))
-         abn-map-val)
-
-    ;; Use existing keymap if it exists.
-    (unless (boundp abn-map-sym)
-      (set abn-map-sym (make-sparse-keymap)))
-    (setq abn-map-val (symbol-value abn-map-sym))
-
-    (eval-after-load 'evil
-      `(progn
-         ;; All evil states with `M-m m'
-         (evil-define-key '(normal insert visual operator motion emacs)
-           ,mode-map-sym
-           (kbd (concat shadow-emacs-leader-key " m")) ,abn-map-sym)
-         ;; Non inserting evil states with SPC-m
-         (evil-define-key '(normal visual operator motion)
-           ,mode-map-sym
-           (kbd (concat shadow-leader-key " m")) ,abn-map-sym)))
-
-    abn-map-val))
-
 (defun shadow//define-keys (keymap key def &rest bindings)
   "In KEYMAP define KEY to DEF as well as all BINDINGS.
 `kbd' is applied to all KEYs.  BINDINGS is additional KEY-DEF pairs.
@@ -99,15 +74,6 @@ BINDINGS is additional key-definition pairs.  `kbd' is used for
 every KEY."
   (declare (indent 0))
   (apply 'shadow//define-keys shadow-leader-map key def bindings))
-
-(defun shadow/define-leader-keys-for-major-mode (mode key def &rest bindings)
-  "Add KEY and DEF as key bindings in major-MODE.
-The keymap used for KEY is activated by SPC-m and under `M-m m'
-for the major-mode MODE.
-
-BINDINGS are additions KEY-DEF pairs. `kbd' is applied to every KEY."
-  (declare (indent defun))
-  (apply 'shadow//define-keys (shadow//init-major-mode-map mode) key def bindings))
 
 ;; Instantly display current keystrokes in mini buffer
 (setq echo-keystrokes 0.02)
