@@ -4,11 +4,8 @@
 ;;
 
 ;;; Code:
-
-(defvar shadow-font (pcase system-type
-                      ('darwin "Consolas 13")
-                      (_ "Consolas 11"))
-  "The default font size to use for everything.")
+(eval-when-compile
+  (require 'init-constants))
 
 (when (member "Consolas" (font-family-list))
   (set-frame-font shadow-font 'keep-size)
@@ -32,9 +29,10 @@
 		   (abbreviate-file-name (buffer-file-name))
 		 "%b"))))
 
+;; 定义窗口位置
 (set-frame-position (selected-frame) 0 0)
 
-;; 自定义窗口大小 
+;; 自定义窗口大小
 (defun set-frame-size-according-to-resolution ()
   (interactive)
   (if sys/win32p
@@ -134,5 +132,6 @@
 (setq scroll-step 1
       scroll-margin 0
       scroll-conservatively 100000)
+
 (provide 'init-ui)
 ;;; config-ui.el ends here

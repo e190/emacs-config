@@ -98,6 +98,9 @@ Similar to `before-init-time'")
           (const :tag "Netease" netease)
           (const :tag "Tuna" tuna)))
 
+(defvar shadow-font "Consolas 11"
+  "The default font size to use for everything.")
+
 (defvar shadow-leader-key "SPC"
   "The leader key in Evil normal, visual and motion states.")
 

@@ -99,6 +99,7 @@
 (require 'init-yasnippet)
 
 (require 'init-dashboard)
+(require 'init-highlight)
 (require 'init-buffer)
 (require 'init-chinese)
 (require 'init-dired)
@@ -106,7 +107,6 @@
 (require 'init-eshell)
 (require 'init-filetree)
 (require 'init-treemacs)
-(require 'init-highlight)
 (require 'init-helper)
 (require 'init-git)
 (require 'init-org)

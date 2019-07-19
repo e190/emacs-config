@@ -4,23 +4,46 @@
 ;;
 
 ;;; Code:
-(eval-when-compile
-  (require 'use-package))
 
-(use-package funcs-highlight
-  :ensure nil ; local package
-  :commands (shadow/highlight-symbol))
-
-(use-package auto-highlight-symbol
-  :defer t
-  :bind
-  (:map shadow-leader-map
-   ("sh" . shadow/highlight-symbol)))
-
+;; Beacon flashes the cursor whenever you adjust position.
+(use-package beacon
+  :ensure t
+  :diminish beacon-mode
+  :init
+  (setq beacon-color "red")
+  (setq beacon-size 80)
+  (beacon-mode t))
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+;; Highlight show trailing whitespace
+(use-package whitespace
+  :ensure nil
+  :defer t
+  :diminish whitespace-mode
+  :hook (after-init . whitespace-mode)
+  :init
+  (add-hook 'minibuffer-setup-hook (lambda () (setq show-trailing-whitespace nil)))
+  (add-hook 'eshell-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+  (setq-default show-trailing-whitespace t)
+  (setq whitespace-style '(face trailing))
+  :config
+  (with-eval-after-load 'popup
+    ;; advice for whitespace-mode conflict with popup
+    (defvar my-prev-whitespace-mode nil)
+    (make-local-variable 'my-prev-whitespace-mode)
+    (defadvice popup-draw (before my-turn-off-whitespace activate compile)
+	  "Turn off whitespace mode before showing autocomplete box."
+	  (if whitespace-mode
+		  (progn
+            (setq my-prev-whitespace-mode t)
+            (whitespace-mode -1))
+        (setq my-prev-whitespace-mode nil)))
+    (defadvice popup-delete (after my-restore-whitespace activate compile)
+	  "Restore previous whitespace mode when deleting autocomplete box."
+	  (if my-prev-whitespace-mode
+		  (whitespace-mode 1)))))
 ;; Highlight symbols
 (use-package symbol-overlay
   :diminish
@@ -53,17 +76,6 @@
   :diminish rainbow-mode
   :hook ((text-mode . rainbow-mode)
          (prog-mode . rainbow-mode)))
-
-;; Beacon flashes the cursor whenever you adjust position.
-(use-package beacon
-  :ensure t
-  :diminish beacon-mode
-  :config
-  (beacon-mode t)
-  (setq beacon-color "red")
-  (setq beacon-size 80)
-  (add-to-list 'beacon-dont-blink-major-modes 'eshell-mode))
-
 
 (provide 'init-highlight)
 ;;; config-highlight.el ends here
