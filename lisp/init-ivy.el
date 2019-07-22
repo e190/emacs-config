@@ -7,6 +7,11 @@
 
 (use-package counsel
   :diminish counsel-mode ivy-mode
+  :functions (my-ivy-fly-time-travel
+              my-swiper-toggle-counsel-rg
+              my-swiper-toggle-rg-dwim)
+  :commands (ivy--format-function-generic
+             ivy--add-face)
   :bind
   (;; Current global keymap
    ("C-s" . swiper-isearch)
@@ -41,6 +46,7 @@
    ("/"  . counsel-rg)
    ("si" . swiper-isearch)
    ("sb" . swiper-all)
+   ("sr" . swiper-isearch-backward)
 
    ("bb" . ivy-switch-buffer)
    ("rl" . ivy-resume)
@@ -76,6 +82,20 @@
         ivy-on-del-error-function nil
         ivy-initial-inputs-alist nil)
 
+  (defun my-ivy-format-function-arrow (cands)
+    "Transform CANDS into a string for minibuffer."
+    (ivy--format-function-generic
+     (lambda (str)
+       (concat (if (display-graphic-p)
+                   (all-the-icons-octicon "chevron-right" :height 0.8 :v-adjust -0.05)
+                 ">")
+               (propertize " " 'display `(space :align-to 2))
+               (ivy--add-face str 'ivy-current-match)))
+     (lambda (str)
+       (concat (propertize " " 'display `(space :align-to 2)) str))
+     cands
+     "\n"))
+  (setq ivy-format-functions-alist '((t . my-ivy-format-function-arrow)))
   (setq swiper-action-recenter t)
 
   (setq counsel-find-file-at-point t
@@ -113,9 +133,12 @@
       keep-lines
       ivy-read
       swiper
+      swiper-backward
       swiper-all
       swiper-isearch
+      swiper-isearch-backward
       counsel-grep-or-swiper
+      counsel-grep-or-swiper-backward
       counsel-grep
       counsel-ack
       counsel-ag
@@ -148,7 +171,12 @@
                               (buffer-string))))))
         (when future
           (save-excursion
-            (insert (propertize future 'face 'shadow)))
+            (insert (propertize (replace-regexp-in-string
+                                 "\\\\_<" ""
+                                 (replace-regexp-in-string
+                                  "\\\\_>" ""
+                                  future))
+                                'face 'shadow)))
           (add-hook 'pre-command-hook 'my-ivy-fly-back-to-present nil t)))))
 
   (add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
@@ -160,12 +188,8 @@
     (interactive)
     (let ((text (replace-regexp-in-string
                  "\n" ""
-                 (replace-regexp-in-string
-                  "\\\\_<" ""
-                  (replace-regexp-in-string
-                   "\\\\_>" ""
                    (replace-regexp-in-string "^.*Swiper: " ""
-                                             (thing-at-point 'line t)))))))
+                                             (thing-at-point 'line t)))))
 	  (setq my-swiper-to-counsel-rg-search text)
       (ivy-quit-and-run
         (counsel-rg my-swiper-to-counsel-rg-search default-directory))))
@@ -207,7 +231,8 @@
                     (t . ivy--regex-fuzzy))))
 ;; Add help menu by pressing C-o in minibuffer.
 (use-package ivy-hydra
-  :defer t)
+  :bind (:map ivy-minibuffer-map
+          ("M-o" . ivy-dispatching-done-hydra)))
 
 (use-package counsel-projectile
   :bind

@@ -1,19 +1,9 @@
-* lakdj
-** 
-** 
 
-|            |       |
-|------------+-------|
-| asdfsdfsdf |       |
-|            | sdfaf |
-电影：一个小忙
-* DONE 
-已关闭: [2019-07-16 �ܶ� 09:22]
-<2019-07-16 �ܶ�>
-<2019-07-16 �ܶ�>
-* Magit
-现在来试一试如何用，官方文档在这里：https://magit.vc/manual/magit.html#Top
-状态查询
+* 
+emacs-tutorial
+大连房价
+* magit
+现在来试一试如何用，官方文档在这里：https://magit.vc/manual/magit.html#Top 状态查询
 
 C-x g来查询状态
 
@@ -27,13 +17,11 @@ Untracked files //工作区中有，但没有加入git管理
 
 Unstaged files //git管理的，在工作区已经修改的，但是没有用git add进入staged状态
 
-
 其实还有其他更多信息：
 
-"Staged changes", //用git add变成了staged状态
+“Staged changes”, //用git add变成了staged状态
 
-"Unpulled commits", "Unpushed commits",
-
+“Unpulled commits”, “Unpushed commits”,
 
 状态信息做的不错，git status输出也有这些信息，不过没有它这么简洁。
 
@@ -41,30 +29,21 @@ Unstaged files //git管理的，在工作区已经修改的，但是没有用git
 
 在状态buffer中，用C-h m 会打开帮助信息。
 
-
 删除文件
 
 在shell中用rm命令删除一些文件，然后再查看状态，会看到类似如下信息
 
-Unstaged changes (2)
-deleted    data/dw_product_dt.csv
-deleted    data/dw_product_dt.csv.tgz
-
+Unstaged changes (2) deleted data/dw_product_dt.csv deleted data/dw_product_dt.csv.tgz
 
 这时光标移动到这两个文件，分别按下s，会将这两个文件状态变为staged
 
-Staged changes (2)
-deleted    data/dw_product_dt.csv
-deleted    data/dw_product_dt.csv.tgz
-
+Staged changes (2) deleted data/dw_product_dt.csv deleted data/dw_product_dt.csv.tgz
 
 然后继续按c建进入提交界面，按c后会提示输入comments，之后C-c C-c会提交成功。
 
 此时状态buffer会看到一个commit id，回车可以看到里面的详细信息
 
-
 按P键计入push界面，再按p会直接push到远程分支。
-
 
 commit
 
@@ -72,10 +51,6 @@ commit
 
 按c，然后再按c，输入comments
 
-C-c C-c提交
-push
+C-c C-c提交 push
 
-
-把untracked文件变为staged
-相当于git add命令
-按下s即可
+把untracked文件变为staged 相当于git add命令 按下s即可

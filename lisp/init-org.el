@@ -12,6 +12,7 @@
   (add-hook 'org-mode-hook (lambda ()
                              (org-indent-mode 1)
                              (diminish 'org-indent-mode)))
+  (add-to-list 'file-coding-system-alist '("\\.org\\'" . utf-8))
   :config
   ;; (evil-define-key 'normal org-mode-map
   ;;   (kbd "TAB") 'org-cycle)
