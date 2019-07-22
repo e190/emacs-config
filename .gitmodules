@@ -1,0 +1,6 @@
+[submodule "color-rg"]
+	path = site-lisp/color-rg
+	url = http://github.com/manateelazycat/color-rg.git
+[submodule "awesome-pair"]
+	path = site-lisp/awesome-pair
+	url = https://github.com/manateelazycat/awesome-pair.git
