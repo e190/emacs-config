@@ -8,6 +8,95 @@
   :preface
   (defvar homepage-url "https://github.com/lkzz/emacs.d")
 
+  :functions (all-the-icons-faicon
+              all-the-icons-material
+              open-custom-file
+              persp-get-buffer-or-null
+              persp-load-state-from-file
+              persp-switch-to-buffer
+              winner-undo
+              widget-forward)
+  :pretty-hydra
+  ((:title (pretty-hydra-title "Dashboard" 'material "dashboard" :height 1.1 :v-adjust -0.225)
+    :color pink :quit-key "q")
+    ("Navigator"
+    (("U" update-config-and-packages "update" :exit t)
+      ("H" browse-homepage "homepage" :exit t)
+      ("R" restore-session "recover session" :exit t)
+      ("L" persp-load-state-from-file "list sessions" :exit t)
+      ("S" open-custom-file "settings" :exit t))
+    "Section"
+    (("}" dashboard-next-section "next")
+      ("{" dashboard-previous-section "previous")
+      ("r" dashboard-goto-recent-files "recent files")
+      ("m" dashboard-goto-bookmarks "projects")
+      ("p" dashboard-goto-projects "bookmarks"))
+    "Item"
+    (("RET" widget-button-press "open" :exit t)
+      ("<tab>" widget-forward "next")
+      ("C-i" widget-forward "next")
+      ("<backtab>" widget-backward "previous")
+      ("C-n" next-line "next line")
+      ("C-p" previous-line "previous  line"))
+    "Misc"
+    (("<f2>" open-dashboard "open" :exit t)
+      ("g" dashboard-refresh-buffer "refresh" :exit t)
+      ("Q" quit-dashboard "quit" :exit t))))
+  :init (setq initial-buffer-choice (lambda () (get-buffer dashboard-buffer-name)))
+  :hook (after-init . dashboard-setup-startup-hook)
+  :bind (("<f2>" . open-dashboard)
+         :map dashboard-mode-map
+         ("H" . browse-homepage)
+         ("O" . dashboard-open-init-file)
+         ("R" . restore-session)
+         ("q" . quit-dashboard)
+         ("h" . dashboard-hydra/body)
+         ("?" . dashboard-hydra/body))
+  :config
+  (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!")
+  (setq dashboard-startup-banner (expand-file-name "img/dashLogo.png" user-emacs-directory))
+  (setq dashboard-items '((recents . 10)
+                          (bookmarks . 5)
+                          (projects . 5)))
+
+  (defun dashboard-insert-buttons (_list-size)
+    (insert "\n")
+    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 51) 2))) ?\ ))
+    (widget-create 'url-link
+                   :tag (propertize "Homepage" 'face 'font-lock-keyword-face)
+                   :help-echo "Open Emacs Github page"
+                   :mouse-face 'highlight
+                   homepage-url)
+    (insert " ")
+    (widget-create 'push-button
+                   :help-echo "Open Personal Configurations"
+                   :action (lambda (&rest _) (shadow/open-init-file))
+                   :mouse-face 'highlight
+                   :button-prefix ""
+                   :button-suffix ""
+                   (propertize "Open Config" 'face 'font-lock-keyword-face))
+    (insert " ")
+    (widget-create 'push-button
+                   :help-echo "Restore previous session"
+                   :action (lambda (&rest _) (restore-session))
+                   :mouse-face 'highlight
+                   :button-prefix ""
+                   :button-suffix ""
+                   (propertize "Restore Session" 'face 'font-lock-keyword-face))
+    (insert "\n")
+    (insert "\n")
+    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 48) 2))) ?\ ))
+    (insert (format "[%d packages loaded in %s]" (length package-activated-list) (emacs-init-time))))
+  (add-to-list 'dashboard-item-generators  '(buttons . dashboard-insert-buttons))
+  (add-to-list 'dashboard-items '(buttons))
+
+  (dashboard-insert-startupify-lists)
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal dashboard-mode-map
+       (kbd "h") 'dashboard-hydra/body
+       (kbd "?") 'dashboard-hydra/body)
+       "r" 'dashboard-goto-recent-files)
+
   (defun open-dashboard ()
     "Open the *dashboard* buffer and jump to the first widget."
     (interactive)
@@ -61,92 +150,6 @@
     "Go to bookmarks."
     (interactive)
     (funcall (local-key-binding "m")))
-  
-  :init (setq initial-buffer-choice (lambda () (get-buffer dashboard-buffer-name)))
-  :hook (after-init . dashboard-setup-startup-hook)
-  :bind (("<f2>" . open-dashboard)
-         :map dashboard-mode-map
-         ("H" . browse-homepage)
-         ("O" . dashboard-open-init-file)
-         ("R" . restore-session)
-         ("q" . quit-dashboard))
-  :config
-  (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!")
-  (setq dashboard-startup-banner (expand-file-name "img/dashLogo.png" user-emacs-directory))
-  (setq dashboard-items '((recents . 10)
-                          (bookmarks . 5)
-                          (projects . 5)))
-
-  (defun dashboard-insert-buttons (_list-size)
-    (insert "\n")
-    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 51) 2))) ?\ ))
-    (widget-create 'url-link
-                   :tag (propertize "Homepage" 'face 'font-lock-keyword-face)
-                   :help-echo "Open Emacs Github page"
-                   :mouse-face 'highlight
-                   homepage-url)
-    (insert " ")
-    (widget-create 'push-button
-                   :help-echo "Open Personal Configurations"
-                   :action (lambda (&rest _) (shadow/open-init-file))
-                   :mouse-face 'highlight
-                   :button-prefix ""
-                   :button-suffix ""
-                   (propertize "Open Config" 'face 'font-lock-keyword-face))
-    (insert " ")
-    (widget-create 'push-button
-                   :help-echo "Restore previous session"
-                   :action (lambda (&rest _) (restore-session))
-                   :mouse-face 'highlight
-                   :button-prefix ""
-                   :button-suffix ""
-                   (propertize "Restore Session" 'face 'font-lock-keyword-face))
-    (insert "\n")
-    (insert "\n")
-    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 48) 2))) ?\ ))
-    (insert (format "[%d packages loaded in %s]" (length package-activated-list) (emacs-init-time))))
-  (add-to-list 'dashboard-item-generators  '(buttons . dashboard-insert-buttons))
-  (add-to-list 'dashboard-items '(buttons))
-
-  (dashboard-insert-startupify-lists)
-
-  (defhydra hydra-dashboard (:color red :hint none)
-      "
-^Head^               ^Section^            ^Item^                  ^Dashboard^
-^^───────────────────^^───────────────────^^──────────────────────^^───────────────
-_U_pdate             _}_: Next            _RET_: Open             _<f2>_: Open
-_H_omePage           _{_: Previous        _<tab>_/_C-i_: Next       _Q_: Quit
-_R_ecover session    _r_: Recent Files    _<backtab>_: Previous
-_L_ist sessions      _m_: Bookmarks       _C-n_: Next line
-_S_ettings           _p_: Projects        _C-p_: Previous Line
-"
-      ("<tab>" widget-forward)
-      ("C-i" widget-forward)
-      ("<backtab>" widget-backward)
-      ("RET" widget-button-press :exit t)
-      ("g" dashboard-refresh-buffer :exit t)
-      ("}" dashboard-next-section)
-      ("{" dashboard-previous-section)
-      ("r" dashboard-goto-recent-files)
-      ("p" dashboard-goto-projects)
-      ("m" dashboard-goto-bookmarks)
-      ("H" browse-homepage :exit t)
-      ("R" restore-session :exit t)
-      ("L" persp-load-state-from-file :exit t)
-      ("S" open-custom-file :exit t)
-      ("U" update-config-and-packages :exit t)
-      ("C-n" next-line)
-      ("C-p" previous-line)
-      ("<f2>" open-dashboard :exit t)
-      ("Q" quit-dashboard :exit t)
-      ("q" nil "quit")
-      ("C-g" nil "quit"))
-
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal dashboard-mode-map
-       (kbd "h") 'hydra-dashboard/body
-       (kbd "?") 'hydra-dashboard/body)
-       "r" 'dashboard-goto-recent-files)
   )
 
 (provide 'init-dashboard)

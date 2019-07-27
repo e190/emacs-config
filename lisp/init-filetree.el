@@ -11,6 +11,32 @@
              neotree-toggle
              neotree-hide
              neotree-enter)
+  :pretty-hydra
+  ((:title (pretty-hydra-title "neotree Management" 'faicon "tree")
+    :foreign-keys warn :quit-key "q")
+   ("Navigation"
+     (("L" neotree-select-next-sibling-node "next sibling")
+     ("H" neotree-select-previous-sibling-node "previous sibling")
+     ("J" neotree-select-down-node "goto child")
+     ("K" neotree-select-up-node "goto parent")
+     ("l" neotree-enter "open/expand")
+     ("h" spacemacs/neotree-collapse-or-up "up/collapse")
+     ("j" neotree-next-line "line down")
+     ("k" neotree-previous-line "line up")
+     ("'" neotree-quick-look "quick look")
+     ("RET" neotree-enter "open"))
+    "Actions"
+     (("c" neotree-create-node "create")
+     ("C" neotree-copy-node "copy")
+     ("d" neotree-delete-node "delete")
+     ("r" neotree-rename-node "rename")
+     ("R" neotree-change-root "change root"))
+    "Visual actions/config"
+     (("TAB" neotree-stretch-toggle "shrink/enlarge")
+     ("|" neotree-enter-vertical-split "vertical split")
+     ("-" neotree-enter-horizontal-split "horizontal split")
+     ("gr" neotree-refresh "refresh")
+     ("s" neotree-hidden-file-toggle "hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")"))))
   :init
   (shadow/define-leader-keys "ft" 'neotree-toggle)
   (setq neo-create-file-auto-open t
@@ -40,43 +66,6 @@
           "^bazel-*"
           "^#.*#$"))
   :config
-  (defhydra hydra-neotree (:color red
-                                    :hint nil)
-         "
-Navigation^^^^             Actions^^         Visual actions/config^^^
-───────^^^^─────────────── ───────^^──────── ───────^^^────────────────
-[_L_]   next sibling^^     [_c_] create      [_TAB_] shrink/enlarge
-[_H_]   previous sibling^^ [_C_] copy        [_|_]   vertical split
-[_J_]   goto child^^       [_d_] delete      [_-_]   horizontal split
-[_K_]   goto parent^^      [_r_] rename      [_gr_]  refresh^
-[_l_]   open/expand^^      [_R_] change root [_s_]   hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")
-[_h_]   up/collapse^^      ^^                ^^^
-[_j_]   line down^^        ^^                ^^^
-[_k_]   line up^^          ^^                ^^
-[_'_]   quick look         ^^                ^^
-[_RET_] open               ^^^^              [_?_]   close hints
-"
-        ("RET" neotree-enter)
-        ("TAB" neotree-stretch-toggle)
-        ("|" neotree-enter-vertical-split)
-        ("-" neotree-enter-horizontal-split)
-        ("?" nil :exit t)
-        ("'" neotree-quick-look)
-        ("c" neotree-create-node)
-        ("C" neotree-copy-node)
-        ("d" neotree-delete-node)
-        ("gr" neotree-refresh)
-        ("h" spacemacs/neotree-collapse-or-up)
-        ("H" neotree-select-previous-sibling-node)
-        ("j" neotree-next-line)
-        ("J" neotree-select-down-node)
-        ("k" neotree-previous-line)
-        ("K" neotree-select-up-node)
-        ("l" neotree-enter)
-        ("L" neotree-select-next-sibling-node)
-        ("r" neotree-rename-node)
-        ("R" neotree-change-root)
-        ("s" neotree-hidden-file-toggle))
   (when (bound-and-true-p evil-mode)
     (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-stretch-toggle)
     (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
@@ -89,7 +78,7 @@ Navigation^^^^             Actions^^         Visual actions/config^^^
     (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
     (evil-define-key 'normal neotree-mode-map (kbd "r") 'neotree-rename-node)
     (evil-define-key 'normal neotree-mode-map (kbd "s") 'neotree-hidden-file-toggle)
-    (evil-define-key 'normal neotree-mode-map (kbd "?") 'hydra-neotree/body)))
+    (evil-define-key 'normal neotree-mode-map (kbd "?") 'neotree-hydra/body)))
 
 (provide 'init-filetree)
 ;;; config-filetree ends here

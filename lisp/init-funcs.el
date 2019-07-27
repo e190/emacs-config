@@ -88,5 +88,8 @@
         (async-byte-recompile-directory dir)
       (byte-recompile-directory dir 0 t))))
 
+(defun shadow-current-theme ()
+  "The current enabled theme."
+  (car custom-enabled-themes))
 (provide 'init-funcs)
 ;;; funcs-base.el ends here

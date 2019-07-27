@@ -85,6 +85,7 @@
 (require 'init-packages) 
 (require 'init-base)
 (require 'init-funcs)
+(require 'init-hydra)
 (require 'init-keybindings)
 (require 'init-ui)
 (require 'init-theme)

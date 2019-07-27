@@ -25,9 +25,6 @@
 ;; seeing the GNU license.
 (global-set-key (kbd "C-h C-c") 'describe-key-briefly)
 
-;; Make bindings that stick around
-;;(use-package hydra :ensure t)
-
 (defun shadow-declare-prefix (prefix name)
   "Declare a which-key PREFIX.
 PREFIX is a string describing a key sequence.  NAME is a string

@@ -17,33 +17,12 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-;; Highlight show trailing whitespace
-(use-package whitespace
-  :ensure nil
-  :defer t
-  :diminish whitespace-mode
-  :hook (after-init . whitespace-mode)
-  :init
-  (add-hook 'minibuffer-setup-hook (lambda () (setq show-trailing-whitespace nil)))
-  (add-hook 'eshell-mode-hook (lambda () (setq show-trailing-whitespace nil)))
-  (setq-default show-trailing-whitespace t)
-  (setq whitespace-style '(face trailing))
-  :config
-  (with-eval-after-load 'popup
-    ;; advice for whitespace-mode conflict with popup
-    (defvar my-prev-whitespace-mode nil)
-    (make-local-variable 'my-prev-whitespace-mode)
-    (defadvice popup-draw (before my-turn-off-whitespace activate compile)
-	  "Turn off whitespace mode before showing autocomplete box."
-	  (if whitespace-mode
-		  (progn
-            (setq my-prev-whitespace-mode t)
-            (whitespace-mode -1))
-        (setq my-prev-whitespace-mode nil)))
-    (defadvice popup-delete (after my-restore-whitespace activate compile)
-	  "Restore previous whitespace mode when deleting autocomplete box."
-	  (if my-prev-whitespace-mode
-		  (whitespace-mode 1)))))
+;; Visualize TAB, (HARD) SPACE, NEWLINE
+(setq-default show-trailing-whitespace nil)
+(dolist (hook '(prog-mode-hook outline-mode-hook conf-mode-hook))
+  (add-hook hook (lambda ()
+                   (setq show-trailing-whitespace t)
+                   (add-hook 'before-save-hook #'delete-trailing-whitespace nil t))))
 ;; Highlight symbols
 (use-package symbol-overlay
   :diminish

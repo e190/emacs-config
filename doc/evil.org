@@ -1,0 +1,90 @@
+* return to normal mode
+#+BEGIN_SRC emacs-lisp
+ESC or <c-[>
+#+END_SRC
+* move cursor 
+#+BEGIN_SRC emacs-lisp
+0---head of line        |  w---first letter of forward word
+$---end of line         |  b---first letter of current / backward word
+gg--head of paragraph   |  e---last letter of current / forward word
+G---end of paragraph    |  ge--last letter of backward word 
+#+END_SRC
+* modity 
+#+BEGIN_SRC emacs-lisp
+.---repeat last change                |  u---undo last change
+A---add content at end of line        |  a---add content before cursor
+I---add content at begin of line      |  i---add content after cursor
+O---add content at previous line      |  o---add content at next line
+#+END_SRC
+* delete and insert 
+#+BEGIN_SRC emacs-lisp
+ci(--delete all things bwtween (), insert
+ciw--delete word ,insert
+caw--delete word and space, insert
+s----delete char at cursor, insert
+S----delete line, insert
+#+END_SRC
+* delete 
+#+BEGIN_SRC emacs-lisp
+di(--delete all things between ()
+x----delete char at cursor
+X----delete char before cursor
+dd---delete line
+dw---delete chars from cursor to end of word, contain space
+db---delete chars before cursor in word
+diw--delete word at cursor
+daw--delete word at cursor, contain space
+dis--delete a sentence
+das--delete a sentence, contain space
+dip--delete a paragraph
+dap--delete a paragraph, contain space
+#+END_SRC
+* visual  
+#+BEGIN_SRC emacs-lisp
+v----char  |  V----line
+C-v--block |  gv---redo last selection
+o----change active line in selected block
+#+END_SRC
+* switch caps 
+#+BEGIN_SRC emacs-lisp
+guu--low line
+gUU--up line
+guw--low word
+gUw--up word
+g~---switch up and low
+#+END_SRC
+* copy and move 
+#+BEGIN_SRC emacs-lisp
+:t----copy
+:6t.--copy line 6 to next line
+:t6---copy line at cursor next to line 6
+:t.---copy line at cursor and past ==yyp
+:t$---copy line at cursor to end of paragraph
+yiw---copy a word and past
+#+END_SRC
+* windows 
+#+BEGIN_SRC emacs-lisp
+C-w s split a horizontal window
+C-w v split a vertical window
+C-w c close active window
+C-w o only remain active window
+#+END_SRC
+* jump between parentheses 
+#+BEGIN_SRC emacs-lisp
+%--jump bwtween () [] {} "" <>
+#+END_SRC
+* replace 
+#+BEGIN_SRC emacs-lisp
+r--replace a char one time
+R--continue replacing a char one time
+
+:s/target/replacement------replace in a line
+:s/target/replacement/g----replace in a sentence
+:%s/target/replacement/g---replace in all
+:%s/target/replacement/gc--replace in all and confirm everytime
+#+END_SRC
+* sort 
+#+BEGIN_SRC emacs-lisp
+sort--use in a block
+:g/{/ .+1, /}/-1 sort --sort in {}
+#+END_SRC
