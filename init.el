@@ -82,7 +82,7 @@
 (update-load-path)
 ;; Must come first
 (require 'init-constants)
-(require 'init-packages) 
+(require 'init-packages)
 (require 'init-base)
 (require 'init-funcs)
 (require 'init-hydra)
@@ -106,7 +106,7 @@
 (require 'init-evil)
 (require 'init-eshell)
 (require 'init-filetree)
-(require 'init-treemacs)
+;; (require 'init-treemacs)
 (require 'init-helper)
 (require 'init-git)
 (require 'init-org)
