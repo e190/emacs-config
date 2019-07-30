@@ -110,6 +110,7 @@
 (require 'init-helper)
 (require 'init-git)
 (require 'init-org)
+(require 'init-markdown)
 (require 'init-search)
 (require 'init-window)
 (require 'init-projectile)

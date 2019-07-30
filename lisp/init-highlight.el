@@ -55,6 +55,19 @@
   :diminish rainbow-mode
   :hook ((text-mode . rainbow-mode)
          (prog-mode . rainbow-mode)))
+;; Highlight TODO and similar keywords in comments and strings
+(use-package hl-todo
+  :bind (:map hl-todo-mode-map
+         ([C-f3] . hl-todo-occur)
+         ("C-c t p" . hl-todo-previous)
+         ("C-c t n" . hl-todo-next)
+         ("C-c t o" . hl-todo-occur))
+  :hook (after-init . global-hl-todo-mode)
+  :config
+  (dolist (keyword '("BUG" "DEFECT" "ISSUE"))
+    (cl-pushnew `(,keyword . ,(face-foreground 'error)) hl-todo-keyword-faces))
+  (dolist (keyword '("WORKAROUND" "HACK" "TRICK"))
+    (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces)))
 
 (provide 'init-highlight)
 ;;; config-highlight.el ends here

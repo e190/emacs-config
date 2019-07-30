@@ -5,9 +5,60 @@
 
 ;;; Code:
 (use-package org
-  :bind (("C-c B" . org-switchb)
+  :ensure nil
+  :custom-face (org-ellipsis ((t (:foreground nil))))
+  :preface
+  (defun hot-expand (str &optional mod)
+    "Expand org template."
+    (let (text)
+      (when (region-active-p)
+        (setq text (buffer-substring (region-beginning) (region-end)))
+        (delete-region (region-beginning) (region-end)))
+      (insert str)
+      (org-try-structure-completion)
+      (when mod (insert mod) (forward-line))
+      (when text (insert text))))
+  :pretty-hydra
+  ((:title (pretty-hydra-title "Org Template" 'fileicon "org")
+    :color blue :quit-key "q")
+   ("Basic"
+    (("a" (hot-expand "<a") "ascii")
+     ("c" (hot-expand "<c") "center")
+     ("e" (hot-expand "<e") "example")
+     ("h" (hot-expand "<h") "html")
+     ("l" (hot-expand "<l") "latex")
+     ("o" (hot-expand "<q") "quote")
+     ("v" (hot-expand "<v") "verse"))
+    "Head"
+    (("i" (hot-expand "<i") "index")
+     ("A" (hot-expand "<A") "ASCII")
+     ("I" (hot-expand "<I") "INCLUDE")
+     ("H" (hot-expand "<H") "HTML")
+     ("L" (hot-expand "<L") "LaTeX"))
+    "Source"
+    (("s" (hot-expand "<s") "src")
+     ("m" (hot-expand "<s" "emacs-lisp") "emacs-lisp")
+     ("y" (hot-expand "<s" "python :results output") "python")
+     ("p" (hot-expand "<s" "perl") "perl")
+     ("r" (hot-expand "<s" "ruby") "ruby")
+     ("S" (hot-expand "<s" "sh") "sh")
+     ("g" (hot-expand "<s" "go :imports '\(\"fmt\"\)") "golang"))
+    "Misc"
+    (("u" (hot-expand "<s" "plantuml :file CHANGE.png") "plantuml")
+     ("Y" (hot-expand "<s" "ipython :session :exports both :results raw drawer\n$0") "ipython")
+     ("P" (progn
+            (insert "#+HEADERS: :results output :exports both :shebang \"#!/usr/bin/env perl\"\n")
+            (hot-expand "<s" "perl")) "Perl tangled")
+     ("<" self-insert-command "ins"))))
+  :bind (("C-c a" . org-agenda)
+         ("C-c b" . org-switchb)
          :map org-mode-map
-         ("C-c l" . org-store-link))
+         ("<" . (lambda ()
+                  "Insert org template."
+                  (interactive)
+                  (if (or (region-active-p) (looking-back "^\s*" 1))
+                      (org-hydra/body)
+                    (self-insert-command 1)))))
   :init
   (add-hook 'org-mode-hook (lambda ()
                              (org-indent-mode 1)
@@ -17,40 +68,25 @@
   ;; (evil-define-key 'normal org-mode-map
   ;;   (kbd "TAB") 'org-cycle)
 
-  (add-hook 'org-mode-hook #'auto-fill-mode)
-
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")))
-  (setq org-todo-keyword-faces
+  (setq org-agenda-files '("~/org")
+        org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
+                            (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
+   org-todo-keyword-faces
         '(("TODO" . (:foreground "#ee6363" :weight bold))
           ("DOING" . (:foreground "#3a81c3" :weight bold))
           ("HANGUP" . (:foreground "red" :weight bold))
           ("DONE" . (:foreground "#7ccd7c" :weight bold))
-          ("CANCEL"  . (:foreground "yellow" :weight bold))))
-  (setq org-log-done 'time)
-  (setq org-src-fontify-natively t)
+          ("CANCEL"  . (:foreground "yellow" :weight bold)))
+        org-log-done 'time
+        org-catch-invisible-edits 'smart
+        org-startup-indented t
+        ;; org-ellipsis (if (char-displayable-p ?) "  " nil)
+        org-pretty-entities t
+        org-hide-emphasis-markers t)
+
+  ;; ;; Enable markdown backend
   (add-to-list 'org-export-backends 'md)
 
-  (setq org-clock-string "计时:")
-  (setq org-closed-string "已关闭:")
-  (setq org-deadline-string "最后期限:")
-  (setq org-scheduled-string "计划任务:")
-  ;; Fast TODO Selection
-  (setq org-use-fast-todo-selection t)
-  ;; record timestamp when a task moves to the DONE state
-  (setq org-log-done 'time)
-  ;; Log time when rescheduling an entry.
-  (setq org-log-reschedule 'time)
-  (setq org-log-redeadline 'time)
-  (setq org-log-into-drawer t)
-  ;; Resume clocking task on clock-in if the clock is open
-  (setq org-clock-in-resume t)
-  ;; Don't clock out when moving task to a done state
-  (setq org-clock-out-when-done nil)
-  ;; Save the running clock and all clock history when exiting Emacs,load it on startup
-  (setq org-clock-persist t)
-  ;; Don't indent under headers.
-  (setq org-adapt-indentation nil)
 
 ;;; show org-mode bullets as UTF-8 character
 (use-package org-bullets

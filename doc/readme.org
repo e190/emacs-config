@@ -1,56 +1,103 @@
-
-* 
+<2019-07-25 周四>
+*
 emacs-tutorial
-大连房价
 * magit
 现在来试一试如何用，官方文档在这里：https://magit.vc/manual/magit.html#Top 状态查询
-
 C-x g来查询状态
-
 会打开一个buffer，显示
-
 Head: //指向当前分支的的最近一次提交
-
 Merge: //远程分支的最近一次提交
-
 Untracked files //工作区中有，但没有加入git管理
-
 Unstaged files //git管理的，在工作区已经修改的，但是没有用git add进入staged状态
-
 其实还有其他更多信息：
-
 “Staged changes”, //用git add变成了staged状态
-
 “Unpulled commits”, “Unpushed commits”,
-
 状态信息做的不错，git status输出也有这些信息，不过没有它这么简洁。
-
 查看帮助
-
 在状态buffer中，用C-h m 会打开帮助信息。
-
 删除文件
-
 在shell中用rm命令删除一些文件，然后再查看状态，会看到类似如下信息
-
 Unstaged changes (2) deleted data/dw_product_dt.csv deleted data/dw_product_dt.csv.tgz
-
 这时光标移动到这两个文件，分别按下s，会将这两个文件状态变为staged
-
 Staged changes (2) deleted data/dw_product_dt.csv deleted data/dw_product_dt.csv.tgz
-
 然后继续按c建进入提交界面，按c后会提示输入comments，之后C-c C-c会提交成功。
-
 此时状态buffer会看到一个commit id，回车可以看到里面的详细信息
-
 按P键计入push界面，再按p会直接push到远程分支。
-
 commit
-
 前面已经说过了，这里重复一次
-
 按c，然后再按c，输入comments
-
 C-c C-c提交 push
-
 把untracked文件变为staged 相当于git add命令 按下s即可
+* keybindings
+| key        | Description                |   |
+|------------+----------------------------+---|
+| ~C-x C-+~    | 放大字体                   |   |
+| ~C-x C--~    | 缩小字体                   |   |
+| ~C-x C-0~    | 还原字体                   |   |
+|            |                            |   |
+| *magit*      |                            |   |
+|            |                            |   |
+| evil       |                            |   |
+| ~C-o~        | 返回                       |   |
+| ~g d~        | 查找定义                   |   |
+| ~z m~        |                            |   |
+| ~z r~        |                            |   |
+|            |                            |   |
+| org        |                            |   |
+| ~C-c~        | 创建表格                   |   |
+| ~C-c C-c~    | 格式化表格                 |   |
+| ~M-S down~   | 下方插入一行表格           |   |
+| ~M-S up~     | 上方删除一行表格           |   |
+| ~M-S right~  | 右方插入一行表格           |   |
+| ~M-S left~   | 左方删除一行表格           |   |
+| ~M-S left~   | 左方删除一行表格           |   |
+| ~M-up~       | 表格上移                   |   |
+| ~M-down~     | 表格下移                   |   |
+| ~C-c -~      | 插入水平分割线             |   |
+| ~C-c Ret~    | 插入水平分割线并跳到下一行 |   |
+| ~C-c C-t~    | 创建TODO                   |   |
+| ~S-left~     | 改变TODO状态               |   |
+| ~C-c ^~      | 根据当前列排序             |   |
+| ~S-M-RET~    | 创建一个目前层级的TODO项   |   |
+|            |                            |   |
+| customized |                            |   |
+| ~C-c y~      | 有道词典                   |   |
+| ~SPC h h~    | 帮助系统                   |   |
+| visual ~C-c~ | 复制到系统剪切板           |   |
+| Insert ~C-v~ | 从系统剪切板粘贴           |   |
+| LSP ~C-c i~  | imenu                      |   |
+|            |                            |   |
+|            |                            |   |
+
+** Tips
+表格的自动生成
+
+只要你打一个| 就代表一列，然后按下C-c C-c 或者Ret 或者 TAB，即可自动调整表格
+表格内容与表头分界线的生成，输入|-，然后自动生成
+* 标签
+* 字体
+*dfdsf*
+*粗体*
+/斜体/
+/asdfd/
++删除线+
+_下划线_
+下标： H_2 O
+
+上标： E=mc^2
+等宽字：  =git=
+ 或者 ～git～
+
+* Projec
+
+** ❓ 任务
+* 超链接
+
+[[https://www.baidu.com]]
+[[www.baidu.com][aa]]
+[[~/.emacs.d/init.el]]
+<2019-07-23 Tue>
+** 3
+***** 2
+<2019-07-29 周一>
+*****
