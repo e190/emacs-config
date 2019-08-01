@@ -95,7 +95,7 @@
 
 ;; Modules
 (require 'init-ivy)
-(require 'init-complete)
+(require 'init-company)
 (require 'init-yasnippet)
 
 (require 'init-dashboard)

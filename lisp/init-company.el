@@ -25,19 +25,26 @@
   :diminish company-mode "ⓒ"
   :bind
   (:map company-mode-map
-   ("M-/" . company-complete))
-  (:map company-active-map
-   ("C-s" . company-filter-candidates)
-   ("C-n" . company-select-next)
-   ("C-p" . company-select-previous)
-   ;; ("TAB" . company-complete-selection)
+  ("M-/" . company-complete)
+  ("<backtab>" . company-yasnippet)
+  :map company-active-map
+  ("C-s" . company-filter-candidates)
+  ("C-n" . company-select-next)
+  ("C-p" . company-select-previous)
+  ("<tab>" . company-complete-common-or-cycle)
+  ("<backtab>" . my-company-yasnippet)
+  ;; ("C-c C-y" . my-company-yasnippet)
    ("C-g" . company-abort)
    ("C-/" . yas-expand-from-trigger-key)
-   ("<tab>" . company-complete-common)
+   ;; ("<tab>" . company-complete-common)
    :map company-search-map
    ("C-p" . company-select-previous)
    ("C-n" . company-select-next))
   :init
+  (defun my-company-yasnippet ()
+    (interactive)
+    (company-abort)
+    (call-interactively 'company-yasnippet))
   (add-hook 'after-init-hook #'global-company-mode)
   (add-hook 'company-completion-started-hook
             (lambda (&rest ignore)
@@ -236,5 +243,5 @@
   :init
   :config)
 
-(provide 'init-complete)
+(provide 'init-company)
 ;;; config-complete.el ends here

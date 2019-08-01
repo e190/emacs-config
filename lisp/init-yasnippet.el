@@ -4,11 +4,8 @@
 ;;
 
 ;;; Code:
-(eval-when-compile
-  (require 'use-package))
 
 (use-package yasnippet
-  :defer t
   :diminish yas-minor-mode
   :commands (yas-hippie-try-expand)
   :hook (after-init . yas-global-mode)

@@ -94,9 +94,21 @@ _下划线_
 * 超链接
 
 [[https://www.baidu.com]]
+#+BEGIN_SRC
+
+[[https://www.baidu.com]]
+
+#+END_SRC
 [[www.baidu.com][aa]]
+#+BEGIN_SRC
+[[www.baidu.com][aa]]
+#+END_SRC
+
+
 [[~/.emacs.d/init.el]]
-<2019-07-23 Tue>
+#+BEGIN_SRC
+[[~/.emacs.d/init.el]]
+#+END_SRC
 ** 3
 ***** 2
 <2019-07-29 周一>
