@@ -72,7 +72,7 @@
 (use-package hungry-delete
   :defer t
   :ensure t
-  :diminish hungry-delete-mode 
+  :diminish hungry-delete-mode
   :init (add-hook 'after-init-hook #'global-hungry-delete-mode)
   (setq hungry-delete-chars-to-skip " \t\n\r\f\v"))
 
@@ -80,7 +80,7 @@
 (use-package undo-tree
   :defer t
   :ensure t
-  :diminish undo-tree-mode 
+  :diminish undo-tree-mode
   :config
   (setq undo-tree-history-directory-alist `(("." . ,(concat shadow-cache-dir "undo-tree-history"))))
   (setq undo-tree-auto-save-history nil)
@@ -89,6 +89,29 @@
   (shadow/define-leader-keys "tu" 'undo-tree-visualize)
   (global-undo-tree-mode))
 
+(use-package thing-edit
+  :ensure nil; local package
+  :load-path "site-lisp/thing-edit"
+  :bind
+  (:map shadow-leader-map
+   ("cw" . thing-copy-word)
+   ("cs" . thing-copy-symbol)
+   ("cx" . thing-copy-sexp)
+   ("mp" . thing-copy-parentheses)
+   ("ca" . thing-copy-to-line-beginning)
+   ("ce" . thing-copy-to-line-end)
+   ("mW" . thing-replace-word)
+   ("mS" . thing-replace-symbol)
+   ("mX" . thing-replace-sexp)
+   ("mP" . thing-replace-parentheses)))
+
+;; Increase selected region by semantic units
+(use-package expand-region
+  :bind ("C-=" . er/expand-region)
+  (:map shadow-leader-map
+   ("mw" . er/mark-word)
+   ("ms" . er/mark-symbol)
+   ("mx" . er/mark-inside-pairs)))
 
 (provide 'init-coding)
 ;;; config-coding.el ends here
