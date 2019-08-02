@@ -4,8 +4,6 @@
 ;;
 
 ;;; Code:
-(eval-when-compile
-  (require 'use-package))
 
 (defun kevin/goto-match-parent ()
   "Go to the matching  if on (){}[], similar to vi style of %."
@@ -78,6 +76,10 @@
    ("sc" . color-rg-search-input)
    ("sp" . color-rg-search-input-in-projcet)
    ("ss" . color-rg-search-symbol)))
+  ;; :config
+  ;; (with-eval-after-load 'evil
+  ;;   (evil-define-key 'normal color-rg-mode-map
+  ;;   ("RET" . color-rg-open-file))))
   ;; :map color-rg-mode-map
   ;;   ("j" . color-rg-jump-next-keyword)
   ;;   ("k" . color-rg-jump-prev-keyword)
@@ -87,6 +89,19 @@
   ;;   ("C-m" . color-rg-open-file)))
   ;; :config)
   ;; (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg))
+
+;; SnailsPac
+(use-package snails
+  :load-path "site-elisp/snails"
+  ;; :init
+  :bind
+  (:map shadow-leader-map
+   ("sa" . snails))
+  :custom-face
+  (snails-content-buffer-face ((t (:background "#111" :height 110))))
+  (snails-input-buffer-face ((t (:background "#222" :foreground "gold" :height 110))))
+  (snails-header-line-face ((t (:inherit font-lock-function-name-face :underline t :height 1.1)))))
+;; -SnailsPac
 
 (provide 'init-search)
 ;;; config-search.el ends here

@@ -4,3 +4,6 @@
 [submodule "awesome-pair"]
 	path = site-lisp/awesome-pair
 	url = https://github.com/manateelazycat/awesome-pair.git
+[submodule "thing-edit"]
+	path = site-lisp/thing-edit
+	url = https://github.com/manateelazycat/thing-edit.git

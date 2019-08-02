@@ -65,9 +65,6 @@
                              (diminish 'org-indent-mode)))
   (add-to-list 'file-coding-system-alist '("\\.org\\'" . utf-8))
   :config
-  ;; (evil-define-key 'normal org-mode-map
-  ;;   (kbd "TAB") 'org-cycle)
-
   (setq org-agenda-files '("~/org")
         org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
                             (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
@@ -92,16 +89,10 @@
 (use-package org-bullets
   :ensure t
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  :config (progn
-	    (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"))
-	    ))
-  ;; (use-package org-bullets
-  ;;   :ensure t
-  ;;   :init
-  ;;   (setq org-bullets-bullet-list
-  ;;         '("✡" "✽" "✲" "✱" "✻" "✼" "✽" "✾" "✿" "❀" "❁" "❂" "❃" "❄" "❅" "❆" "❇"))
-  ;;   (add-hook 'org-mode-hook #'org-bullets-mode))
-  ;; )
+  :config
+  ;; (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")))
+  (setq org-bullets-bullet-list
+          '("✡" "✽" "✲" "✱" "✻" "✼" "✽" "✾" "✿" "❀" "❁" "❂" "❃" "❄" "❅" "❆" "❇")))
 
   ;; Presentation
   (use-package org-tree-slide

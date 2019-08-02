@@ -90,7 +90,7 @@
 (require 'init-ui)
 (require 'init-theme)
 (require 'init-mode-line)
-(require 'init-coding)
+(require 'init-edit)
 (require 'init-emacs-settings)
 
 ;; Modules

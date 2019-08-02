@@ -244,4 +244,4 @@
   :config)
 
 (provide 'init-company)
-;;; config-complete.el ends here
+;;; init-company.el ends here
