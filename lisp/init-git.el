@@ -1,4 +1,4 @@
-;;; config-git.el --- version contral setup. -*- lexical-binding: t; -*-
+;;; init-git.el --- version contral setup. -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -238,4 +238,4 @@
 
 
 (provide 'init-git)
-;;; config-git ends here
+;;; init-git.el ends here

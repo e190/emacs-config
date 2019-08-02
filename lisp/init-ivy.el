@@ -16,6 +16,7 @@
   (;; Current global keymap
    ("C-s" . swiper-isearch)
    ("M-x" . counsel-M-x)
+   ("C-c C-r" . ivy-resume)
 
    :map shadow-leader-map
    ("SPC" . counsel-M-x)
@@ -31,16 +32,11 @@
    ("hdf" . counsel-describe-function)
    ("hdm" . describe-mode)
    ("hdv" . counsel-describe-variable)
-   ("hR" . spacemacs/counsel-search-docs)
-
    ;; register/ring
    ("ry" . counsel-yank-pop)
 
    ;; jumping
    ("ji" . counsel-imenu)
-
-   ;; insert
-   ("iu" . counsel-unicode-char)
 
    ;; search
    ("/"  . counsel-rg)
@@ -49,8 +45,13 @@
    ("sr" . swiper-isearch-backward)
 
    ("bb" . ivy-switch-buffer)
-   ("rl" . ivy-resume)
 
+  :map counsel-mode-map
+  ([remap swiper] . counsel-grep-or-swiper)
+  ("C-x C-r" . counsel-recentf)
+  ("C-x j" . counsel-mark-ring)
+  ("C-c c e" . counsel-colors-emacs)
+  ("C-c c u" . counsel-unicode-char)
   :map swiper-map
   ("M-s" . swiper-isearch-toggle)
   ("M-%" . swiper-query-replace)
@@ -209,7 +210,7 @@
       (ivy-quit-and-run
         (color-rg-search-input my-last-swiper-to-counsel-rg-search default-directory))))
   (bind-key "<M-return>" #'swiper-toggle-color-rg swiper-map)
-	  
+
   ;; (with-eval-after-load 'rg
   ;;   (defun my-swiper-toggle-rg-dwim ()
   ;;     "Toggle `rg-dwim' with current swiper input."

@@ -108,9 +108,7 @@
   :after evil
   :init
   (shadow/define-leader-keys "ci" 'evilnc-comment-or-uncomment-lines
-                             "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-                             "cp" 'evilnc-comment-or-uncomment-paragraphs
-                             "cy" 'evilnc-copy-and-comment-operator))
+                             "cl" 'evilnc-comment-or-uncomment-paragraphs))
 
 (use-package evil-escape
   :ensure t

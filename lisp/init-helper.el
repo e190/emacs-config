@@ -1,4 +1,4 @@
-;;; config-helper.el --- Ivy setup
+;;; init-helper.el --- helper setup
 
 ;;; Commentary:
 ;;
@@ -58,4 +58,4 @@
              ("q" . delete-window)))
 
 (provide 'init-helper)
-;;; config-helper.el ends here
+;;; init-helper.el ends here

@@ -29,10 +29,6 @@
       :defines company-backends
       :init (cl-pushnew 'company-c-headers company-backends))))
 
-;;; Google C style
-(use-package google-c-style
-  :load-path "site-lisp/google-c-style.el")
-
 (use-package cmake-mode
   :ensure t
   :mode (
@@ -65,7 +61,13 @@
   (add-to-list 'origami-parser-alist '(python-mode . origami-indent-parser))
   :init
   (add-hook 'prog-mode-hook 'origami-mode)
-  )
+
+  ;; Support LSP
+  (when shadow-lsp-mode
+    (use-package lsp-origami
+      :hook (origami-mode . (lambda ()
+                              (if (bound-and-true-p lsp-mode)
+                                  (lsp-origami-mode)))))))
 
 ;; Use universal ctags to build the tags database for the project.
 ;; When you first want to build a TAGS database run 'touch TAGS'
