@@ -92,16 +92,7 @@ Create the *scratch* buffer first if needed."
         "bR" 'shadow/safe-revert-buffer
         "bs" 'shadow/switch-to-scratch-buffer
         "bY" 'shadow/copy-whole-buffer-to-clipboard
-        "bw" 'read-only-mode
-        "b1" 'buffer-to-window-1
-        "b2" 'buffer-to-window-2
-        "b3" 'buffer-to-window-3
-        "b4" 'buffer-to-window-4
-        "b5" 'buffer-to-window-5
-        "b6" 'buffer-to-window-6
-        "b7" 'buffer-to-window-7
-        "b8" 'buffer-to-window-8
-        "b9" 'buffer-to-window-9)
+        "bw" 'read-only-mode)
 
 (use-package ibuffer
   :ensure nil
@@ -110,7 +101,10 @@ Create the *scratch* buffer first if needed."
               all-the-icons-auto-mode-match?
               all-the-icons-faicon)
   :commands ibuffer-find-file
-  :bind ("C-x C-b" . ibuffer)
+  :bind
+  ("C-x C-b" . ibuffer)
+  (:map shadow-leader-map
+   ("bi" . ibuffer))
   :config
   (setq ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
 
