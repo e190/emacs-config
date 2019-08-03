@@ -207,9 +207,17 @@
   :ensure t
   :hook (eshell-mode . esh-autosuggest-mode))
 
-  ;; Eldoc support
-  (use-package esh-help
-    :init (setup-esh-help-eldoc))
+;; Eldoc support
+(use-package esh-help
+  :init (setup-esh-help-eldoc))
+
+(use-package aweshell
+  :ensure nil; local package
+  :load-path "site-lisp/aweshell"
+;;   :bind
+;; (global-set-key (kbd "C-:") 'aweshell-dedicated-open)
+;; (global-set-key (kbd "C-\"") 'aweshell-dedicated-toggle)
+  )
 
 (provide 'init-eshell)
 ;;; init-eshell.el ends here

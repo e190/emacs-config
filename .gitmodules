@@ -10,3 +10,6 @@
 [submodule "maple-iedit"]
 	path = site-lisp/maple-iedit
 	url = https://github.com/honmaple/emacs-maple-iedit.git
+[submodule "snails"]
+	path = site-lisp/snails
+	url = https://github.com/manateelazycat/snails.git
