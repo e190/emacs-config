@@ -103,6 +103,28 @@
     (add-to-list 'desktop-minor-mode-table
                  '(iedit-mode nil))))
 
+(use-package maple-iedit
+  :ensure nil
+  :load-path "site-lisp/maple-iedit"
+  :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
+  :config
+  (setq maple-iedit-evil-keybind t
+        maple-iedit-ignore-case t)
+
+  (maple-iedit-init)
+  (defhydra maple/iedit ()
+    ("a" maple-iedit-match-all "all match")
+    ("n" maple-iedit-match-next "next")
+    ("t" maple-iedit-skip-and-match-next "skip and next")
+    ("T" maple-iedit-skip-and-match-previous "skip and previous")
+    ("p" maple-iedit-match-previous "prev"))
+  :bind (:map evil-visual-state-map
+              ("n" . maple/iedit/body)
+              ("C-n" . maple-iedit-match-next)
+              ("C-p" . maple-iedit-match-previous)
+              ("C-t" . maple-iedit-skip-and-match-next))
+)
+
 (use-package thing-edit
   :ensure nil; local package
   :load-path "site-lisp/thing-edit"

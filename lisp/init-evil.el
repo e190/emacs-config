@@ -119,43 +119,6 @@
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-escape-delay 0.3))
 
-(use-package evil-mc
-  :ensure t
-  :after evil
-  :diminish evil-mc-mode "ⓜ"
-  :init
-  (defun kevin/toggle-evil-mc ()
-    (interactive)
-    (if evil-mc-mode
-        (progn
-          (evil-mc-undo-all-cursors)
-          (evil-mc-mode -1)
-          (message "evil mc mode disabled"))
-      (progn
-        (evil-mc-mode 1)
-        (message "evil mc mode enabled"))))
-  ;; (shadow/define-leader-keys "tm" #'kevin/toggle-evil-mc)
-  (shadow/define-leader-keys "tm" 'evil-mc-mode)
-  (defun kevin/reset-evil-mc-key-map ()
-    (let ((keys '(("ma" . evil-mc-make-all-cursors)
-                  ("mu" . evil-mc-undo-all-cursors)
-                  ("ms" . evil-mc-pause-cursors)
-                  ("mr" . evil-mc-resume-cursors)
-                  ("mf" . evil-mc-make-and-goto-first-cursor)
-                  ("mb" . evil-mc-make-and-goto-last-cursor)
-                  ("mh" . evil-mc-make-cursor-here)
-                  ("mn" . evil-mc-skip-and-goto-next-match)
-                  ("mp" . evil-mc-skip-and-goto-prev-match)
-                  ("C-n" . evil-mc-make-and-goto-next-match)
-                  ("C-p" . evil-mc-make-and-goto-prev-match)
-                  )))
-      (dolist (key-data keys)
-        ;; (evil-define-key 'normal 'evil-mc-key-map (kbd (car key-data)) (cdr key-data))
-        (evil-define-key 'visual 'evil-mc-key-map (kbd (car key-data)) (cdr key-data)))))
-  :config
-  (kevin/reset-evil-mc-key-map)
-  (evil-mc-mode -1))
-
 (use-package ace-mc
  :defer t
  :init

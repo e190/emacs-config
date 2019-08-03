@@ -90,6 +90,7 @@
 (require 'init-ui)
 (require 'init-theme)
 (require 'init-mode-line)
+(require 'init-evil)
 (require 'init-edit)
 (require 'init-emacs-settings)
 
@@ -103,7 +104,6 @@
 (require 'init-buffer)
 (require 'init-chinese)
 (require 'init-dired)
-(require 'init-evil)
 (require 'init-eshell)
 (require 'init-filetree)
 ;; (require 'init-treemacs)
