@@ -115,6 +115,7 @@
 (require 'init-window)
 (require 'init-projectile)
 (require 'init-lsp)
+(require 'init-prog)
 (require 'init-c)
 
 ;; Make gc pauses faster by decreasing the threshold.

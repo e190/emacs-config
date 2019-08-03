@@ -121,7 +121,9 @@
 
 ;; Increase selected region by semantic units
 (use-package expand-region
-  :bind ("C-=" . er/expand-region)
+  :bind
+  ("C-=" . er/expand-region)
+  ("C--" . er/contract-region)
   (:map shadow-leader-map
    ("mw" . er/mark-word)
    ("ms" . er/mark-symbol)
