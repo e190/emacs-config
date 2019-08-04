@@ -5,12 +5,6 @@
 
 ;;; Code:
 
-;; (defun shadow/set-gc-cons-threshold-to-2mb ()
-;;   (setq gc-cons-threshold (* 2 1000 1000)))
-
-;; (defun shadow/set-gc-cons-threshold-to-50mb ()
-;;   (setq gc-conj-threshold (* 50 1000 1000)))
-
 (defmacro shadow/ktop-watch (&rest forms)
   (let ((temp-var (make-symbol "start")))
     `(let ((,temp-var (float-time)))
@@ -27,6 +21,12 @@
           (copy-file custom-file)
         (error "Unable to find \"%s\"" custom-example)))
     (find-file custom-file)))
+
+;;;###autoload
+(defun shadow/open-init-file ()
+  "Open emacs init file"
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
 
 ;; Update
 (defun update-config ()

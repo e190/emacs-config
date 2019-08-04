@@ -77,7 +77,7 @@ Similar to `before-init-time'")
  :type '(choice
          (const :tag "LSP Mode" 'lsp-mode)
          (const :tag "eglot" 'eglot)
-         nil)) 
+         nil))
 
 (defcustom shadow-theme 'default
   "Set color theme."
@@ -89,6 +89,7 @@ Similar to `before-init-time'")
           (const :tag "Light theme" light)
           (const :tag "Daylight theme" daylight)
           symbol))
+
 (defcustom shadow-package-archives 'emacs-china
   "Set package archives from which to fetch."
   :type '(choice

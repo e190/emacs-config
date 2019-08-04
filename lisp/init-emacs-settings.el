@@ -13,15 +13,18 @@
     (make-directory new-dir 'parents)
     (file-truename new-dir)))
 
-;;;###autoload
-(defun shadow/open-init-file ()
-  "Open emacs init file"
-  (interactive)
-  (find-file "~/.emacs.d/init.el"))
-
 (setq auto-save-file-name-transforms
       `((".*" ,(shadow//make-cache-dir "auto-save-list") t)))
 
+;; 缩放字体
+(if sys/win32p
+    (progn
+    (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+    (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease))
+    (progn
+    (global-set-key (kbd "<C-mouse-4>") 'text-scale-increase)
+    (global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease))
+)
 ;; Directory to store backup files.
 (setq-default backup-directory-alist `(("." . ,(shadow//make-cache-dir "backups"))))
 (setq-default tramp-auto-save-directory (shadow//make-cache-dir "tramp-auto-save"))
