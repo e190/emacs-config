@@ -1,4 +1,4 @@
-;;; config-evil.el --- Basic evil-mode configuration.
+;;; init-evil.el --- Basic evil-mode configuration.
 
 ;;; Code:
 (eval-when-compile
@@ -11,16 +11,15 @@
   (evil-leader/set-leader "<SPC>"))
 
 (use-package evil
-  :demand
+  :demand t
+  :hook (after-init . evil-mode)
   :init
   ;; Must be set before evil is loaded.
   (setq evil-respect-visual-line-mode t)
   ;; 使能C-u 往上翻
   (setq evil-want-C-u-scroll t)
+  ;; (evil-mode 1)
   :config
-  ;; Be really evil.
-  (evil-mode 1)
-
   ;; Set SPACE to invoke `abn-leader-map' in modes except emacs and insert.
   (evil-define-key '(normal visual motion) 'global
     (kbd shadow-leader-key) shadow-leader-map)
@@ -93,11 +92,13 @@
    "jb" 'evil-window-bottom))
 
 (use-package evil-surround
+  :demand t
   :after evil
   :config
   (global-evil-surround-mode t))
 
 (use-package evil-visualstar
+  :demand t
   :after evil
   :config
   (setq evil-visualstar/persistent t)
@@ -111,7 +112,7 @@
                              "cl" 'evilnc-comment-or-uncomment-paragraphs))
 
 (use-package evil-escape
-  :ensure t
+  :demand t
   :after evil
   :diminish evil-escape-mode
   :config
@@ -120,10 +121,9 @@
   (setq-default evil-escape-delay 0.3))
 
 (use-package ace-mc
- :defer t
  :init
  (define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
  (define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor))
 
 (provide 'init-evil)
-;;; config-evil.el ends here
+;;; init-evil.el ends here

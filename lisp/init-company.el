@@ -34,12 +34,12 @@
   ("<tab>" . company-complete-common-or-cycle)
   ("<backtab>" . my-company-yasnippet)
   ;; ("C-c C-y" . my-company-yasnippet)
-   ("C-g" . company-abort)
-   ("C-/" . yas-expand-from-trigger-key)
-   ;; ("<tab>" . company-complete-common)
-   :map company-search-map
-   ("C-p" . company-select-previous)
-   ("C-n" . company-select-next))
+  ("C-g" . company-abort)
+  ("C-/" . yas-expand-from-trigger-key)
+  ;; ("<tab>" . company-complete-common)
+  :map company-search-map
+  ("C-p" . company-select-previous)
+  ("C-n" . company-select-next))
   :init
   (defun my-company-yasnippet ()
     (interactive)
@@ -74,7 +74,7 @@
   (setq company-backends shadow/company-global-backends))
 
   ;; Icons and quickhelp
-   (when emacs/>=26p
+  (when emacs/>=26p
     (use-package company-box
       :diminish
       :functions (my-company-box--make-line my-company-box-icons--elisp)

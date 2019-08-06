@@ -63,9 +63,6 @@
 
 (shadow-install-use-package)
 
-;; (require 'use-package)
-;; (setq use-package-always-ensure t)
-
 ;; ;; Should set before loading `use-package'
 (eval-and-compile
   (setq use-package-always-ensure t)

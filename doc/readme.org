@@ -83,18 +83,38 @@ C-c C-c提交 push
 ~<backtab>~ shift + tab
 * 标签
 * 字体
-*dfdsf*
+
 *粗体*
+#+BEGIN_SRC
+*粗体*
+#+END_SRC
 /斜体/
 /asdfd/
+
 +删除线+
+#+BEGIN_SRC
++删除线+
+#+END_SRC
 _下划线_
+#+BEGIN_SRC
+_下划线_
+#+END_SRC
 下标： H_2 O
+#+BEGIN_SRC
+下标： H_2 O
+#+END_SRC
 
 上标： E=mc^2
-等宽字：  =git=
- 或者 ～git～
+#+BEGIN_SRC
+上标： E=mc^2
+#+END_SRC
 
+等宽字：  =git=
+ 或者 ~git~
+#+BEGIN_SRC
+等宽字：  =git=
+ 或者 ~git~
+#+END_SRC
 * Projec
 
 ** ❓ 任务
@@ -120,3 +140,11 @@ _下划线_
 ***** 2
 <2019-07-29 周一>
 *****
+
+* c/c++ ide
+1、lsp + ccls
+2、counsel-etags + ctags + company-etags
+3、counsel-gtags + company-gtags
+* surround
+
+asdlfkj
