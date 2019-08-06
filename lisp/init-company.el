@@ -1,4 +1,4 @@
-;;; config-complete.el --- Config for yasnippet
+;; init-company.el --- Initialize company configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;

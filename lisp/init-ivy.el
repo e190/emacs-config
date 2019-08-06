@@ -1,4 +1,4 @@
-;;; config-ivy.el --- Ivy setup
+;;; init-ivy.el --- Initialize ivy configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -230,7 +230,8 @@
                     (counsel-ack . ivy--regex-plus)
                     (counsel-grep . ivy--regex-plus)
                     (t . ivy--regex-fuzzy))))
-;; Add help menu by pressing C-o in minibuffer.
+
+  ;; Add help menu by pressing C-o in minibuffer.
 (use-package ivy-hydra
   :bind (:map ivy-minibuffer-map
           ("M-o" . ivy-dispatching-done-hydra)))
@@ -308,4 +309,4 @@
   )
 
 (provide 'init-ivy)
-;;; config-ivy.el ends here
+;;; init-ivy.el ends here

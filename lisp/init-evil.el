@@ -1,4 +1,4 @@
-;;; init-evil.el --- Basic evil-mode configuration.
+;; init-evil.el --- Initialize evil-mode configurations.	-*- lexical-binding: t -*-
 
 ;;; Code:
 (eval-when-compile

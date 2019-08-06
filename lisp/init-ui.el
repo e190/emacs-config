@@ -1,4 +1,4 @@
-;;; config-ui.el --- UI tweaks
+;; init-ui.el --- Better lookings and appearances.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -47,7 +47,7 @@
     ;; from the screen height (for panels, menubars and
     ;; whatnot), then divide by the height of a char to
     ;; get the height we want
-    (add-to-list 'default-frame-alist 
+    (add-to-list 'default-frame-alist
          (cons 'height (/ (- (x-display-pixel-height) 140)
                           (frame-char-height))))
     )))
@@ -134,4 +134,4 @@
       scroll-conservatively 100000)
 
 (provide 'init-ui)
-;;; config-ui.el ends here
+;;; init-ui.el ends here

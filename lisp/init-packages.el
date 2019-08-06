@@ -1,4 +1,4 @@
-;;; core-packages.el --- Default package selection
+;;; init-package.el --- Initialize package configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;

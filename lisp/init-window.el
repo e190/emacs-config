@@ -1,4 +1,4 @@
-;;; config-window.el --- Config for yasnippet
+;; init-window.el --- Initialize window configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -301,4 +301,4 @@ Dedicated (locked) windows are left untouched."
 ;;   (global-centered-cursor-mode +1))
 
 (provide 'init-window)
-;;; config-window.el ends here
+;;; init-window.el ends here

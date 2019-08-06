@@ -1,4 +1,4 @@
-;;; config-dashboard.el --- Config for dashboard
+;; init-dashboard.el --- Initialize dashboard configurations.	-*- lexical-binding: t -*-
 
 ;;; Code:
 
@@ -154,4 +154,4 @@
 
 (provide 'init-dashboard)
 
-;;; config-dashboard.el ends here
+;;; init-dashboard.el ends here

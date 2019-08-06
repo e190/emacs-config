@@ -1,4 +1,4 @@
-;;; init-edit.el --- Config for general coding.
+;; init-edit.el --- Initialize editing configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;

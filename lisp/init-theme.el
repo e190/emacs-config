@@ -1,4 +1,4 @@
-;;; config-theme.el --- Important packages.
+;; init-theme.el --- Initialize theme configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;

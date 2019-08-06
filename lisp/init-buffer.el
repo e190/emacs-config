@@ -1,4 +1,4 @@
-;; config-buffer.el -- initialize buffer configurations. -*- lexical-binding: t; -*-
+;; init-buffer.el -- initialize buffer configurations. -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -160,3 +160,5 @@ Create the *scratch* buffer first if needed."
             "Project: "))))
 
 (provide 'init-buffer)
+
+;;; init-buffer.el ends here

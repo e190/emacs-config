@@ -1,4 +1,4 @@
-;;; config-dired.el --- Config for dired
+;; init-dired.el --- Initialize dired configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -46,4 +46,4 @@
 	 (ranger-mode . all-the-icons-dired-mode)))
 
 (provide 'init-dired)
-;;; config-dired.el ends here
+;;; init-dired.el ends here

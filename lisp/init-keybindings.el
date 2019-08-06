@@ -1,4 +1,4 @@
-;; core-keybindings.el --- Core key bindings.
+;; init-keybindings.el --- Initialize key bindings configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -118,4 +118,4 @@ every KEY."
 
 
 (provide 'init-keybindings)
-;;; core-keybindings.el ends here
+;;; init-keybindings.el ends here

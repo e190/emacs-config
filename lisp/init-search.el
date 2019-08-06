@@ -1,4 +1,4 @@
-;;; config-search.el --- Config for yasnippet
+;; init-search.el --- Initialize search.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -93,7 +93,6 @@
 ;; SnailsPac
 (use-package snails
   :load-path "site-elisp/snails"
-  ;; :init
   :bind
   (:map shadow-leader-map
    ("sa" . snails))

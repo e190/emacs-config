@@ -1,4 +1,4 @@
-;;; config-highlight.el --- Config for highlight
+;; init-highlight.el --- Initialize highlighting configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;

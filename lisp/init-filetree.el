@@ -1,4 +1,4 @@
-;;; config-filetree --- a tree layout file explorer for Emacs,such as treemacs or neotree. -*- lexical-binding: t; -*-
+;;; init-filetree --- a tree layout file explorer for Emacs,such as treemacs or neotree. -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -81,4 +81,4 @@
     (evil-define-key 'normal neotree-mode-map (kbd "?") 'neotree-hydra/body)))
 
 (provide 'init-filetree)
-;;; config-filetree ends here
+;;; init-filetree ends here

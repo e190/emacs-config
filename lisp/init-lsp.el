@@ -1,4 +1,4 @@
-;; config-lsp.el --- Initialize lsp (Language Server Protocol) configurations. -*- lexical-binding: t; -*-
+;; init-lsp.el --- Initialize lsp (Language Server Protocol) configurations. -*- lexical-binding: t; -*-
 ;;
 ;;; Commentary:
 ;;
@@ -151,4 +151,4 @@
   (dolist (lang org-babel-lang-list)
     (eval `(lsp-org-babel-enbale ,lang))))
 (provide 'init-lsp)
-;;; config-lsp.el ends here
+;;; init-lsp.el ends here

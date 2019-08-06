@@ -1,4 +1,4 @@
-;;; config-mode-line.el --- Config for mode-line
+;; init-mode-line.el.el --- Initialize mode-line configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;

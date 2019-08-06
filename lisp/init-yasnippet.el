@@ -1,4 +1,4 @@
-;;; config-yasnippet.el --- Config for yasnippet
+;; init-yasnippet.el --- Initialize yasnippet configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -19,4 +19,4 @@
   :config (use-package yasnippet-snippets))
 
 (provide 'init-yasnippet)
-;;; config-yasnippet.el ends here
+;;; init-yasnippet.el ends here

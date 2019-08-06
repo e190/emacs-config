@@ -1,4 +1,4 @@
-;;; config-projectile.el --- Config for projectile
+;; init-projectile.el --- Initialize projectile configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -12,9 +12,8 @@
   :config (shadow/define-leader-keys "p/" 'projectile-ripgrep))
 
 (use-package projectile
-  :defer 1
   :ensure t
-  :diminish projectile-mode 
+  :diminish projectile-mode
   :commands (projectile-ack
              projectile-ag
              projectile-compile-project
@@ -68,4 +67,4 @@
   (projectile-global-mode))
 
 (provide 'init-projectile)
-;;; config-projectile ends here
+;;; init-projectile ends here
