@@ -6,7 +6,7 @@
   :ensure t
   :diminish page-break-lines-mode
   :preface
-  (defvar homepage-url "https://github.com/lkzz/emacs.d")
+  (defvar homepage-url "https://github.com/e190/emacs-config")
 
   :functions (all-the-icons-faicon
               all-the-icons-material
@@ -53,12 +53,30 @@
          ("h" . dashboard-hydra/body)
          ("?" . dashboard-hydra/body))
   :config
-  (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!")
-  (setq dashboard-startup-banner (expand-file-name "img/dashLogo.png" user-emacs-directory))
-  (setq dashboard-items '((recents . 10)
-                          (bookmarks . 5)
-                          (projects . 5)))
+  (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!"
+        dashboard-startup-banner (expand-file-name "img/dashLogo.png" user-emacs-directory)
+        dashboard-items '((recents . 10)
+                                (bookmarks . 5)
+                                (projects . 5))
 
+        dashboard-set-init-info t
+        dashboard-set-file-icons t
+        dashboard-set-heading-icons t
+        dashboard-heading-icons '((recents   . "file-text")
+                                  (bookmarks . "bookmark")
+                                  (agenda    . "calendar")
+                                  (projects  . "file-directory")
+                                  (registers . "database"))
+
+        dashboard-set-footer t
+        dashboard-footer (format "Powered by Shadow, %s" (format-time-string "%Y"))
+        dashboard-footer-icon (cond ((display-graphic-p)
+                                     (all-the-icons-faicon "heart"
+                                                           :height 1.1
+                                                           :v-adjust -0.05
+                                                           :face 'error))
+                                    ((char-displayable-p ?🧡) "🧡 ")
+                                    (t (propertize ">" 'face 'font-lock-doc-face))))
   (defun dashboard-insert-buttons (_list-size)
     (insert "\n")
     (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 51) 2))) ?\ ))
@@ -85,8 +103,7 @@
                    (propertize "Restore Session" 'face 'font-lock-keyword-face))
     (insert "\n")
     (insert "\n")
-    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 48) 2))) ?\ ))
-    (insert (format "[%d packages loaded in %s]" (length package-activated-list) (emacs-init-time))))
+    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 48) 2))) ?\ )))
   (add-to-list 'dashboard-item-generators  '(buttons . dashboard-insert-buttons))
   (add-to-list 'dashboard-items '(buttons))
 

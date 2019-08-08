@@ -92,10 +92,7 @@
    "jb" 'evil-window-bottom))
 
 (use-package evil-surround
-  :demand t
-  :after evil
-  :config
-  (global-evil-surround-mode t))
+  :hook (evil-mode . global-evil-surround-mode))
 
 (use-package evil-visualstar
   :demand t
@@ -110,6 +107,41 @@
   :init
   (shadow/define-leader-keys "ci" 'evilnc-comment-or-uncomment-lines
                              "cl" 'evilnc-comment-or-uncomment-paragraphs))
+
+(use-package evil-mc
+  :demand t
+  :after evil
+  :diminish evil-mc-mode "ⓜ"
+  :init
+  (defun kevin/toggle-evil-mc ()
+    (interactive)
+    (if evil-mc-mode
+        (progn
+          (evil-mc-undo-all-cursors)
+          (evil-mc-mode -1)
+          (message "evil mc mode disabled"))
+      (progn
+        (evil-mc-mode 1)
+        (message "evil mc mode enabled"))))
+  (shadow/define-leader-keys "tm" #'kevin/toggle-evil-mc)
+  (defun kevin/reset-evil-mc-key-map ()
+    (let ((keys '(("ma" . evil-mc-make-all-cursors)
+                  ("mu" . evil-mc-undo-all-cursors)
+                  ("ms" . evil-mc-pause-cursors)
+                  ("mr" . evil-mc-resume-cursors)
+                  ("mf" . evil-mc-make-and-goto-first-cursor)
+                  ("mb" . evil-mc-make-and-goto-last-cursor)
+                  ("mh" . evil-mc-make-cursor-here)
+                  ("mn" . evil-mc-skip-and-goto-next-match)
+                  ("mp" . evil-mc-skip-and-goto-prev-match)
+                  ("C-n" . evil-mc-make-and-goto-next-match)
+                  ("C-p" . evil-mc-make-and-goto-prev-match)
+                  )))
+      (dolist (key-data keys)
+        ;; (evil-define-key 'normal 'evil-mc-key-map (kbd (car key-data)) (cdr key-data))
+        (evil-define-key 'visual 'evil-mc-key-map (kbd (car key-data)) (cdr key-data)))))
+  :config
+  (kevin/reset-evil-mc-key-map))
 
 (use-package evil-escape
   :demand t

@@ -1,7 +1,5 @@
-<2019-07-25 周四>
-*
-emacs-tutorial
-* magit
+* emacs-tutorial<2019-08-08 周四>
+** magit
 现在来试一试如何用，官方文档在这里：https://magit.vc/manual/magit.html#Top 状态查询
 C-x g来查询状态
 会打开一个buffer，显示
@@ -28,7 +26,7 @@ commit
 按c，然后再按c，输入comments
 C-c C-c提交 push
 把untracked文件变为staged 相当于git add命令 按下s即可
-* keybindings
+** keybindings
 | key            | Description                |   |
 |----------------+----------------------------+---|
 | ~C-x C-+~        | 放大字体                   |   |
@@ -81,8 +79,8 @@ C-c C-c提交 push
 表格内容与表头分界线的生成，输入|-，然后自动生成
 
 ~<backtab>~ shift + tab
-* 标签
-* 字体
+** 标签
+** 字体
 
 *粗体*
 #+BEGIN_SRC
@@ -115,10 +113,10 @@ _下划线_
 等宽字：  =git=
  或者 ~git~
 #+END_SRC
-* Projec
+** Projec
 
 ** ❓ 任务
-* 超链接
+** 超链接
 
 [[https://www.baidu.com]]
 #+BEGIN_SRC
@@ -141,10 +139,11 @@ _下划线_
 <2019-07-29 周一>
 *****
 
-* c/c++ ide
+** c/c++ ide
 1、lsp + ccls
 2、counsel-etags + ctags + company-etags
 3、counsel-gtags + company-gtags
-* surround
+https://www.gnu.org/software/global/download.html
+** surround
 
 (asdlfkj)

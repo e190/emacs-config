@@ -20,7 +20,6 @@
                                           company-files
                                           ))
 (use-package company
-  :defer 1
   :ensure t
   :diminish company-mode "ⓒ"
   :bind
