@@ -72,7 +72,7 @@ Similar to `before-init-time'")
   :type 'string
   )
 
-(defcustom shadow-lsp-mode 'gtags
+(defcustom shadow-lsp-mode 'lsp-mode
  "Set language server."
  :type '(choice
          (const :tag "LSP Mode" 'lsp-mode)
