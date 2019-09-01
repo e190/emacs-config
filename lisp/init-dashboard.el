@@ -110,7 +110,6 @@
   (dashboard-insert-startupify-lists)
   (with-eval-after-load 'evil
     (evil-define-key 'normal dashboard-mode-map
-       (kbd "h") 'dashboard-hydra/body
        (kbd "?") 'dashboard-hydra/body)
        "r" 'dashboard-goto-recent-files)
 

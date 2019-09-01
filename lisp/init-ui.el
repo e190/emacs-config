@@ -7,9 +7,35 @@
 (eval-when-compile
   (require 'init-constants))
 
-(when (member "Consolas" (font-family-list))
-  (set-frame-font shadow-font 'keep-size)
-  (add-to-list 'default-frame-alist (cons 'font shadow-font)))
+;; (when (member "Consolas" (font-family-list))
+;;   (set-frame-font shadow-font 'keep-size)
+;;   (add-to-list 'default-frame-alist (cons 'font shadow-font)))
+;; Fonts
+(when (display-graphic-p)
+  ;; Set default font
+  (catch 'loop
+    (dolist (font '("Consolas" "SF Mono" "Hack" "Source Code Pro" "Fira Code"
+                    "Menlo" "Monaco" "DejaVu Sans Mono"))
+      (when (member font (font-family-list))
+        (set-face-attribute 'default nil :font font :height (cond
+                                                             (sys/mac-x-p 130)
+                                                             (sys/win32p 110)
+                                                             (t 100)))
+        (throw 'loop t))))
+
+  ;; Specify font for all unicode characters
+  (catch 'loop
+    (dolist (font '("Symbola" "Apple Symbols" "Symbol"))
+      (when (member font (font-family-list))
+        (set-fontset-font t 'unicode font nil 'prepend)
+        (throw 'loop t))))
+
+  ;; Specify font for Chinese characters
+  (catch 'loop
+    (dolist (font '("WenQuanYi Micro Hei" "Microsoft Yahei"))
+      (when (member font (font-family-list))
+        (set-fontset-font t '(#x4e00 . #x9fff) font)
+        (throw 'loop t)))))
 
 ;; Start a clean slate.
 (blink-cursor-mode -1)

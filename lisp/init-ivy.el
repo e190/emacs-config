@@ -251,7 +251,6 @@
 
 ;; counsel-M-x will use smex if available.
 (use-package smex
-  :defer t
   :init
   (setq smex-save-file (concat shadow-cache-dir "/smex-items")))
 
@@ -304,8 +303,7 @@
           (:columns
            ((ivy-rich-candidate (:width 20 :face success)) ; return the candidate itself
             (ivy-rich-bookmark-info (:face font-lock-comment-face)))) ; return the last modified time of the file)
-          )
-        ))
+          )))
 
 
 ;; Use universal ctags to build the tags database for the project.

@@ -27,14 +27,15 @@
   (with-eval-after-load 'company
     (use-package company-c-headers
       :defines company-backends
-      :init (cl-pushnew 'company-c-headers company-backends))))
+      :init (cl-pushnew 'company-c-headers company-backends)))
+  ;; (setq ctags-command "/usr/local/bin/ctags -e -R ")
+  )
 
 (use-package cmake-mode
   :ensure t
   :mode (
 	 ("CMakeLists\\.txt\\'" . cmake-mode)
-	 ("\\.cmake\\'" . cmake-mode)
-	 ))
+	 ("\\.cmake\\'" . cmake-mode)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Origami - Does code folding, ie hide the body of an
 ;; if/else/for/function so that you can fit more code on your screen
@@ -63,7 +64,7 @@
   (add-hook 'prog-mode-hook 'origami-mode)
 
   ;; Support LSP
-  (when shadow-lsp-mode
+  (when (eq shadow-lsp-mode 'lsp-mode)
     (use-package lsp-origami
       :hook (origami-mode . (lambda ()
                               (if (bound-and-true-p lsp-mode)
@@ -77,19 +78,17 @@
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
               (ggtags-mode 1))))
   :bind (:map ggtags-mode-map
-              ([remap xref-find-definitions] . ggtags-find-definition)
-              ([remap xref-find-references] . ggtags-find-references)
-              ("C-c d" . ggtags-find-definition)
-              ("C-c r" . ggtags-find-references)
-              ("C-c i" . ggtags-find-tag-dwim)
-              ("M-," . pop-tag-mark)
-              ("C-c <" . ggtags-prev-mark)
-              ("C-c >" . ggtags-next-mark)
+        ([remap xref-find-definitions] . ggtags-find-definition)
+        ([remap xref-find-references] . ggtags-find-references)
+        ("C-c d" . ggtags-find-definition)
+        ("C-c r" . ggtags-find-references)
+        ("C-c i" . ggtags-find-tag-dwim)
+        ("M-," . pop-tag-mark)
+        ("C-c <" . ggtags-prev-mark)
+        ("C-c >" . ggtags-next-mark)
         :map shadow-leader-map
-              ("tc" . ggtags-create-tags)
-              ("tu" . ggtags-update-tags)
-              ))
-
+        ("tc" . ggtags-create-tags)
+        ("tu" . ggtags-update-tags)))
 
 (provide 'init-c)
 

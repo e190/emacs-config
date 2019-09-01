@@ -1,4 +1,4 @@
-;;; funcs-base.el --- Functions for base
+;;; init-funcs.el --- Functions for base. -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;
@@ -91,5 +91,78 @@
 (defun shadow-current-theme ()
   "The current enabled theme."
   (car custom-enabled-themes))
+
+(defun my-project-name-contains-substring (REGEX)
+  (let ((dir (if (buffer-file-name)
+                 (file-name-directory (buffer-file-name))
+               "")))
+    (string-match-p REGEX dir)))
+
+(defun my-create-tags-if-needed (SRC-DIR &optional FORCE)
+  "return the full path of tags file"
+  (let ((dir (file-name-as-directory (file-truename SRC-DIR)) )
+       file)
+    (setq file (concat dir "TAGS"))
+    (when (or FORCE (not (file-exists-p file)))
+      (message "Creating TAGS in %s ..." dir)
+      (shell-command
+       (format "ctags -f %s -e -R %s" file dir))
+      )
+    file
+    ))
+
+(defvar my-tags-updated-time nil)
+
+(defun my-update-tags ()
+  (interactive)
+  "check the tags in tags-table-list and re-create it"
+  (dolist (tag tags-table-list)
+    (my-create-tags-if-needed (file-name-directory tag) t)
+    ))
+
+(defun my-auto-update-tags-when-save ()
+  (interactive)
+  (cond
+   ((not my-tags-updated-time)
+    (setq my-tags-updated-time (current-time)))
+   ((< (- (float-time (current-time)) (float-time my-tags-updated-time)) 300)
+    ;; < 300 seconds
+    ;; do nothing
+    )
+   (t
+    (setq my-tags-updated-time (current-time))
+    (my-update-tags)
+    (message "updated tags after %d seconds." (- (float-time (current-time))  (float-time my-tags-updated-time)))
+    )
+   ))
+
+;; (defun my-setup-develop-environment ()
+;;     (when (my-project-name-contains-substring "Loris")
+;;       (cond
+;;        ((my-project-name-contains-substring "src/desktop")
+;;         ;; C++ project don't need html tags
+;;         (setq tags-table-list (list
+;;                                (my-create-tags-if-needed
+;;                                 (concat (file-name-as-directory (getenv "WXWIN")) "include"))
+;;                                (my-create-tags-if-needed "~/projs/Loris/loris/src/desktop")))
+;;         )
+;;        ((my-project-name-contains-substring "src/html")
+;;         ;; html project donot need C++ tags
+;;         (setq tags-table-list (list (my-create-tags-if-needed "~/projs/Loris/loris/src/html")))
+;;         ))))
+(defun my-setup-develop-environment ()
+  (interactive)
+  (when (my-project-name-contains-substring "guanghui")
+    (cond
+     ((my-project-name-contains-substring "cocos2d-x")
+      ;; C++ project don't need html tags
+      (setq tags-table-list (list (my-create-tags-if-needed "~/cocos2d-x/cocos"))))
+     ((my-project-name-contains-substring "Github/fireball")
+      (message "load tags for fireball engine repo...")
+      ;; html project donot need C++ tags
+      (setq tags-table-list (list (my-create-tags-if-needed "~/Github/fireball/engine/cocos2d")))))))
+
+
+
 (provide 'init-funcs)
-;;; funcs-base.el ends here
+;;; init-funcs.el ends here

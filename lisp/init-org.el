@@ -18,6 +18,35 @@
       (org-try-structure-completion)
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
+
+  ;; https://emacs-china.org/t/org-mode/79
+  (defun my-org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+  same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (org-display-inline-images)
+    (setq filename
+          (concat
+          (make-temp-name
+            (concat (file-name-nondirectory (buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+                      ; take screenshot
+    (if (eq system-type 'darwin)
+        (progn
+      (call-process-shell-command "screencapture" nil nil nil nil " -s " (concat
+                                          "\"" filename "\"" ))
+      (call-process-shell-command "convert" nil nil nil nil (concat "\"" filename "\" -resize  \"50%\"" ) (concat "\"" filename "\"" ))
+      ))
+    (if (eq system-type 'gnu/linux)
+        (call-process "import" nil nil nil filename))
+                      ; insert into file if correctly taken
+    (if (file-exists-p filename)
+        (insert (concat "[[file:" filename "]]")))
+    (org-display-inline-images))
+
   :pretty-hydra
   ((:title (pretty-hydra-title "Org Template" 'fileicon "org")
     :color blue :quit-key "q")
@@ -58,7 +87,9 @@
                   (interactive)
                   (if (or (region-active-p) (looking-back "^\s*" 1))
                       (org-hydra/body)
-                    (self-insert-command 1)))))
+                    (self-insert-command 1))))
+          :map shadow-leader-map
+          ("os" . my-org-screenshot))
   :init
   (add-hook 'org-mode-hook (lambda ()
                              (org-indent-mode 1)

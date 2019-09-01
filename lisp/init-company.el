@@ -7,18 +7,6 @@
 (eval-when-compile
   (require 'init-constants))
 
-(defconst shadow/company-global-backends '(
-                                          ;; 当前文件所属编程语言的语法关键词
-                                          company-keywords
-                                          ;; 使用 completion-at-point-functions 的后端
-                                          company-capf
-                                          ;; 主要用来补全当前 buffer 中出现的 word
-                                          company-dabbrev
-                                          ;; 使用 yasnippet 补全的后端
-                                          company-yasnippet
-                                          ;; 补全文件系统的路径后端
-                                          company-files
-                                          ))
 (use-package company
   :ensure t
   :diminish company-mode "ⓒ"
@@ -70,7 +58,9 @@
                                message-mode
                                help-mode
                                gud-mode))
-  (setq company-backends shadow/company-global-backends))
+
+  ;; (setq company-backends (delete 'company-capf company-backends))
+  (setq company-backends (delete 'company-ropemacs company-backends)))
 
   ;; Icons and quickhelp
   (when emacs/>=26p
@@ -166,7 +156,6 @@
       :init (setq company-quickhelp-delay 0.5))))
 
 (use-package company-ycmd
-  :defer 2
   :ensure t
   :init
   :config
@@ -237,10 +226,52 @@
   :defer t)
 
 (use-package ycmd
-  :defer 2
   :ensure t
   :init
   :config)
+
+(when (eq shadow-lsp-mode 'ctags)
+  ;; Wait 30  minutes to update cache from tags file
+  ;; assume `company-dabbrev-code' or `company-dabbrev' in the same group provides candidates
+  ;; @see https://github.com/company-mode/company-mode/pull/877 for tech details
+  ;; The purpose is to avoid rebuilding candidate too frequently because rebuilding could take
+  ;; too much time.
+  (defvar company-etags-update-interval 1800
+    "The interval (seconds) to update candidate cache.
+  Function `tags-completion-table' sets up variable `tags-completion-table'
+  by parsing tags files.
+  The interval stops the function being called too frequently.")
+
+  (defvar company-etags-timer nil
+    "Timer to avoid calling function `tags-completion-table' too frequently.")
+
+  (eval-after-load 'company-etags
+    '(progn
+      ;; insert major-mode not inherited from prog-mode
+      ;; to make company-etags work
+      (defadvice company-etags--candidates (around company-etags--candidates-hack activate)
+        (let* ((prefix (car (ad-get-args 0)))
+                (tags-table-list (company-etags-buffer-table))
+                (tags-file-name tags-file-name)
+                (completion-ignore-case company-etags-ignore-case))
+          (and (or tags-file-name tags-table-list)
+                (fboundp 'tags-completion-table)
+                (save-excursion
+                  (unless (and company-etags-timer
+                              tags-completion-table
+                              (> (length tags-completion-table) 0)
+                              (< (- (float-time (current-time)) (float-time company-etags-timer))
+                                  company-etags-update-interval))
+                    (setq company-etags-timer (current-time))
+                    ;; `visit-tags-table-buffer' will check the modified time of tags file. If it's
+                    ;; changed, the tags file is reloaded.
+                    (visit-tags-table-buffer))
+                  ;; In function `tags-completion-table', cached variable `tags-completion-table' is
+                  ;; accessed at first. If the variable is empty, it is set by parsing tags file
+                  (all-completions prefix (tags-completion-table))))))
+
+      (add-to-list 'company-etags-modes 'web-mode)
+      (add-to-list 'company-etags-modes 'c++-mode))))
 
 (provide 'init-company)
 ;;; init-company.el ends here

@@ -26,6 +26,7 @@
 (defvar default-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 (setq gc-cons-threshold 40000000)
+
 (add-hook 'emacs-startup-hook
           (lambda ()
             "Restore defalut values after startup."
@@ -51,11 +52,6 @@
 
             (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
             (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
-;; Core
-;;----------------------------------------------------------------------------
-;; Core files required.
-;;----------------------------------------------------------------------------
-;; (add-to-list 'load-path (expand-file-name "core" user-emacs-directory))
 
 ;;----------------------------------------------------------------------------
 ;; Load custom file first.

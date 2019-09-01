@@ -1,4 +1,4 @@
-* emacs-tutorial<2019-08-08 周四>
+* emacs-tutorial<2019-07-25 周四>
 ** magit
 现在来试一试如何用，官方文档在这里：https://magit.vc/manual/magit.html#Top 状态查询
 C-x g来查询状态
@@ -140,10 +140,48 @@ _下划线_
 *****
 
 ** c/c++ ide
-1、lsp + ccls
-2、counsel-etags + ctags + company-etags
-3、counsel-gtags + company-gtags
+*** lsp + ccls
+*** counsel-etags + ctags + company-etags
+ctags：大多数 Unix 系统都能找到。只支持 C。只有基本的功能；
+
+Exuberant ctags：它支持 C、C++、Java、Fortran、Python、Eiffel、PHP等41种语言，详见这里；
+下载Exuberant ctags: http://ctags.sourceforge.net/
+
+Tips:
+_emacs自带有ctags，但是没有e参数，需要重新下载Exuberant ctags_
+
+macs company实现补全的候选来源，叫company-backends；是一个emacs变量，可以使用c-h v company-backends查看。
+1- 默认的company候选项有很多，有时候发现很多候选项对自己完全不适用，极大干扰了自动补全的效率。
+2- 主要的是company-dabbrev，是依赖emacs当前打开的buffer作为自动补全候选项来源。很有作用。
+3- 还有company-files，是文件系统的路径。很有作用。
+4- company-keywords，是当前文件所属编程语言的语法关键词。
+5- company-gtags、company-etags是依据ctags等生成TAGS，去寻找候选项。
+6- 其它均可以在文件目录里找到其描述 d:/EDA-tools/emacs/emacs-25.1/.emacs.d/elpa/company-20170715.1035
+7- 根据个人实践，去删减，达到优化目的；使得自动补全的候选项都是期望的内容。
+如何判断，当前候选项，来自哪个company-backends？
+回答：m-x diminish-undo，然后选择company-mode后，mode-line会显示当前补全的候选项来自哪个company-backends。
+#+BEGIN_SRC
+(defconst shadow/company-global-backends '(
+                                          ;; 当前文件所属编程语言的语法关键词
+                                          company-keywords
+                                          ;; 使用 completion-at-point-functions 的后端
+                                          company-capf
+                                          ;; 主要用来补全当前 buffer 中出现的 word
+                                          company-dabbrev
+                                          ;; 使用 yasnippet 补全的后端
+                                          company-yasnippet
+                                          ;; 补全文件系统的路径后端
+                                          company-files
+                                          (company-dabbrev-code
+                                          company-etags
+                                          company-gtags
+                                          )))
+
+(setq company-backends shadow/company-global-backends))
+#+END_SRC
+*** counsel-gtags + company-gtags
 https://www.gnu.org/software/global/download.html
+
 ** surround
 
 (asdlfkj)
