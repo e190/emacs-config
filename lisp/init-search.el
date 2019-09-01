@@ -99,7 +99,11 @@
   :custom-face
   (snails-content-buffer-face ((t (:background "#111" :height 110))))
   (snails-input-buffer-face ((t (:background "#222" :foreground "gold" :height 110))))
-  (snails-header-line-face ((t (:inherit font-lock-function-name-face :underline t :height 1.1)))))
+  (snails-header-line-face ((t (:inherit font-lock-function-name-face :underline t :height 1.1))))
+  :config
+  (add-hook 'snails-mode-hook (lambda ()
+                              (snails-init-face-with-theme)
+                              (evil-emacs-state))))
 ;; -SnailsPac
 
 (provide 'init-search)
