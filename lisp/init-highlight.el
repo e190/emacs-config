@@ -23,11 +23,24 @@
   (add-hook hook (lambda ()
                    (setq show-trailing-whitespace t)
                    (add-hook 'before-save-hook #'delete-trailing-whitespace nil t))))
+
 ;; Highlight symbols
+;; "i" -> symbol-overlay-put
+;; "n" -> symbol-overlay-jump-next
+;; "p" -> symbol-overlay-jump-prev
+;; "w" -> symbol-overlay-save-symbol
+;; "t" -> symbol-overlay-toggle-in-scope
+;; "e" -> symbol-overlay-echo-mark
+;; "d" -> symbol-overlay-jump-to-definition
+;; "s" -> symbol-overlay-isearch-literally
+;; "q" -> symbol-overlay-query-replace
+;; "r" -> symbol-overlay-rename
+
 (use-package symbol-overlay
   :diminish
   :custom-face
-  (symbol-overlay-default-face ((t (:inherit 'region))))
+  ;; (symbol-overlay-default-face ((t (:inherit 'region))))
+  (symbol-overlay-default-face ((t (:background "dark gray" :foreground "black"))))
   (symbol-overlay-face-1 ((t (:inherit 'highlight))))
   (symbol-overlay-face-2 ((t (:inherit 'font-lock-builtin-face :inverse-video t))))
   (symbol-overlay-face-3 ((t (:inherit 'warning :inverse-video t))))

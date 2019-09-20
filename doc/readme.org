@@ -1,4 +1,94 @@
 * emacs-tutorial<2019-07-25 周四>
+** 安装 emacs26-GUI
+*Ubuntu*
+源码编译安装(最新版)
+
+系统更新资源：
+
+#+BEGIN_SRC
+sudo apt-get update && apt-get upgrade
+#+END_SRC
+
+安装源码编译需要的包：
+
+#+BEGIN_SRC
+sudo apt-get install build-essential libncurses-dev
+#+END_SRC
+
+可以到 EMACS官方下载页面 或 直接使用下面的链接:
+
+#+BEGIN_SRC
+$ cd /tmp
+$ wget http://mirrors.ustc.edu.cn/gnu/emacs/emacs-26.1.tar.xz
+## 解压 xz 文件包
+$ tar -xJvf emacs-26.1.tar.xz
+$ cd emacs-26.1
+
+#+END_SRC
+
+可以通过 _configure_ 进行配置安装：
+
+    纯命令行：仅用于控制台环境，如果需要GUI界面还要安装其它开发包, --without-x，以及 --with-gnutls=no
+    交互界面：默认是会配置所有的交互界面，但需要额外安装相关的软件包。
+
+#+BEGIN_SRC
+ ## 默认安装 GUI
+ $ ./configure
+#+END_SRC
+
+对于在本地操作，一般我选择配置 GUI。如果有报错需要安装包，可以使用 apt search xxx 来搜索名称，然后安装好就可以了。我安装了几个常用的包：
+
+#+BEGIN_SRC
+$ sudo apt-get install gnutls-dev libxpm-dev libgif-dev libtiff-dev
+#+END_SRC
+
+如果继续报错
+
+#+BEGIN_SRC
+... ...
+checking for libXaw... configure: error: No X toolkit could be found.
+... ...
+#+END_SRC
+
+则需要通过安装 gtk 来实现带界面运行
+
+#+BEGIN_SRC
+apt search gtk | grep libgtk
+libgtk2.0-dev    - development files for the GTK+ library
+#+END_SRC
+
+
+安装这个 gtk 包
+
+#+BEGIN_SRC
+$ sudo apt-get install libgtk2.0-dev
+
+#+END_SRC
+
+剩下的就是编译安装了
+
+#+BEGIN_SRC
+$ sudo make && make install
+
+#+END_SRC
+
+查看版本号
+
+#+BEGIN_SRC
+$ emacs --version
+GNU Emacs 26.1
+Copyright (C) 2018 Free Software Foundation, Inc.
+GNU Emacs comes with ABSOLUTELY NO WARRANTY.
+You may redistribute copies of GNU Emacs
+under the terms of the GNU General Public License.
+For more information about these matters, see the file named COPYING.
+#+END_SRC
+当然，也可以在终端启动无界面的操作：
+
+#+BEGIN_SRC
+$ emacs -nw
+#+END_SRC
+
 ** magit
 现在来试一试如何用，官方文档在这里：https://magit.vc/manual/magit.html#Top 状态查询
 C-x g来查询状态
@@ -114,7 +204,6 @@ _下划线_
  或者 ~git~
 #+END_SRC
 ** Projec
-
 ** ❓ 任务
 ** 超链接
 

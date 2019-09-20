@@ -63,7 +63,7 @@
       ("F" flymake-mode "flymake" :toggle t)
       ("o" origami-mode "folding" :toggle t)
       ("O" hs-minor-mode "hideshow" :toggle t)
-      ("w" subword-mode "subword" :toggle t)
+      ("u" subword-mode "subword" :toggle t)
       ("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
       ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))
      "Version Control"

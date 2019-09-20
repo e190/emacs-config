@@ -162,7 +162,6 @@
   (add-to-list 'company-backends 'company-ycmd))
 
 (use-package flycheck
-  :defer 3
   :ensure t
   :diminish flycheck-mode
   :commands (hydra-flycheck/body)

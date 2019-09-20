@@ -103,8 +103,25 @@
   :config
   (add-hook 'snails-mode-hook (lambda ()
                               (snails-init-face-with-theme)
-                              (evil-emacs-state))))
+                              (evil-emacs-state)))
+  ;; Functions for specific backends
+  (defun snails-current-project ()
+    (interactive)
+    (snails '(snails-backend-projectile snails-backend-rg snails-backend-fd)))
+  (defun snails-active-recent-buffers ()
+    (interactive)
+    (snails '(snails-backend-buffer snails-backend-recentf)))
+  (defun snails-everywhere ()
+    (interactive)
+    (snails '(snails-backend-everything snails-backend-mdfind)))
+  :bind
+  (("M-s s" . snails)
+   ("M-s g" . snails-current-project)
+   ("M-s b" . snails-active-recent-buffers)
+   ("M-s e" . snails-everywhere)))
 ;; -SnailsPac
+
+
 
 (provide 'init-search)
 ;;; config-search.el ends here
