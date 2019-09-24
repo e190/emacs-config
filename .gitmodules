@@ -10,3 +10,6 @@
 [submodule "maple-iedit"]
 	path = site-lisp/maple-iedit
 	url = https://github.com/honmaple/emacs-maple-iedit.git
+[submodule "emacs-maple-imenu"]
+	path = site-lisp/emacs-maple-imenu
+	url = https://github.com/honmaple/emacs-maple-imenu.git

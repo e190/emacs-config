@@ -128,19 +128,34 @@
 (setq column-number-mode t)
 (setq line-number-mode t)
 
-(use-package imenu-list
-  :defer t
-  :ensure t
-  :init
-  (shadow/define-leader-keys "ti" 'imenu-list-smart-toggle)
-  :config
-  (setq imenu-list-size     0.2)
-  (setq imenu-list-position 'right)
-  (setq imenu-list-focus-after-activation t))
+;; (use-package imenu-list
+;;   :defer t
+;;   :ensure t
+;;   :init
+;;   (shadow/define-leader-keys "ti" 'imenu-list-smart-toggle)
+;;   :config
+;;   (setq imenu-list-size     0.2)
+;;   (setq imenu-list-position 'right)
+;;   (setq imenu-list-focus-after-activation t))
 
-(use-package imenu-anywhere
+;; (use-package imenu-anywhere
+;;   :config
+;;   (setq imenu-anywhere-delimiter ": "))
+
+;; https://emacs-china.org/t/imenu-list-tagbar/7341
+(use-package maple-imenu
+  :ensure nil
+  :load-path "site-lisp/emacs-maple-imenu"
+  :commands (maple-imenu)
+  :init
+  (shadow/define-leader-keys "ti" 'maple-imenu)
   :config
-  (setq imenu-anywhere-delimiter ": "))
+  (setq maple-imenu-display-alist '((side . left) (slot . -1)))
+  ;; (setq maple-imenu-display-alist '((side . right) (slot . -1))))
+  (defun maple-sidebar()
+    (interactive)
+    (maple-imenu)
+    (neotree-toggle)))
 
 ;; Display Time
 (use-package time
