@@ -4,6 +4,8 @@
 ;;
 
 ;;; Code:
+(eval-when-compile
+  (require 'init-constants))
 
 (use-package counsel
   :diminish counsel-mode ivy-mode
@@ -193,22 +195,14 @@
                                              (thing-at-point 'line t)))))
 	  (setq my-swiper-to-counsel-rg-search text)
       (ivy-quit-and-run
-        (counsel-rg my-swiper-to-counsel-rg-search default-directory))))
+        (counsel-rg my-swiper-to-counsel-rg-search))))
   (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
+
   (defun swiper-toggle-color-rg ()
     "Toggle `color-rg' with current swiper input."
     (interactive)
-    (let ((text (replace-regexp-in-string
-                "\n" ""
-                 (replace-regexp-in-string
-                  "\\\\_<" ""
-                  (replace-regexp-in-string
-                   "\\\\_>" ""
-                   (replace-regexp-in-string "^.*Swiper: " ""
-                                             (thing-at-point 'line t)))))))
-      (setq my-last-swiper-to-counsel-rg-search text)
       (ivy-quit-and-run
-        (color-rg-search-input my-last-swiper-to-counsel-rg-search default-directory))))
+        (color-rg-search-symbol-in-project)))
   (bind-key "<M-return>" #'swiper-toggle-color-rg swiper-map)
 
   ;; (with-eval-after-load 'rg
@@ -218,6 +212,7 @@
   ;;     (ivy-quit-and-run (rg-dwim default-directory)))
   ;;   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
   ;;   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map))
+
   ;; Enhance fuzzy matching
   (use-package flx
     :config (setq ivy-re-builders-alist
@@ -231,7 +226,7 @@
                     (counsel-grep . ivy--regex-plus)
                     (t . ivy--regex-fuzzy))))
 
-  ;; Add help menu by pressing C-o in minibuffer.
+ ;; Add help menu by pressing C-o in minibuffer.
 (use-package ivy-hydra
   :bind (:map ivy-minibuffer-map
           ("M-o" . ivy-dispatching-done-hydra)))

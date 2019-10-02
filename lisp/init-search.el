@@ -69,29 +69,24 @@
                ("c f" . counsel-fzf))))
 
 (use-package color-rg
+  :demand t
   :ensure nil; local package
   :load-path "site-lisp/color-rg"
   :bind
+  ("M-s p" . color-rg-search-input-in-projcet)
   (:map shadow-leader-map
    ("sc" . color-rg-search-input)
-   ("sp" . color-rg-search-input-in-projcet)
-   ("ss" . color-rg-search-symbol)))
-  ;; :config
-  ;; (with-eval-after-load 'evil
-  ;;   (evil-define-key 'normal color-rg-mode-map
-  ;;   ("RET" . color-rg-open-file))))
-  ;; :map color-rg-mode-map
-  ;;   ("j" . color-rg-jump-next-keyword)
-  ;;   ("k" . color-rg-jump-prev-keyword)
-  ;;   ("h" . color-rg-jump-next-file)
-  ;;   ("l" . color-rg-jump-prev-file)
-  ;;   ("RET" . color-rg-open-file)
-  ;;   ("C-m" . color-rg-open-file)))
-  ;; :config)
+   ;; ("sp" . color-rg-search-input-in-projcet)
+   ("sp" . color-rg-search-symbol-in-project)
+   ("ss" . color-rg-search-symbol))
+  :config
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)))
   ;; (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg))
 
 ;; SnailsPac
 (use-package snails
+  :demand t
   :load-path "site-elisp/snails"
   :bind
   (:map shadow-leader-map

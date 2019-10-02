@@ -4,67 +4,60 @@
 ;;
 
 ;;; Code:
-(use-package ripgrep
-  :ensure t)
+(eval-when-compile
+  (require 'init-constants))
 
-(use-package projectile-ripgrep
-  :ensure t
-  :config (shadow/define-leader-keys "p/" 'projectile-ripgrep))
-
+;; Manage and navigate projects
 (use-package projectile
-  :ensure t
-  :diminish projectile-mode
-  :commands (projectile-ack
-             projectile-ag
-             projectile-compile-project
-             projectile-dired
-             projectile-find-dir
-             projectile-find-file
-             projectile-find-tag
-             projectile-test-project
-             projectile-invalidate-cache
-             projectile-kill-buffers
-             projectile-multi-occur
-             projectile-project-p
-             projectile-project-root
-             projectile-recentf
-             projectile-regenerate-tags
-             projectile-replace
-             projectile-replace-regexp
-             projectile-run-async-shell-command-in-root
-             projectile-run-shell-command-in-root
-             projectile-switch-project
-             projectile-switch-to-buffer
-             projectile-vc)
-  :bind
-  (:map shadow-leader-map
-   ("p!" . projectile-run-shell-command-in-root)
-   ("p%" . projectile-replace-regexp)
-   ("p&" . projectile-run-async-shell-command-in-root)
-   ("pD" . projectile-dired)
-   ("pF" . projectile-find-file-dwim)
-   ("pG" . projectile-regenerate-tags)
-   ("pI" . projectile-invalidate-cache)
-   ("pR" . projectile-replace)
-   ("pT" . projectile-test-project)
-   ("pa" . projectile-toggle-between-implementation-and-test)
-   ("pb" . projectile-switch-to-buffer)
-   ("pc" . projectile-compile-project)
-   ("pd" . projectile-find-dir)
-   ("pf" . projectile-find-file)
-   ("pg" . projectile-find-tag)
-   ("ph" . helm-projectile)
-   ("pk" . projectile-kill-buffers)
-   ("pp" . projectile-switch-project)
-   ("pr" . projectile-recentf)
-   ("pv" . projectile-vc))
+  :diminish
+  :bind (:map projectile-mode-map
+         ("s-t" . projectile-find-file) ; `cmd-t' or `super-t'
+         ("C-c p" . projectile-command-map))
+  :hook (after-init . projectile-mode)
+  :init
+  (setq projectile-mode-line-prefix ""
+        projectile-completion-system 'ivy
+        projectile-enable-caching t
+        projectile-sort-order 'recentf
+        projectile-cache-file (concat shadow-cache-dir "projectile.cache")
+        projectile-known-projects-file (concat shadow-cache-dir "projectile-bookmarks.eld")
+        projectile-use-git-grep t)
   :config
-  (setq projectile-completion-system 'ivy)
-  (setq projectile-enable-caching t)
-  (setq projectile-sort-order 'recentf)
-  (setq projectile-cache-file (concat shadow-cache-dir "projectile.cache"))
-  (setq projectile-known-projects-file (concat shadow-cache-dir "projectile-bookmarks.eld"))
-  (projectile-global-mode))
+  ;; (projectile-update-mode-line)         ; Update mode-line at the first time
+
+  ;; Use the faster searcher to handle project files: ripgrep `rg'.
+  (when (and (not (executable-find "fd"))
+             (executable-find "rg"))
+    (setq projectile-generic-command
+          (let ((rg-cmd ""))
+            (dolist (dir projectile-globally-ignored-directories)
+              (setq rg-cmd (format "%s --glob '!%s'" rg-cmd dir)))
+            (concat "rg -0 --files --color=never --hidden" rg-cmd))))
+
+  ;; Faster searching on Windows
+  (when sys/win32p
+    (when (or (executable-find "fd") (executable-find "rg"))
+      (setq projectile-indexing-method 'alien
+            projectile-enable-caching nil))
+
+    ;; FIXME: too slow while getting submodule files on Windows
+    (setq projectile-git-submodule-command nil)))
+
+(with-eval-after-load 'counsel
+  (use-package counsel-projectile
+    :init
+    (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point))
+    (counsel-projectile-mode 1)
+    :bind
+    (:map shadow-leader-map
+    ("pD" . counsel-projectile-dired)
+    ("pF" . counsel-projectile-find-file-dwim)
+    ("pb" . counsel-projectile-switch-to-buffer)
+    ("pd" . counsel-projectile-find-dir)
+    ("pf" . counsel-projectile-find-file)
+    ("pp" . counsel-projectile-switch-project)
+    ("pr" . counsel-projectile-rg)
+    ("pi" . counsel-projectile-git-grep))))
 
 (provide 'init-projectile)
 ;;; init-projectile ends here

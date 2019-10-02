@@ -57,6 +57,7 @@
 
 ;; AwesomePairPac
 (use-package awesome-pair
+  :demand t
   :ensure nil
   :load-path "site-lisp/awesome-pair"
   :bind
