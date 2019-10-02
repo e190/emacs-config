@@ -8,7 +8,8 @@
   :after evil
   :config
   (global-evil-leader-mode t)
-  (evil-leader/set-leader "<SPC>"))
+  (evil-leader/set-leader "<SPC>")
+  (setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode")))
 
 (use-package evil
   :demand t

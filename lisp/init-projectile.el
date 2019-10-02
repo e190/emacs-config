@@ -19,8 +19,8 @@
         projectile-completion-system 'ivy
         projectile-enable-caching t
         projectile-sort-order 'recentf
-        projectile-cache-file (concat shadow-cache-dir "projectile.cache")
-        projectile-known-projects-file (concat shadow-cache-dir "projectile-bookmarks.eld")
+        projectile-cache-file (concat shadow-cache-dir "/projectile.cache")
+        projectile-known-projects-file (concat shadow-cache-dir "/projectile-bookmarks.eld")
         projectile-use-git-grep t)
   :config
   ;; (projectile-update-mode-line)         ; Update mode-line at the first time

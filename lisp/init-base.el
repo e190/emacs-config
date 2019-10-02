@@ -31,8 +31,9 @@
 
 ;; Save point position between sessions.
 (use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode)
   :config
-  (save-place-mode)
   (setq save-place-file (concat shadow-cache-dir "/places")))
 
 (use-package simple

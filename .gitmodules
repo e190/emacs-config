@@ -1,9 +1,6 @@
 [submodule "color-rg"]
 	path = site-lisp/color-rg
 	url = http://github.com/manateelazycat/color-rg.git
-[submodule "awesome-pair"]
-	path = site-lisp/awesome-pair
-	url = https://github.com/manateelazycat/awesome-pair.git
 [submodule "thing-edit"]
 	path = site-lisp/thing-edit
 	url = https://github.com/manateelazycat/thing-edit.git
@@ -13,3 +10,6 @@
 [submodule "emacs-maple-imenu"]
 	path = site-lisp/emacs-maple-imenu
 	url = https://github.com/honmaple/emacs-maple-imenu.git
+[submodule "company-ctags"]
+	path = site-lisp/company-ctags
+	url = https://github.com/redguardtoo/company-ctags.git

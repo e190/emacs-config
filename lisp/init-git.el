@@ -3,55 +3,8 @@
 ;;; Commentary:
 ;;
 ;;; Code:
-(eval-when-compile
-  (require 'use-package))
-
-;;;###autload
-(defun git-get-current-file-relative-path ()
-  "Get current file relative path."
-  (replace-regexp-in-string (concat "^" (file-name-as-directory default-directory))
-                            ""
-                            buffer-file-name))
-
-;;;###autload
-(defun kevin/git-checkout-current-file ()
-  "Git checkout current file."
-  (interactive)
-  (when (and (buffer-file-name)
-             (yes-or-no-p (format "git checkout %s?"
-                                  (file-name-nondirectory (buffer-file-name)))))
-    (let* ((filename (git-get-current-file-relative-path)))
-      (shell-command (concat "git checkout " filename))
-      (kevin/revert-buffer-no-confirm)
-      (message "DONE! git checkout %s" filename))))
-
-;;;###autload
-(defun kevin/git-add-current-file ()
-  "Git add file of current buffer."
-  (interactive)
-  (let ((filename))
-    (when buffer-file-name
-      (setq filename (git-get-current-file-relative-path))
-      (shell-command (concat "git add " filename))
-      (message "DONE! git add %s" filename))))
-
-;;;###autload
-(defun kevin/magit-display-buffer-function (buffer)
-  (if magit-display-buffer-noselect
-      ;; the code that called `magit-display-buffer-function'
-      ;; expects the original window to stay alive, we can't go
-      ;; fullscreen
-      (magit-display-buffer-traditional buffer)
-    (delete-other-windows)
-    ;; make sure the window isn't dedicated, otherwise
-    ;; `set-window-buffer' throws an error
-    (set-window-dedicated-p nil nil)
-    (set-window-buffer nil buffer)
-    ;; return buffer's window
-    (get-buffer-window buffer)))
 
 (use-package magit
-  :defer t
   :commands (magit-status magit-init magit-file-log magit-blame-mode)
   :bind
   (("C-x g i" . magit-init)
@@ -83,15 +36,19 @@
         git-commit-style-convention-checks '(overlong-summary-line non-empty-second-line)))
 
 (use-package evil-magit
+  :demand t
   :ensure t
-  :after (evil magit)
+  ;; :after (evil magit)
   :init
   (setq evil-magit-want-horizontal-movement nil)
+  ;; optional: this is the evil state that evil-magit will use
+  (setq evil-magit-state 'normal)
+;; optional: disable additional bindings for yanking text
+  (setq evil-magit-use-y-for-yank nil)
   (add-hook 'git-commit-mode-hook #'evil-insert-state))
 
 ;; Gitflow externsion for Magit
 (use-package magit-gitflow
-  :defer t
   :after magit
   :diminish magit-gitflow-mode
   :bind
@@ -105,7 +62,6 @@
 
 ;;; Pop up last commit information of current line
 (use-package git-messenger
-  :defer t
   :commands (git-messenger:copy-message git-messenger:popup-message)
   :init
   ;; Use magit-show-commit for showing status/diff commands
@@ -115,7 +71,6 @@
 
 ;; Walk through git revisions of a file
 (use-package git-timemachine
-  :defer t
   :commands (hydra-git-timemachine/body)
   :init
   (shadow/define-leader-keys "gt" #'hydra-git-timemachine/body)
@@ -151,14 +106,12 @@
          ("/git/ignore\\'" . gitignore-mode)))
 
 (use-package git-link
-  :defer t
   :config
   (kevin/set-leader-keys "gl" 'git-link-commit)
   (setq git-link-open-in-browser t))
 
 (use-package smerge
   :ensure nil
-  ;; :defer t
   :commands (smerge-mode)
   :init
   (defhydra hydra-smerge-mode (:hint nil

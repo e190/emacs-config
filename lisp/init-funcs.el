@@ -10,6 +10,7 @@
     `(let ((,temp-var (float-time)))
        (progn . ,forms)
        (message "%f" (- (float-time) ,temp-var)))))
+
 ;; Open custom file
 (defun open-custom-file()
   "Open custom.el if exists, otherwise create it."
@@ -92,76 +93,49 @@
   "The current enabled theme."
   (car custom-enabled-themes))
 
-(defun my-project-name-contains-substring (REGEX)
-  (let ((dir (if (buffer-file-name)
-                 (file-name-directory (buffer-file-name))
-               "")))
-    (string-match-p REGEX dir)))
+;;;###autload
+(defun git-get-current-file-relative-path ()
+  "Get current file relative path."
+  (replace-regexp-in-string (concat "^" (file-name-as-directory default-directory))
+                            ""
+                            buffer-file-name))
 
-(defun my-create-tags-if-needed (SRC-DIR &optional FORCE)
-  "return the full path of tags file"
-  (let ((dir (file-name-as-directory (file-truename SRC-DIR)) )
-       file)
-    (setq file (concat dir "TAGS"))
-    (when (or FORCE (not (file-exists-p file)))
-      (message "Creating TAGS in %s ..." dir)
-      (shell-command
-       (format "ctags -f %s -e -R %s" file dir))
-      )
-    file
-    ))
-
-(defvar my-tags-updated-time nil)
-
-(defun my-update-tags ()
+;;;###autload
+(defun kevin/git-checkout-current-file ()
+  "Git checkout current file."
   (interactive)
-  "check the tags in tags-table-list and re-create it"
-  (dolist (tag tags-table-list)
-    (my-create-tags-if-needed (file-name-directory tag) t)
-    ))
+  (when (and (buffer-file-name)
+             (yes-or-no-p (format "git checkout %s?"
+                                  (file-name-nondirectory (buffer-file-name)))))
+    (let* ((filename (git-get-current-file-relative-path)))
+      (shell-command (concat "git checkout " filename))
+      (kevin/revert-buffer-no-confirm)
+      (message "DONE! git checkout %s" filename))))
 
-(defun my-auto-update-tags-when-save ()
+;;;###autload
+(defun kevin/git-add-current-file ()
+  "Git add file of current buffer."
   (interactive)
-  (cond
-   ((not my-tags-updated-time)
-    (setq my-tags-updated-time (current-time)))
-   ((< (- (float-time (current-time)) (float-time my-tags-updated-time)) 300)
-    ;; < 300 seconds
-    ;; do nothing
-    )
-   (t
-    (setq my-tags-updated-time (current-time))
-    (my-update-tags)
-    (message "updated tags after %d seconds." (- (float-time (current-time))  (float-time my-tags-updated-time)))
-    )
-   ))
+  (let ((filename))
+    (when buffer-file-name
+      (setq filename (git-get-current-file-relative-path))
+      (shell-command (concat "git add " filename))
+      (message "DONE! git add %s" filename))))
 
-;; (defun my-setup-develop-environment ()
-;;     (when (my-project-name-contains-substring "Loris")
-;;       (cond
-;;        ((my-project-name-contains-substring "src/desktop")
-;;         ;; C++ project don't need html tags
-;;         (setq tags-table-list (list
-;;                                (my-create-tags-if-needed
-;;                                 (concat (file-name-as-directory (getenv "WXWIN")) "include"))
-;;                                (my-create-tags-if-needed "~/projs/Loris/loris/src/desktop")))
-;;         )
-;;        ((my-project-name-contains-substring "src/html")
-;;         ;; html project donot need C++ tags
-;;         (setq tags-table-list (list (my-create-tags-if-needed "~/projs/Loris/loris/src/html")))
-;;         ))))
-(defun my-setup-develop-environment ()
-  (interactive)
-  (when (my-project-name-contains-substring "guanghui")
-    (cond
-     ((my-project-name-contains-substring "cocos2d-x")
-      ;; C++ project don't need html tags
-      (setq tags-table-list (list (my-create-tags-if-needed "~/cocos2d-x/cocos"))))
-     ((my-project-name-contains-substring "Github/fireball")
-      (message "load tags for fireball engine repo...")
-      ;; html project donot need C++ tags
-      (setq tags-table-list (list (my-create-tags-if-needed "~/Github/fireball/engine/cocos2d")))))))
-
+;;;###autload
+(defun kevin/magit-display-buffer-function (buffer)
+  (if magit-display-buffer-noselect
+      ;; the code that called `magit-display-buffer-function'
+      ;; expects the original window to stay alive, we can't go
+      ;; fullscreen
+      (magit-display-buffer-traditional buffer)
+    (delete-other-windows)
+    ;; make sure the window isn't dedicated, otherwise
+    ;; `set-window-buffer' throws an error
+    (set-window-dedicated-p nil nil)
+    (set-window-buffer nil buffer)
+    ;; return buffer's window
+    (get-buffer-window buffer)))
 
 
 (provide 'init-funcs)

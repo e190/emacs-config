@@ -55,20 +55,6 @@
               #'(lambda (&optional arg) (unless mark-active
                                           (ove-mode 0)))))
 
-;; AwesomePairPac
-(use-package awesome-pair
-  :demand t
-  :ensure nil
-  :load-path "site-lisp/awesome-pair"
-  :bind
-  (("C-c C-k" . awesome-pair-kill)
-   ("SPC" . awesome-pair-space)
-   ("=" . awesome-pair-equal)
-   ("M-F" . awesome-pair-jump-right)
-   ("M-B" . awesome-pair-jump-left))
-  :config
-  (add-hook 'prog-mode-hook '(lambda () (awesome-pair-mode 1))))
-
 ;; Hungry deletion
 (use-package hungry-delete
   :defer t
