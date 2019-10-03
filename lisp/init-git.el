@@ -16,8 +16,8 @@
    ("C-x g r" . magit-reflog)
    ("C-x g t" . magit-tag))
   (:map shadow-leader-map
-   ("ga" . kevin/git-add-current-file)
-   ("gc" . kevin/git-checkout-current-file)
+   ("ga" . shadow/git-add-current-file)
+   ("gc" . shadow/git-checkout-current-file)
    ("gd" . magit-diff-buffer-file)
    ("gl" . magit-log-buffer-file)
    ("gi" . magit-init)
@@ -28,7 +28,7 @@
    ("gv" . vc-annotate))
   :config
   ;; display buffer fullframe
-  (setq magit-display-buffer-function #'kevin/magit-display-buffer-function)
+  (setq magit-display-buffer-function #'shadow/magit-display-buffer-function)
   ;; `git-commit-mode'
   ;; see https://chris.beams.io/posts/git-commit/
   (setq fill-column 72
@@ -60,35 +60,23 @@
   (magit-define-popup-action 'magit-dispatch-popup
     ?G "GitFlow" #'magit-gitflow-popup ?!))
 
-;;; Pop up last commit information of current line
-(use-package git-messenger
-  :commands (git-messenger:copy-message git-messenger:popup-message)
-  :init
-  ;; Use magit-show-commit for showing status/diff commands
-  (setq git-messenger:use-magit-popup t)
-  (setq git-messenger:show-detail t)
-  (shadow/define-leader-keys "gm" 'git-messenger:popup-message))
-
 ;; Walk through git revisions of a file
 (use-package git-timemachine
-  :commands (hydra-git-timemachine/body)
+  :custom-face
+  (git-timemachine-minibuffer-author-face ((t (:inherit success))))
+  (git-timemachine-minibuffer-detail-face ((t (:inherit warning))))
+  :bind (:map vc-prefix-map
+         ("t" . git-timemachine)))
+
+;; Pop up last commit information of current line
+(use-package git-messenger
+  :bind (:map vc-prefix-map
+         ("p" . git-messenger:popup-message)
+         :map git-messenger-map
+         ("m" . git-messenger:copy-message))
   :init
-  (shadow/define-leader-keys "gt" #'hydra-git-timemachine/body)
-  ;; (add-hook 'git-timemachine-mode-hook #'evil-force-normal-state)
-  (defhydra hydra-git-timemachine (:body-pre (unless (bound-and-true-p git-timemachine-mode)
-                                               (call-interactively 'git-timemachine))
-                                             :post (git-timemachine-quit)
-                                             :color pink ;; toggle :foreign-keys run
-                                             :hint nil)
-    "
-[_p_] previous [_n_] next [_c_] current [_g_] goto nth rev [_Y_] copy hash [_q_] quit\n
-"
-    ("c" git-timemachine-show-current-revision)
-    ("g" git-timemachine-show-nth-revision)
-    ("p" git-timemachine-show-previous-revision)
-    ("n" git-timemachine-show-next-revision)
-    ("Y" git-timemachine-kill-revision)
-    ("q" nil exit: t)))
+  ;; Use `magit-show-commit' to show status/diff commands
+  (setq git-messenger:use-magit-popup t))
 
 ;; Git modes
 (use-package gitconfig-mode
@@ -107,7 +95,7 @@
 
 (use-package git-link
   :config
-  (kevin/set-leader-keys "gl" 'git-link-commit)
+  (shadow/define-leader-keys "gl" 'git-link-commit)
   (setq git-link-open-in-browser t))
 
 (use-package smerge
@@ -163,32 +151,46 @@
   (add-hook 'find-file-hook #'kevin/enable-smerge-mode-maybe)
   )
 
+
 ;; Highlight uncommitted changes
 (use-package diff-hl
-  :ensure t
-  :commands (diff-hl-mode diff-hl-dired-mode diff-hl-next-hunk diff-hl-previous-hunk
-                          hydra-diff-hl/body)
-  :init
-  (add-hook 'after-init-hook #'global-diff-hl-mode)
-  (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
-  (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)
-  (custom-set-faces
-   '(diff-hl-insert ((t (:background "#7ccd7c"))))
-   '(diff-hl-change ((t (:background "#3a81c3"))))
-   '(diff-hl-delete ((t (:background "#ee6363")))))
-  (defhydra hydra-diff-hl (:color pink
-                                  :hint nil)
-    "
-[_p_] previous hunk [_n_] next hunk [_r_] revert hunk [_q_] quit\n
-"
-    ("p" diff-hl-previous-hunk)
-    ("n" diff-hl-next-hunk)
-    ("r" diff-hl-revert-hunk)
-    ("q" nil exit: t))
-  (shadow/define-leader-keys "gh" #'hydra-diff-hl/body)
+  :defines (diff-hl-margin-symbols-alist desktop-minor-mode-table)
+  :commands diff-hl-magit-post-refresh
+  :functions  my-diff-hl-fringe-bmp-function
+  :custom-face (diff-hl-change ((t (:foreground ,(face-background 'highlight)))))
+  :bind (:map diff-hl-command-map
+         ("SPC" . diff-hl-mark-hunk))
+  :hook ((after-init . global-diff-hl-mode)
+         (dired-mode . diff-hl-dired-mode))
   :config
-  (diff-hl-flydiff-mode 1))
+  ;; Highlight on-the-fly
+  (diff-hl-flydiff-mode 1)
 
+  ;; Set fringe style
+  (setq-default fringes-outside-margins t)
+
+  (defun my-diff-hl-fringe-bmp-function (_type _pos)
+    "Fringe bitmap function for use as `diff-hl-fringe-bmp-function'."
+    (define-fringe-bitmap 'my-diff-hl-bmp
+      (vector (if sys/macp #b11100000 #b11111100))
+      1 8
+      '(center t)))
+  (setq diff-hl-fringe-bmp-function #'my-diff-hl-fringe-bmp-function)
+
+  (unless (display-graphic-p)
+    (setq diff-hl-margin-symbols-alist
+          '((insert . " ") (delete . " ") (change . " ")
+            (unknown . " ") (ignored . " ")))
+    ;; Fall back to the display margin since the fringe is unavailable in tty
+    (diff-hl-margin-mode 1)
+    ;; Avoid restoring `diff-hl-margin-mode'
+    (with-eval-after-load 'desktop
+      (add-to-list 'desktop-minor-mode-table
+                   '(diff-hl-margin-mode nil))))
+
+  ;; Integration with magit
+  (with-eval-after-load 'magit
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
 
 (provide 'init-git)
 ;;; init-git.el ends here

@@ -14,8 +14,8 @@
               my-swiper-toggle-rg-dwim)
   :commands (ivy--format-function-generic
              ivy--add-face)
-  :bind
-  (;; Current global keymap
+  :bind(
+   ;; Current global keymap
    ("C-s" . swiper-isearch)
    ("M-x" . counsel-M-x)
    ("C-c C-r" . ivy-resume)
@@ -50,6 +50,7 @@
 
   :map counsel-mode-map
   ([remap swiper] . counsel-grep-or-swiper)
+  ([remap dired] . counsel-dired)
   ("C-x C-r" . counsel-recentf)
   ("C-x j" . counsel-mark-ring)
   ("C-c c e" . counsel-colors-emacs)
@@ -98,14 +99,13 @@
        (concat (propertize " " 'display `(space :align-to 2)) str))
      cands
      "\n"))
-  (setq ivy-format-functions-alist '((t . my-ivy-format-function-arrow)))
+  (setq ivy-format-functions-alist '((counsel-describe-face . counsel--faces-format-function)
+                                     (t . my-ivy-format-function-arrow)))
   (setq swiper-action-recenter t)
 
   (setq counsel-find-file-at-point t
         counsel-yank-pop-separator "\n────────\n")
   :config
-  (add-to-list 'ivy-format-functions-alist '(counsel-describe-face . counsel--faces-format-function))
-
   ;; Use faster search tools: ripgrep or the silver search
   (let ((cmd (cond ((executable-find "rg")
                     "rg -S --no-heading --line-number --color never '%s' %s")
@@ -113,20 +113,6 @@
                     "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
                    (t counsel-grep-base-command))))
     (setq counsel-grep-base-command cmd))
-
-  ;; Build abbreviated recent file list.
-  (defun my-counsel-recentf ()
-    "Find a file on `recentf-list'."
-    (interactive)
-    (require 'recentf)
-    (recentf-mode)
-    (ivy-read "Recentf: " (mapcar #'abbreviate-file-name recentf-list)
-              :action (lambda (f)
-                        (with-ivy-window
-                          (find-file f)))
-              :require-match t
-              :caller 'counsel-recentf))
-  (advice-add #'counsel-recentf :override #'my-counsel-recentf)
 
   ;; Pre-fill search keywords
   ;; @see https://www.reddit.com/r/emacs/comments/b7g1px/withemacs_execute_commands_like_marty_mcfly/
@@ -149,7 +135,6 @@
       counsel-pt))
 
   (defun my-ivy-fly-back-to-present ()
-    (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)
     (cond ((and (memq last-command my-ivy-fly-commands)
                 (equal (this-command-keys-vector) (kbd "M-p")))
            ;; repeat one time to get straight to the first history item
@@ -183,6 +168,9 @@
           (add-hook 'pre-command-hook 'my-ivy-fly-back-to-present nil t)))))
 
   (add-hook 'minibuffer-setup-hook #'my-ivy-fly-time-travel)
+  (add-hook 'minibuffer-exit-hook
+            (lambda ()
+              (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)))
 
   ;; Improve search experience of `swiper'
   ;; @see https://emacs-china.org/t/swiper-swiper-isearch/9007/12
@@ -226,23 +214,10 @@
                     (counsel-grep . ivy--regex-plus)
                     (t . ivy--regex-fuzzy))))
 
- ;; Add help menu by pressing C-o in minibuffer.
-(use-package ivy-hydra
-  :bind (:map ivy-minibuffer-map
-          ("M-o" . ivy-dispatching-done-hydra)))
-
-(use-package counsel-projectile
-  :bind
-  (:map shadow-leader-map
-   ("p SPC" . counsel-projectile)
-   ("pb" . counsel-projectile-switch-to-buffer)
-   ("pd" . counsel-projectile-find-dir)
-   ("pp" . counsel-projectile-switch-project)
-   ("pf" . counsel-projectile-find-file)
-   ("pr" . projectile-recentf))
-  :init
-  (with-eval-after-load 'projectile
-    (setq projectile-switch-project-action 'counsel-projectile-find-file))))
+  ;; Add help menu by pressing C-o in minibuffer.
+  (use-package ivy-hydra
+    :bind (:map ivy-minibuffer-map
+            ("M-o" . ivy-dispatching-done-hydra))))
 
 ;; counsel-M-x will use smex if available.
 (use-package smex

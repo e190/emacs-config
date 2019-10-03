@@ -50,6 +50,7 @@
     (counsel-projectile-mode 1)
     :bind
     (:map shadow-leader-map
+    ("p SPC" . counsel-projectile)
     ("pD" . counsel-projectile-dired)
     ("pF" . counsel-projectile-find-file-dwim)
     ("pb" . counsel-projectile-switch-to-buffer)
@@ -57,7 +58,10 @@
     ("pf" . counsel-projectile-find-file)
     ("pp" . counsel-projectile-switch-project)
     ("pr" . counsel-projectile-rg)
-    ("pi" . counsel-projectile-git-grep))))
+    ("pi" . counsel-projectile-git-grep))
+    :init
+    (with-eval-after-load 'projectile
+      (setq projectile-switch-project-action 'counsel-projectile-find-file))))
 
 (provide 'init-projectile)
 ;;; init-projectile ends here

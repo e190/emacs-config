@@ -158,5 +158,16 @@
  (define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
  (define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor))
 
+(use-package evil-snipe
+  :demand t
+  :ensure t
+  :after evil
+  :diminish evil-snipe-local-mode
+  :config
+  (evil-snipe-mode +1)
+  (evil-snipe-override-mode +1)
+  ;; fix problems with magit buffer
+  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode))
+
 (provide 'init-evil)
 ;;; init-evil.el ends here

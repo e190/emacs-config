@@ -31,7 +31,7 @@
 
 ;; Update
 (defun update-config ()
-  "Update Centaur Emacs configurations to the latest version."
+  "Update shadow Emacs configurations to the latest version."
   (interactive)
   (let ((dir (expand-file-name user-emacs-directory)))
     (if (file-exists-p dir)
@@ -41,17 +41,18 @@
           (shell-command "git pull")
           (message "Update finished. Restart Emacs to complete the process."))
       (message "\"%s\" doesn't exist." dir))))
-(defalias 'centaur-update-config 'update-config)
+(defalias 'shadow-update-config 'update-config)
 
 (declare-function upgrade-packages 'init-package)
-(defalias 'centaur-update-packages 'upgrade-packages)
+(defalias 'shadow-update-packages 'upgrade-packages)
 
 (defun update-config-and-packages()
   "Update confgiurations and packages."
   (interactive)
   (update-config)
   (upgrade-packages nil))
-(defalias 'centaur-update 'update-config-and-packages)
+(defalias 'shadow-update 'update-config-and-packages)
+
 ;; Create a new scratch buffer
 (defun create-scratch-buffer ()
   "Create a scratch buffer."
@@ -93,6 +94,12 @@
   "The current enabled theme."
   (car custom-enabled-themes))
 
+;;;###autoload
+(defun shadow/revert-buffer-no-confirm ()
+  "Revert buffer without confirm."
+  (interactive)
+  (revert-buffer t t))
+
 ;;;###autload
 (defun git-get-current-file-relative-path ()
   "Get current file relative path."
@@ -101,7 +108,7 @@
                             buffer-file-name))
 
 ;;;###autload
-(defun kevin/git-checkout-current-file ()
+(defun shadow/git-checkout-current-file ()
   "Git checkout current file."
   (interactive)
   (when (and (buffer-file-name)
@@ -109,11 +116,11 @@
                                   (file-name-nondirectory (buffer-file-name)))))
     (let* ((filename (git-get-current-file-relative-path)))
       (shell-command (concat "git checkout " filename))
-      (kevin/revert-buffer-no-confirm)
+      (shadow/revert-buffer-no-confirm)
       (message "DONE! git checkout %s" filename))))
 
 ;;;###autload
-(defun kevin/git-add-current-file ()
+(defun shadow/git-add-current-file ()
   "Git add file of current buffer."
   (interactive)
   (let ((filename))
@@ -123,7 +130,7 @@
       (message "DONE! git add %s" filename))))
 
 ;;;###autload
-(defun kevin/magit-display-buffer-function (buffer)
+(defun shadow/magit-display-buffer-function (buffer)
   (if magit-display-buffer-noselect
       ;; the code that called `magit-display-buffer-function'
       ;; expects the original window to stay alive, we can't go
@@ -137,6 +144,16 @@
     ;; return buffer's window
     (get-buffer-window buffer)))
 
+(defun shadow/goto-match-parent ()
+  "Go to the matching  if on (){}[], similar to vi style of %."
+  (interactive)
+  ;; first, check for "outside of bracket" positions expected by forward-sexp, etc
+  (cond ((looking-at "[\[\(\{]") (evil-jump-item))
+        ((looking-back "[\]\)\}]" 1) (evil-jump-item))
+        ;; now, try to succeed from inside of a bracket
+        ((looking-at "[\]\)\}]") (forward-char) (evil-jump-item))
+        ((looking-back "[\[\(\{]" 1) (backward-char) (evil-jump-item))
+        (t nil)))
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

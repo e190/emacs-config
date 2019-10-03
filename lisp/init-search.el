@@ -5,17 +5,6 @@
 
 ;;; Code:
 
-(defun kevin/goto-match-parent ()
-  "Go to the matching  if on (){}[], similar to vi style of %."
-  (interactive)
-  ;; first, check for "outside of bracket" positions expected by forward-sexp, etc
-  (cond ((looking-at "[\[\(\{]") (evil-jump-item))
-        ((looking-back "[\]\)\}]" 1) (evil-jump-item))
-        ;; now, try to succeed from inside of a bracket
-        ((looking-at "[\]\)\}]") (forward-char) (evil-jump-item))
-        ((looking-back "[\[\(\{]" 1) (backward-char) (evil-jump-item))
-        (t nil)))
-
 ;; Jump to things in Emacs tree-style
 (use-package avy
   :defer t
@@ -26,7 +15,7 @@
    ("jc" . avy-goto-char-2)
    ("jw" . avy-goto-word-or-subword-1)
    ("jl" . avy-goto-line)
-   ("jp" . #'kevin/goto-match-parent))
+   ("jp" . #'shadow/goto-match-parent))
   :config (setq avy-background t))
 
 ;; Search tools: `wgrep', `ag' and `rg'
@@ -73,16 +62,17 @@
   :ensure nil; local package
   :load-path "site-lisp/color-rg"
   :bind
-  ("M-s p" . color-rg-search-input-in-projcet)
+  ;; ("M-s p" . color-rg-search-input-in-projcet)
+  ("M-s p" . color-rg-search-project)
   (:map shadow-leader-map
    ("sc" . color-rg-search-input)
    ;; ("sp" . color-rg-search-input-in-projcet)
    ("sp" . color-rg-search-symbol-in-project)
    ("ss" . color-rg-search-symbol))
   :config
+  ;; (define-key isearch-mode-map (kbd "M-s e") 'isearch-toggle-color-rg)
   (with-eval-after-load 'evil
     (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)))
-  ;; (define-key isearch-mode-map (kbd "M-s M-s") 'isearch-toggle-color-rg))
 
 ;; SnailsPac
 (use-package snails

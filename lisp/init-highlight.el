@@ -5,6 +5,11 @@
 
 ;;; Code:
 
+;; Highlight the current line
+(use-package hl-line
+  :ensure nil
+  :hook (after-init . global-hl-line-mode))
+
 ;; Beacon flashes the cursor whenever you adjust position.
 (use-package beacon
   :ensure t
@@ -13,6 +18,7 @@
   (setq beacon-color "red")
   (setq beacon-size 80)
   (beacon-mode t))
+
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -38,6 +44,9 @@
 
 (use-package symbol-overlay
   :diminish
+  :functions (turn-off-symbol-overlay
+              turn-on-symbol-overlay)
+
   :custom-face
   ;; (symbol-overlay-default-face ((t (:inherit 'region))))
   (symbol-overlay-default-face ((t (:background "dark gray" :foreground "black"))))
@@ -57,9 +66,24 @@
    ("hp" . symbol-overlay-put)
    ("hc" . symbol-overlay-remove-all)))
   :hook ((prog-mode . symbol-overlay-mode)
-         (iedit-mode . (lambda () (symbol-overlay-mode -1)))
-         (iedit-mode-end . symbol-overlay-mode))
-  :init (setq symbol-overlay-idle-time 0.01))
+        (iedit-mode . turn-off-symbol-overlay)
+        (iedit-mode-end . turn-on-symbol-overlay))
+
+  :init (setq symbol-overlay-idle-time 0.01)
+  :config
+    ;; Disable symbol highlighting while selecting
+    (defun turn-off-symbol-overlay (&rest _)
+      "Turn off symbol highlighting."
+      (interactive)
+      (symbol-overlay-mode -1))
+    (advice-add #'set-mark :after #'turn-off-symbol-overlay)
+
+    (defun turn-on-symbol-overlay (&rest _)
+      "Turn on symbol highlighting."
+      (interactive)
+      (when (derived-mode-p 'prog-mode)
+        (symbol-overlay-mode 1)))
+    (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay))
 
 ;; Colorize color names in buffers
 (use-package rainbow-mode
