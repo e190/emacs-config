@@ -29,6 +29,7 @@
        :ensure nil
        :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))))
   (use-package lsp-ui
+    :functions my-lsp-ui-imenu-hide-mode-line
     :commands lsp-ui-doc-hide
     ;; :custom-face (lsp-ui-doc-background ((t (:background ,(face-background 'tooltip)))))
      :custom-face
@@ -49,7 +50,8 @@
                 lsp-ui-doc-use-webkit nil
                 lsp-ui-doc-delay 1.0
                 lsp-ui-doc-include-signature t
-                lsp-ui-doc-position 'at-point
+                ;; lsp-ui-doc-position 'at-point
+                lsp-ui-doc-position 'top
                 lsp-ui-doc-border (face-foreground 'default)
 
                 lsp-ui-sideline-enable nil
@@ -69,8 +71,10 @@
                                      (face-background 'tooltip))))
     ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
     ;; https://github.com/emacs-lsp/lsp-ui/issues/243
-    (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-      (setq mode-line-format nil)))
+     (defun my-lsp-ui-imenu-hide-mode-line ()
+       "Hide the mode-line in lsp-ui-imenu."
+       (setq mode-line-format nil))
+     (advice-add #'lsp-ui-imenu :after #'my-lsp-ui-imenu-hide-mode-line))
 
     (use-package company-lsp
       :init (setq company-lsp-cache-candidates 'auto))

@@ -46,7 +46,7 @@
       ("h" hungry-delete-mode "hungry delete" :toggle t)
       ("e" electric-pair-mode "electric pair" :toggle t)
       ("P" flyspell-mode "spell check" :toggle t)
-      ("S" prettify-symbols-mode "pretty symbol" :toggle t)
+      ("P" awesome-tab-mode "tab mode" :toggle t)
       ("L" page-break-lines-mode "page break lines" :toggle t))
      "Highlight"
      (("l" global-hl-line-mode "line" :toggle t)

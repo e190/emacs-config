@@ -23,6 +23,13 @@
         (error "Unable to find \"%s\"" custom-example)))
     (find-file custom-file)))
 
+;; Reload configurations
+(defun reload-init-file ()
+  "Reload Emacs configurations."
+  (interactive)
+  (load-file user-init-file))
+(bind-key "C-c C-l" #'reload-init-file)
+
 ;;;###autoload
 (defun shadow/open-init-file ()
   "Open emacs init file"
@@ -154,6 +161,36 @@
         ((looking-at "[\]\)\}]") (forward-char) (evil-jump-item))
         ((looking-back "[\[\(\{]" 1) (backward-char) (evil-jump-item))
         (t nil)))
+
+;; FontsList
+;; Input Mono, Monaco Style, Line Height 1.3 download from http://input.fontbureau.com/
+(defvar font-list '(("Input" . 11)
+                    ("Consolas" . 11)
+                    ("DejaVu Sans Mono" . 10)
+                    ("SF Mono" . 10)
+                    ("Source Code Pro" . 10)
+                    ("Menlo" . 10))
+
+  "List of fonts and sizes.  The first one available will be used.")
+;; -FontsList
+
+;; FontFun
+(defun change-font ()
+  "Documentation."
+  (interactive)
+  (let* (available-fonts font-name font-size font-setting)
+    (dolist (font font-list (setq available-fonts (nreverse available-fonts)))
+      (when (member (car font) (font-family-list))
+        (push font available-fonts)))
+    (if (not available-fonts)
+        (message "No fonts from the chosen set are available")
+      (if (called-interactively-p 'interactive)
+          (let* ((chosen (assoc-string (completing-read "What font to use? " available-fonts nil t) available-fonts)))
+            (setq font-name (car chosen) font-size (read-number "Font size: " (cdr chosen))))
+        (setq font-name (caar available-fonts) font-size (cdar available-fonts)))
+      (setq font-setting (format "%s-%d" font-name font-size))
+      (set-frame-font font-setting nil t)
+      (add-to-list 'default-frame-alist (cons 'font font-setting)))))
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

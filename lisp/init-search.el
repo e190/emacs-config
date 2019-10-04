@@ -62,17 +62,20 @@
   :ensure nil; local package
   :load-path "site-lisp/color-rg"
   :bind
-  ;; ("M-s p" . color-rg-search-input-in-projcet)
-  ("M-s p" . color-rg-search-project)
+  ("M-s p" . color-rg-search-input-in-projcet)
+  ;; ("M-s p" . color-rg-search-project)
   (:map shadow-leader-map
    ("sc" . color-rg-search-input)
+   ("sp" . color-rg-search-project)
    ;; ("sp" . color-rg-search-input-in-projcet)
-   ("sp" . color-rg-search-symbol-in-project)
    ("ss" . color-rg-search-symbol))
   :config
+    ;; `color-rg' do not kill any buffer
+  (setq color-rg-kill-temp-buffer-p nil)
   ;; (define-key isearch-mode-map (kbd "M-s e") 'isearch-toggle-color-rg)
   (with-eval-after-load 'evil
-    (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)))
+    (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)
+    (evil-define-key 'normal color-rg-mode-map (kbd "q") 'quit-window)))
 
 ;; SnailsPac
 (use-package snails

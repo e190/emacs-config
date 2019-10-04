@@ -7,35 +7,13 @@
 (eval-when-compile
   (require 'init-constants))
 
-;; (when (member "Consolas" (font-family-list))
-;;   (set-frame-font shadow-font 'keep-size)
-;;   (add-to-list 'default-frame-alist (cons 'font shadow-font)))
-;; Fonts
-(when (display-graphic-p)
-  ;; Set default font
-  (catch 'loop
-    (dolist (font '("Consolas" "SF Mono" "Hack" "Source Code Pro" "Fira Code"
-                    "Menlo" "Monaco" "DejaVu Sans Mono"))
-      (when (member font (font-family-list))
-        (set-face-attribute 'default nil :font font :height (cond
-                                                             (sys/mac-x-p 130)
-                                                             (sys/win32p 110)
-                                                             (t 100)))
-        (throw 'loop t))))
+(set-face-attribute 'default nil :font shadow-font)
 
-  ;; Specify font for all unicode characters
-  (catch 'loop
-    (dolist (font '("Symbola" "Apple Symbols" "Symbol"))
-      (when (member font (font-family-list))
-        (set-fontset-font t 'unicode font nil 'prepend)
-        (throw 'loop t))))
-
-  ;; Specify font for Chinese characters
-  (catch 'loop
-    (dolist (font '("WenQuanYi Micro Hei" "Microsoft Yahei"))
-      (when (member font (font-family-list))
-        (set-fontset-font t '(#x4e00 . #x9fff) font)
-        (throw 'loop t)))))
+;; Setting Chinese Font
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+  		      charset
+  		      (font-spec :family "Microsoft Yahei" :size 16)))
 
 ;; Start a clean slate.
 (blink-cursor-mode -1)
@@ -173,6 +151,25 @@
 (setq scroll-step 1
       scroll-margin 0
       scroll-conservatively 100000)
+
+(use-package awesome-tab
+  :demand t
+  :ensure nil
+  :load-path "site-lisp/awesome-tab"
+  :config
+  (with-eval-after-load 'evil
+    (define-key evil-normal-state-map (kbd ",tt") 'awesome-tab-switch-group)
+    (define-key evil-normal-state-map (kbd ",ta") 'awesome-tab-select-beg-tab)
+    (define-key evil-normal-state-map (kbd ",te") 'awesome-tab-select-end-tab)
+    (define-key evil-normal-state-map (kbd ",t<") 'awesome-tab-move-current-tab-to-left)
+    (define-key evil-normal-state-map (kbd ",t>") 'awesome-tab-move-current-tab-to-right)
+    (define-key evil-normal-state-map (kbd ",th") 'awesome-tab-forward)
+    (define-key evil-normal-state-map (kbd ",tl") 'awesome-tab-backward))
+  (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
+  (setq awesome-tab-label-fixed-length 14)
+  (setq awesome-tab-face-height 100)
+  (awesome-tab-mode t))
+
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

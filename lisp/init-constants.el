@@ -21,6 +21,10 @@ Similar to `before-init-time'")
   "https://github.com/seagle0128/.emacs.d"
   "The Github page of Centuar Emacs.")
 
+(defconst *sys/gui*
+  (display-graphic-p)
+  "Are we running on a GUI Emacs?")
+
 (defconst sys/win32p
   (eq system-type 'windows-nt)
   "Are we running on a WinTel system?")
@@ -101,8 +105,9 @@ Similar to `before-init-time'")
           (const :tag "Netease" netease)
           (const :tag "Tuna" tuna)))
 
-(defvar shadow-font "Consolas 11"
-  "The default font size to use for everything.")
+(defvar shadow-font "DejaVu Sans Mono 10"
+  "The default font size to use for everything.
+   available : Consolas, DejaVu Sans Mono")
 
 (defvar shadow-leader-key "SPC"
   "The leader key in Evil normal, visual and motion states.")
