@@ -53,12 +53,13 @@
 ;; ** 设置拼音输入法
 (use-package pyim
   :ensure t
-  :demand t
+  :defer t
   :bind (("M-j" . pyim-convert-code-at-point)) ;; 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文
   :config
   ;; 激活 basedict 拼音词库
   (use-package pyim-basedict
     :ensure t
+    :defer t
     :config (pyim-basedict-enable))
   (setq pyim-dcache-directory (expand-file-name "pyim" shadow-cache-dir))
   (setq default-input-method "pyim")

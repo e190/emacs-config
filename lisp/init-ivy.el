@@ -221,6 +221,7 @@
 
 ;; counsel-M-x will use smex if available.
 (use-package smex
+  :defer t
   :init
   (setq smex-save-file (concat shadow-cache-dir "/smex-items")))
 

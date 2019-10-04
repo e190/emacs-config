@@ -153,9 +153,9 @@
       scroll-conservatively 100000)
 
 (use-package awesome-tab
-  :demand t
   :ensure nil
   :load-path "site-lisp/awesome-tab"
+  :hook (after-init . awesome-tab-mode)
   :config
   (with-eval-after-load 'evil
     (define-key evil-normal-state-map (kbd ",tt") 'awesome-tab-switch-group)
@@ -167,8 +167,7 @@
     (define-key evil-normal-state-map (kbd ",tl") 'awesome-tab-backward))
   (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
   (setq awesome-tab-label-fixed-length 14)
-  (setq awesome-tab-face-height 100)
-  (awesome-tab-mode t))
+  (setq awesome-tab-face-height 100))
 
 
 (provide 'init-ui)

@@ -20,11 +20,13 @@
 
 ;; Search tools: `wgrep', `ag' and `rg'
 (use-package wgrep
+  :defer t
   :init
   (setq wgrep-auto-save-buffer t)
   (setq wgrep-change-readonly-file t))
 
 (use-package ag
+  :defer t
   :defines projectile-command-map
   :init
   (with-eval-after-load 'projectile
@@ -57,29 +59,30 @@
                ("c p" . counsel-pt)
                ("c f" . counsel-fzf))))
 
-(use-package color-rg
-  :demand t
-  :ensure nil; local package
-  :load-path "site-lisp/color-rg"
-  :bind
-  ("M-s p" . color-rg-search-input-in-projcet)
-  ;; ("M-s p" . color-rg-search-project)
-  (:map shadow-leader-map
-   ("sc" . color-rg-search-input)
-   ("sp" . color-rg-search-project)
-   ;; ("sp" . color-rg-search-input-in-projcet)
-   ("ss" . color-rg-search-symbol))
-  :config
-    ;; `color-rg' do not kill any buffer
-  (setq color-rg-kill-temp-buffer-p nil)
-  ;; (define-key isearch-mode-map (kbd "M-s e") 'isearch-toggle-color-rg)
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)
-    (evil-define-key 'normal color-rg-mode-map (kbd "q") 'quit-window)))
+(with-eval-after-load 'counsel
+  (use-package color-rg
+    :demand t
+    :ensure nil; local package
+    :load-path "site-lisp/color-rg"
+    :bind
+    ("M-s p" . color-rg-search-input-in-projcet)
+    ;; ("M-s p" . color-rg-search-project)
+    (:map shadow-leader-map
+    ("sc" . color-rg-search-input)
+    ("sp" . color-rg-search-project)
+    ;; ("sp" . color-rg-search-input-in-projcet)
+    ("ss" . color-rg-search-symbol))
+    :config
+      ;; `color-rg' do not kill any buffer
+    (setq color-rg-kill-temp-buffer-p nil)
+    ;; (define-key isearch-mode-map (kbd "M-s e") 'isearch-toggle-color-rg)
+    (with-eval-after-load 'evil
+      (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)
+      (evil-define-key 'normal color-rg-mode-map (kbd "q") 'quit-window))))
 
 ;; SnailsPac
 (use-package snails
-  :demand t
+  :ensure nil; local package
   :load-path "site-elisp/snails"
   :bind
   (:map shadow-leader-map

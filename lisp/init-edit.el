@@ -92,6 +92,7 @@
 
 (use-package maple-iedit
   :ensure nil
+  :after evil
   :load-path "site-lisp/maple-iedit"
   :commands (maple-iedit-match-all maple-iedit-match-next maple-iedit-match-previous)
   :config

@@ -156,6 +156,7 @@
       :init (setq company-quickhelp-delay 0.5))))
 
 (use-package company-ycmd
+  :defer t
   :ensure t
   :init
   :config
@@ -225,11 +226,11 @@
   :defer t)
 
 (use-package ycmd
-  :ensure t
-  :init
-  :config)
+  :defer t
+  :ensure t)
 
 (use-package company-ctags
+  :defer t
   :ensure nil
   :if (eq shadow-lsp-mode 'ctags)
   :load-path "site-lisp/company-ctags"

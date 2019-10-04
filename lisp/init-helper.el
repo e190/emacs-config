@@ -55,7 +55,9 @@
              ("." . end-of-buffer)
              ("b" . helpful-previous-helpful-buffer)
              ("f" . helpful-next-helpful-buffer)
-             ("q" . delete-window)))
+             ("q" . delete-window))
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal helpful-mode-map (kbd "q") 'quit-window)))
 
 (provide 'init-helper)
 ;;; init-helper.el ends here

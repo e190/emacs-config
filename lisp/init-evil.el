@@ -12,7 +12,7 @@
   (setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode")))
 
 (use-package evil
-  :demand t
+  :defer t
   :hook (after-init . evil-mode)
   :init
   ;; Must be set before evil is loaded.
@@ -96,7 +96,6 @@
   :hook (evil-mode . global-evil-surround-mode))
 
 (use-package evil-visualstar
-  :demand t
   :after evil
   :config
   (setq evil-visualstar/persistent t)
@@ -110,7 +109,6 @@
                              "cl" 'evilnc-comment-or-uncomment-paragraphs))
 
 (use-package evil-mc
-  :demand t
   :after evil
   :diminish evil-mc-mode "ⓜ"
   :init
@@ -145,7 +143,7 @@
   (kevin/reset-evil-mc-key-map))
 
 (use-package evil-escape
-  :demand t
+  :defer t
   :after evil
   :diminish evil-escape-mode
   :config
@@ -154,12 +152,12 @@
   (setq-default evil-escape-delay 0.3))
 
 (use-package ace-mc
- :init
- (define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
- (define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor))
+  :after evil
+  :init
+  (define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
+  (define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor))
 
 (use-package evil-snipe
-  :demand t
   :ensure t
   :after evil
   :diminish evil-snipe-local-mode

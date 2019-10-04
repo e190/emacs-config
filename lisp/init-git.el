@@ -36,9 +36,8 @@
         git-commit-style-convention-checks '(overlong-summary-line non-empty-second-line)))
 
 (use-package evil-magit
-  :demand t
   :ensure t
-  ;; :after (evil magit)
+  :after (evil magit)
   :init
   (setq evil-magit-want-horizontal-movement nil)
   ;; optional: this is the evil state that evil-magit will use
@@ -94,6 +93,7 @@
          ("/git/ignore\\'" . gitignore-mode)))
 
 (use-package git-link
+  :defer t
   :config
   (shadow/define-leader-keys "gl" 'git-link-commit)
   (setq git-link-open-in-browser t))

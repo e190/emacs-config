@@ -198,9 +198,10 @@
   :ensure t
   :hook (eshell-mode . esh-autosuggest-mode))
 
-  ;; Eldoc support
-  (use-package esh-help
-    :init (setup-esh-help-eldoc))
+;; Eldoc support
+(use-package esh-help
+  :after eshell
+  :init (setup-esh-help-eldoc))
 
 (provide 'init-eshell)
 ;;; init-eshell.el ends here

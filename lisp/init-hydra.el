@@ -18,6 +18,7 @@
              hydra-set-transient-map))
 
 (use-package pretty-hydra
+  :defer t
   :functions set-package-archives centaur-load-theme
   :bind ("<f6>" . toggles-hydra/body)
   :init
