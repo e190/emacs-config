@@ -92,6 +92,7 @@
   :diminish rainbow-mode
   :hook ((text-mode . rainbow-mode)
          (prog-mode . rainbow-mode)))
+
 ;; Highlight TODO and similar keywords in comments and strings
 (use-package hl-todo
   :bind (:map hl-todo-mode-map

@@ -57,10 +57,9 @@
     )))
 
 (set-frame-size-according-to-resolution)
+
 ;; Control over modes displayed in the modeline.
-(use-package diminish
-  :defer nil ; load immediately
-  :demand)
+(use-package diminish)
 
 ;; Icons
 ;; NOTE: Must run `M-x all-the-icons-install-fonts' manually on Windows

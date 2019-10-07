@@ -6,7 +6,6 @@
 ;;; Code:
 (eval-when-compile
   (require 'init-constants))
-;; (require 'package)
 
 ;; Always load the newer .el or .elc file.
 ;; (setq load-prefer-newer t)
@@ -101,8 +100,6 @@
   ;; Replace default `list-packages'
   (defadvice list-packages (before my-list-packages activate)
     (paradox-enable)))
-
-(use-package all-the-icons :demand t)
 
 ;; Update GPG keyring for GNU ELPA
 (use-package gnu-elpa-keyring-update)

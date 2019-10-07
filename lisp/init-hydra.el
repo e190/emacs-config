@@ -73,13 +73,13 @@
       ("m" diff-hl-margin-mode "margin gutter" :toggle t)
       ("E" diff-hl-dired-mode "dired gutter" :toggle t))
      "Theme"
-     (("d" (centaur-load-theme 'default) "default"
+     (("d" (shadow-load-theme 'default) "default"
        :toggle (eq (shadow-current-theme) (standardize-theme 'default)))
-      ("c" (centaur-load-theme 'classic) "classic"
+      ("c" (shadow-load-theme 'classic) "classic"
        :toggle (eq (shadow-current-theme) (standardize-theme 'classic)))
-      ("g" (centaur-load-theme 'light) "light"
+      ("g" (shadow-load-theme 'light) "light"
        :toggle (eq (shadow-current-theme) (standardize-theme 'light)))
-      ("y" (centaur-load-theme 'daylight) "daylight"
+      ("y" (shadow-load-theme 'daylight) "daylight"
        :toggle (eq (shadow-current-theme) (standardize-theme 'daylight)))
       ("M" doom-modeline-mode "modern mode-line" :toggle t)
       ("T" (counsel-load-theme) "others"))

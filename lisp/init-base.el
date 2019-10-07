@@ -1,4 +1,4 @@
-;;; config-base.el --- Important packages.
+;; init-base.el --- Better default configurations.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;
@@ -12,12 +12,11 @@
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
 
+;; Reverts buffers automatically when underlying files are changed externally.
 (use-package autorevert
   :diminish auto-revert-mode
   :ensure nil ; built-in package
-  :config
-  ;; Reverts buffers automatically when underlying files are changed externally.
-  (global-auto-revert-mode t))
+  :hook (after-init . global-auto-revert-mode))
 
 (use-package deferred
   :defer t)
@@ -56,4 +55,4 @@
     (add-hook 'before-save-hook #'delete-trailing-whitespace nil t)))
 
 (provide 'init-base)
-;;; config-base.el ends here
+;;; init-base.el ends here

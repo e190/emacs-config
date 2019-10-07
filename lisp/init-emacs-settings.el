@@ -5,8 +5,6 @@
 
 ;;; Code:
 
-;; Alphabetical order by identifier.
-
 (defun shadow//make-cache-dir (dir)
   "Create DIR in `shadow-cache-dir', making parents and returning DIR."
   (let ((new-dir (concat shadow-cache-dir "/" dir)))

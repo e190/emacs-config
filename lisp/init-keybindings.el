@@ -10,6 +10,7 @@
 (defvar shadow-leader-map (make-sparse-keymap)
   "Base keymap for all leader key commands.")
 
+;; Display available keybindings in popup
 (use-package which-key
   :diminish which-key-mode
   :init

@@ -7,8 +7,8 @@
 
 ;;; Code:
 
-;; (eval-when-compile
-;;   (require 'core-constants))
+(eval-when-compile
+  (require 'init-constants))
 
 ;; C/C++ Mode
 (use-package cc-mode
@@ -25,11 +25,10 @@
     :diminish
     :init (modern-c++-font-lock-global-mode t))
   ;; Company mode backend for C/C++ header files
-  (with-eval-after-load 'company
-    (use-package company-c-headers
-      :defines company-backends
-      :init (cl-pushnew 'company-c-headers company-backends)))
-  ;; (setq ctags-command "/usr/local/bin/ctags -e -R ")
+  (use-package company-c-headers
+    :after company
+    :defines company-backends
+    :init (cl-pushnew 'company-c-headers company-backends))
   )
 
 (use-package cmake-mode

@@ -12,7 +12,6 @@
   (setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode")))
 
 (use-package evil
-  :defer t
   :hook (after-init . evil-mode)
   :init
   ;; Must be set before evil is loaded.

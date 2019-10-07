@@ -10,6 +10,7 @@
 ;; Theme
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
+
 (defun run-after-load-theme-hook (&rest _)
   "Run `after-load-theme-hook'."
   (run-hooks 'after-load-theme-hook))
@@ -30,7 +31,7 @@
   "Check whether the THEME is a doom theme. THEME is a symbol."
   (string-prefix-p "doom" (symbol-name (standardize-theme theme))))
 
-(defun centaur-load-theme (theme)
+(defun shadow-load-theme (theme)
   "Set color THEME."
   (interactive
    (list
@@ -43,8 +44,19 @@
 (if (is-doom-theme-p shadow-theme)
     (progn
       (use-package doom-themes
-        :init (centaur-load-theme shadow-theme)
+        :hook (after-load-theme . (lambda ()
+                                    (set-face-foreground
+                                     'mode-line
+                                     (face-foreground 'default))))
+        :init (shadow-load-theme shadow-theme)
         :config
+        ;; FIXME: @see https://github.com/hlissner/emacs-doom-themes/issues/317.
+        (set-face-foreground 'mode-line (face-foreground 'default))
+
+        ;; Make swiper match clearer
+	    (with-eval-after-load 'swiper
+	      (set-face-background 'swiper-background-match-face-1 "SlateGray1"))
+
         ;; Enable flashing mode-line on errors
         (doom-themes-visual-bell-config)
         (set-face-attribute 'doom-visual-bell nil
@@ -69,7 +81,8 @@
         (advice-add #'persp-load-state-from-file
                     :after #'solaire-mode-restore-persp-mode-buffers)))
   (progn
-    (ignore-errors (centaur-load-theme centaur-theme))))
+    (warn "The current theme may not be compatible with Centaur!")
+    (shadow-load-theme shadow-theme)))
 
 (provide 'init-theme)
 ;;; config-theme.el ends here

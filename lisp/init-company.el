@@ -230,7 +230,7 @@
   :ensure t)
 
 (use-package company-ctags
-  :defer t
+  :after company
   :ensure nil
   :if (eq shadow-lsp-mode 'ctags)
   :load-path "site-lisp/company-ctags"

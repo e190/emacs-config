@@ -50,6 +50,7 @@
 | eval-last-sexp (C-x C-e) | 使当前 elisp 配置中光标前的那一条语句立刻生效     |   |
 | eval-region              | 使当前 elisp 配置中选中的 region 中的语句立刻生效 |   |
 | eval-buffer              | 使当前的 buffer 中的设置语句立刻生效              |   |
+| load-file                |                                                   |   |
 | ~C-c C-l~                  | 重新加载配置                                      |   |
 | ~C-c y~                    | 有道词典                                          |   |
 | ~SPC h h~                  | 帮助系统                                          |   |

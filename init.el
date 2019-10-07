@@ -75,6 +75,7 @@
 (advice-add #'package-initialize :after #'update-load-path)
 (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
 
+
 (update-load-path)
 ;; Must come first
 (require 'init-constants)
@@ -83,13 +84,12 @@
 (require 'init-funcs)
 (require 'init-hydra)
 (require 'init-keybindings)
+(require 'init-evil)
 (require 'init-ui)
 (require 'init-theme)
 (require 'init-mode-line)
-(require 'init-evil)
 (require 'init-edit)
 (require 'init-emacs-settings)
-
 ;; Modules
 (require 'init-ivy)
 (require 'init-company)

@@ -283,15 +283,13 @@
 (use-package counsel-etags
   :ensure t
   :if (eq shadow-lsp-mode 'ctags)
+  :after evil counsel
   :init
   (eval-when-compile
     ;; Silence missing function warnings
     (declare-function counsel-etags-virtual-update-tags "counsel-etags.el")
     (declare-function counsel-etags-guess-program "counsel-etags.el")
     (declare-function counsel-etags-locate-tags-file "counsel-etags.el"))
-  :bind (
-         ("M-." . counsel-etags-find-tag-at-point)
-         ("M-t" . counsel-etags-grep-symbol-at-point))
   :config
   ;; Ignore files above 800kb
   (setq counsel-etags-max-file-size 800)
@@ -301,16 +299,22 @@
   (add-to-list 'counsel-etags-ignore-filenames '".clang-format")
   ;; Don't ask before rereading the TAGS files if they have changed
   (setq tags-revert-without-query t)
+  ;; Do case-sensitive tag searches
+  (setq tags-case-fold-search nil) ;; t=case-insensitive, nil=case-sensitive
   ;; Don't warn when TAGS files are large
   (setq large-file-warning-threshold nil)
   ;; How many seconds to wait before rerunning tags for auto-update
-  (setq counsel-etags-update-interval 180)
+  (setq counsel-etags-update-interval 10)
+
+  (define-key evil-normal-state-map (kbd "C-]") 'counsel-etags-find-tag-at-point)
+  (define-key evil-visual-state-map (kbd "C-]") 'counsel-etags-find-tag-at-point)
+  ;; (setq ctags-command "ctags.exe -e -R ")
+
   ;; Set up auto-update
-  (add-hook
-   'prog-mode-hook
-   (lambda () (add-hook 'after-save-hook
-                        (lambda ()
-                          (counsel-etags-virtual-update-tags)))))
+  ;; (add-hook 'prog-mode-hook
+  ;;           (lambda ()
+  ;;             (add-hook 'after-save-hook
+  ;;                       'counsel-etags-virtual-update-tags 'append 'local)))
 
   ;; The function provided by counsel-etags is broken (at least on Linux)
   ;; and doesn't correctly exclude directories, leading to an excessive
@@ -351,16 +355,16 @@
         (async-shell-command cmd)
         (visit-tags-table tags-file t))))
 
-  (setq counsel-etags-update-tags-backend
-        (lambda ()
-          (interactive)
-          (let* ((tags-file (counsel-etags-locate-tags-file)))
-            (when tags-file
-              (my-scan-dir (file-name-directory tags-file) t)
-              (run-hook-with-args
-               'counsel-etags-after-update-tags-hook tags-file)
-              (unless counsel-etags-quiet-when-updating-tags
-                (message "%s is updated!" tags-file))))))
+  ;; (setq counsel-etags-update-tags-backend
+  ;;       (lambda ()
+  ;;         (interactive)
+  ;;         (let* ((tags-file (counsel-etags-locate-tags-file)))
+  ;;           (when tags-file
+  ;;             (my-scan-dir (file-name-directory tags-file) t)
+  ;;             (run-hook-with-args
+  ;;              'counsel-etags-after-update-tags-hook tags-file)
+  ;;             (unless counsel-etags-quiet-when-updating-tags
+  ;;               (message "%s is updated!" tags-file))))))
   )
 
 

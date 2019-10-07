@@ -274,7 +274,7 @@ Dedicated (locked) windows are left untouched."
      ("0" (text-scale-increase 0) "reset"))
     "Appearance"
     (("F" set-frame-font "font")
-     ("T" centaur-load-theme "theme"))))
+     ("T" shadow-load-theme "theme"))))
   :custom-face
   (aw-leading-char-face ((t (:inherit font-lock-keyword-face :bold t :height 3.0))))
   (aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t))))
