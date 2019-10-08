@@ -8,16 +8,19 @@
 ;; Highlight the current line
 (use-package hl-line
   :ensure nil
-  :hook (after-init . global-hl-line-mode))
+  :hook (after-init . global-hl-line-mode)
+  :config
+  ;; (set-face-attribute hl-line-face nil :underline "red")
+  (custom-set-faces '(hl-line ((t (:background "grey13"))))))
 
 ;; Beacon flashes the cursor whenever you adjust position.
 (use-package beacon
   :ensure t
   :diminish beacon-mode
+  :hook (after-init . beacon-mode)
   :init
   (setq beacon-color "red")
-  (setq beacon-size 80)
-  (beacon-mode t))
+  (setq beacon-size 80))
 
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
@@ -41,7 +44,6 @@
 ;; "s" -> symbol-overlay-isearch-literally
 ;; "q" -> symbol-overlay-query-replace
 ;; "r" -> symbol-overlay-rename
-
 (use-package symbol-overlay
   :diminish
   :functions (turn-off-symbol-overlay
@@ -108,4 +110,4 @@
     (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces)))
 
 (provide 'init-highlight)
-;;; config-highlight.el ends here
+;;; init-highlight.el ends here

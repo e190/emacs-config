@@ -132,7 +132,9 @@
   (defun maple-sidebar()
     (interactive)
     (maple-imenu)
-    (neotree-toggle)))
+    (neotree-toggle))
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal maple-imenu-mode-map (kbd "q") 'quit-window)))
 
 ;; Display Time
 (use-package time
