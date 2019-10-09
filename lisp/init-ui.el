@@ -127,6 +127,7 @@
   :init
   (shadow/define-leader-keys "ti" 'maple-imenu)
   :config
+  (setq maple-imenu-width 30)
   (setq maple-imenu-display-alist '((side . left) (slot . -1)))
   ;; (setq maple-imenu-display-alist '((side . right) (slot . -1))))
   (defun maple-sidebar()

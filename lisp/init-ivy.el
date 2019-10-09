@@ -11,7 +11,9 @@
   :diminish counsel-mode ivy-mode
   :functions (my-ivy-fly-time-travel
               my-swiper-toggle-counsel-rg
-              my-swiper-toggle-rg-dwim)
+              my-swiper-toggle-rg-dwim
+              shadow-counsel-git-fast
+              shadow-counsel-rg-current-dir)
   :commands (ivy--format-function-generic
              ivy--add-face)
   :bind(
@@ -45,6 +47,8 @@
    ("si" . swiper-isearch)
    ("sb" . swiper-all)
    ("sr" . swiper-isearch-backward)
+   ("sg" . shadow-counsel-git-fast)
+   ("se" . shadow-counsel-rg-current-dir)
 
    ("bb" . ivy-switch-buffer)
 
@@ -200,6 +204,17 @@
   ;;     (ivy-quit-and-run (rg-dwim default-directory)))
   ;;   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
   ;;   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map))
+
+  (defun shadow-counsel-git-fast ()
+    "use ripgrep as the backed for counsel-git"
+    (interactive)
+    (let ((counsel-git-cmd "rg --files"))
+      (counsel-git)))
+
+  (defun shadow-counsel-rg-current-dir ()
+    "run `counsel-rg' in current direcotry"
+    (interactive)
+    (counsel-rg nil default-directory))
 
   ;; Enhance fuzzy matching
   (use-package flx

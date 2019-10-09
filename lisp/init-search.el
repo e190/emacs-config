@@ -39,6 +39,13 @@
 
 (use-package rg
   :hook (after-init . rg-enable-default-bindings)
+  :functions (shadow-custumize-rg
+              shadow-custumize-rg-dwim
+              shadow-rg-dwim-current-dir)
+  :bind
+  (:map shadow-leader-map
+        ("sd" . rg-dwim)
+        ("si" . shadow-rg-dwim-current-dir))
   :config
   (setq rg-group-result t)
   (setq rg-show-columns t)
@@ -52,12 +59,52 @@
   (when (fboundp 'ag)
     (bind-key "a" #'ag rg-global-map))
 
-  (with-eval-after-load 'counsel
-    (bind-keys :map rg-global-map
-               ("c r" . counsel-rg)
-               ("c s" . counsel-ag)
-               ("c p" . counsel-pt)
-               ("c f" . counsel-fzf))))
+  (defun shadow-custumize-rg ()
+    (interactive)
+    (let* ((things (format "%s" (thing-at-point 'symbol)))
+          (input (read-from-minibuffer (concat "Input something Default("
+                                                things
+                                                ")")))
+          (string (if (equal input "")
+                      things
+                    input))
+          (root-dir-origin (shell-command-to-string "git rev-parse --show-toplevel"))
+          (root-dir (replace-regexp-in-string "\n" "" root-dir-origin))
+          )
+
+      ;; save current point for jump back
+      (deactivate-mark)
+      (ring-insert find-tag-marker-ring (point-marker))
+
+      (rg string "everything" root-dir)
+      (switch-to-buffer-other-window "*rg*")))
+
+  (defun shadow-custumize-rg-dwim ()
+    (interactive)
+    (deactivate-mark)
+    (ring-insert find-tag-marker-ring (point-marker))
+    (rg-dwim)
+    (switch-to-buffer-other-window "*rg*"))
+
+  ;; original `rg-dwim-current-dir' only match current kind of file. But
+  ;; I need everything.
+  (rg-define-search shadow-rg-dwim-current-dir
+    "Search for thing at point in every files under the current
+  directory."
+    :query point
+    :format literal
+    :files "everything"
+    :dir current)
+
+  (add-hook 'rg-mode-hook #'(lambda ()
+                              (interactive)
+                              (define-key rg-mode-map (kbd "g") 'evil-goto-first-line)
+                              (define-key rg-mode-map (kbd "TAB") 'next-error-no-select)
+                              (define-key rg-mode-map (kbd "<tab>") 'next-error-no-select)
+                              (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select)
+                              ))
+  )
+
 
 (use-package color-rg
   :demand t
