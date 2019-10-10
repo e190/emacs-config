@@ -105,19 +105,20 @@
 (setq column-number-mode t)
 (setq line-number-mode t)
 
-;; (use-package imenu-list
-;;   :defer t
-;;   :ensure t
-;;   :init
-;;   (shadow/define-leader-keys "ti" 'imenu-list-smart-toggle)
-;;   :config
-;;   (setq imenu-list-size     0.2)
-;;   (setq imenu-list-position 'right)
-;;   (setq imenu-list-focus-after-activation t))
+(use-package imenu-list
+  :defer t
+  :ensure t
+  :init
+  (shadow/define-leader-keys "tl" 'imenu-list-smart-toggle)
+  :config
+  (setq imenu-list-size     0.2)
+  (setq imenu-list-position 'right)
+  (setq imenu-list-focus-after-activation t))
 
-;; (use-package imenu-anywhere
-;;   :config
-;;   (setq imenu-anywhere-delimiter ": "))
+(use-package imenu-anywhere
+  :defer t
+  :config
+  (setq imenu-anywhere-delimiter ": "))
 
 ;; https://emacs-china.org/t/imenu-list-tagbar/7341
 (use-package maple-imenu
@@ -128,8 +129,8 @@
   (shadow/define-leader-keys "ti" 'maple-imenu)
   :config
   (setq maple-imenu-width 30)
-  (setq maple-imenu-display-alist '((side . left) (slot . -1)))
-  ;; (setq maple-imenu-display-alist '((side . right) (slot . -1))))
+  ;; (setq maple-imenu-display-alist '((side . left) (slot . -1)))
+  (setq maple-imenu-display-alist '((side . right) (slot . -1)))
   (defun maple-sidebar()
     (interactive)
     (maple-imenu)

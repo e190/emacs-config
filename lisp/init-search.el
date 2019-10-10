@@ -96,7 +96,6 @@
     :format literal
     :files "everything"
     :dir current)
-    ;; :menu ("Search"))
 
   (add-hook 'rg-mode-hook #'(lambda ()
                               (interactive)
