@@ -45,11 +45,11 @@
   :bind
   (:map shadow-leader-map
         ("sd" . rg-dwim)
-        ("si" . shadow-rg-dwim-current-dir))
+        ("si" . shadow-custumize-rg)
+        ("sq" . shadow-rg-dwim-current-dir))
   :config
   (setq rg-group-result t)
   (setq rg-show-columns t)
-
   (cl-pushnew '("tmpl" . "*.tmpl") rg-custom-type-aliases)
 
   (with-eval-after-load 'projectile
@@ -58,6 +58,9 @@
 
   (when (fboundp 'ag)
     (bind-key "a" #'ag rg-global-map))
+
+  ;; used in rg result buffer
+  (rg-define-toggle "--context 3" (kbd "C-c c t"))
 
   (defun shadow-custumize-rg ()
     (interactive)
@@ -76,15 +79,13 @@
       (deactivate-mark)
       (ring-insert find-tag-marker-ring (point-marker))
 
-      (rg string "everything" root-dir)
-      (switch-to-buffer-other-window "*rg*")))
+      (rg string "everything" root-dir)))
 
   (defun shadow-custumize-rg-dwim ()
     (interactive)
     (deactivate-mark)
     (ring-insert find-tag-marker-ring (point-marker))
-    (rg-dwim)
-    (switch-to-buffer-other-window "*rg*"))
+    (rg-dwim))
 
   ;; original `rg-dwim-current-dir' only match current kind of file. But
   ;; I need everything.
@@ -95,14 +96,17 @@
     :format literal
     :files "everything"
     :dir current)
+    ;; :menu ("Search"))
 
   (add-hook 'rg-mode-hook #'(lambda ()
                               (interactive)
+                              (setq compilation-scroll-output nil)
+                              (switch-to-buffer-other-window "*rg*")
+                              (define-key rg-mode-map (kbd "SPC") shadow-leader-map)
                               (define-key rg-mode-map (kbd "g") 'evil-goto-first-line)
                               (define-key rg-mode-map (kbd "TAB") 'next-error-no-select)
                               (define-key rg-mode-map (kbd "<tab>") 'next-error-no-select)
-                              (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select)
-                              ))
+                              (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select)))
   )
 
 

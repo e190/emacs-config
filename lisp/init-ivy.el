@@ -190,20 +190,20 @@
         (counsel-rg my-swiper-to-counsel-rg-search))))
   (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
 
-  (defun swiper-toggle-color-rg ()
-    "Toggle `color-rg' with current swiper input."
-    (interactive)
-      (ivy-quit-and-run
-        (color-rg-search-symbol-in-project)))
-  (bind-key "<M-return>" #'swiper-toggle-color-rg swiper-map)
+  ;; (defun swiper-toggle-color-rg ()
+  ;;   "Toggle `color-rg' with current swiper input."
+  ;;   (interactive)
+  ;;     (ivy-quit-and-run
+  ;;       (color-rg-search-symbol-in-project)))
+  ;; (bind-key "<M-return>" #'swiper-toggle-color-rg swiper-map)
 
-  ;; (with-eval-after-load 'rg
-  ;;   (defun my-swiper-toggle-rg-dwim ()
-  ;;     "Toggle `rg-dwim' with current swiper input."
-  ;;     (interactive)
-  ;;     (ivy-quit-and-run (rg-dwim default-directory)))
-  ;;   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
-  ;;   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map))
+  (with-eval-after-load 'rg
+    (defun my-swiper-toggle-rg-dwim ()
+      "Toggle `rg-dwim' with current swiper input."
+      (interactive)
+      (ivy-quit-and-run (rg-dwim default-directory)))
+    (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
+    (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map))
 
   (defun shadow-counsel-git-fast ()
     "use ripgrep as the backed for counsel-git"
