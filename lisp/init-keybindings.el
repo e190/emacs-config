@@ -101,7 +101,7 @@ every KEY."
 	("j"   "jump")
 	("g"   "magit")
 	("m"   "mark")
-	("p"   "projectile")
+	("p"   "project")
 	("q"   "quit")
 	("r"   "replace")
 	("s"   "search/symbol")

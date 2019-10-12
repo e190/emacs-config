@@ -128,7 +128,7 @@
   :init
   (shadow/define-leader-keys "ti" 'maple-imenu)
   :config
-  (setq maple-imenu-width 30)
+  (setq maple-imenu-autoresize t)
   ;; (setq maple-imenu-display-alist '((side . left) (slot . -1)))
   (setq maple-imenu-display-alist '((side . right) (slot . -1)))
   (defun maple-sidebar()
@@ -136,7 +136,9 @@
     (maple-imenu)
     (neotree-toggle))
   (with-eval-after-load 'evil
-    (evil-define-key 'normal maple-imenu-mode-map (kbd "q") 'quit-window)))
+    (evil-define-key 'normal maple-imenu-mode-map (kbd "q") 'quit-window))
+  (add-hook 'maple-imenu-mode-hook
+            (lambda() (setq-local maple-modeline-style 'sidebar))))
 
 ;; Display Time
 (use-package time

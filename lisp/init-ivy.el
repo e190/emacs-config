@@ -118,6 +118,13 @@
                    (t counsel-grep-base-command))))
     (setq counsel-grep-base-command cmd))
 
+  (when (executable-find "fd")
+    (defun cm/counsel-locate-cmd-fd (input)
+      (format "fd --color never --hidden  -- \"%s\" /"
+              (counsel--elisp-to-pcre
+               (ivy--regex input t))))
+    (setq counsel-locate-cmd 'cm/counsel-locate-cmd-fd))
+
   ;; Pre-fill search keywords
   ;; @see https://www.reddit.com/r/emacs/comments/b7g1px/withemacs_execute_commands_like_marty_mcfly/
   (defvar my-ivy-fly-commands
@@ -217,6 +224,7 @@
     (counsel-rg nil default-directory))
 
   ;; Enhance fuzzy matching
+  ;; https://github.com/lewang/flx
   (use-package flx
     :config (setq ivy-re-builders-alist
                   '((swiper . ivy--regex-plus)
@@ -229,16 +237,25 @@
                     (counsel-grep . ivy--regex-plus)
                     (t . ivy--regex-fuzzy))))
 
+  ;; A hydra for better `ivy' experience
   ;; Add help menu by pressing C-o in minibuffer.
   (use-package ivy-hydra
     :bind (:map ivy-minibuffer-map
             ("M-o" . ivy-dispatching-done-hydra))))
 
 ;; counsel-M-x will use smex if available.
-(use-package smex
-  :defer t
+;; (use-package smex
+;;   :defer t
+;;   :init
+;;   (setq smex-save-file (concat shadow-cache-dir "/smex-items")))
+
+;; Enchanced M-x
+;; https://github.com/DarwinAwardWinner/amx
+(use-package amx
+  ;; :defer t
+  :hook (after-init . amx-mode)
   :init
-  (setq smex-save-file (concat shadow-cache-dir "/smex-items")))
+  (setq amx-save-file (concat shadow-cache-dir "/amx-items")))
 
 (use-package ivy-rich
   :ensure t

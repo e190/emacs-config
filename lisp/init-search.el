@@ -37,6 +37,11 @@
   (setq ag-reuse-window t)
   (use-package wgrep-ag))
 
+;; `find-dired' alternative using `fd'
+(when (executable-find "fd")
+  (use-package fd-dired
+    :defer t))
+
 (use-package rg
   :hook (after-init . rg-enable-default-bindings)
   :functions (shadow-custumize-rg
@@ -109,6 +114,32 @@
   )
 
 
+(use-package find-file-in-project
+  :defer t
+  :ensure t
+  :bind
+  (:map shadow-leader-map
+  ("p SPC" . find-file-in-project-by-selected)
+  ("pc" . find-file-in-current-directory)
+  ("pd" . ffip-show-diff)
+  ("pf" . find-file-in-project)
+  ("ps" . ffip-save-ivy-last)
+  ("pr" . ffip-ivy-resume)
+  ("pa" . find-file-in-project-at-point))
+  :config
+  (setq ffip-use-rust-fd t)
+
+  ;; ffip-diff-mode (read only) evil setup
+  (defun ffip-diff-mode-hook-setup ()
+    (evil-local-set-key 'normal "q" (lambda () (interactive) (quit-window t)))
+    (evil-local-set-key 'normal (kbd "RET") 'ffip-diff-find-file)
+    ;; "C-c C-a" is binding to `diff-apply-hunk' in `diff-mode'
+    (evil-local-set-key 'normal "a" 'ffip-diff-apply-hunk)
+    (evil-local-set-key 'normal "o" 'ffip-diff-find-file))
+  (add-hook 'ffip-diff-mode-hook 'ffip-diff-mode-hook-setup)
+)
+
+
 (use-package color-rg
   :demand t
   :ensure nil; local package
@@ -132,7 +163,10 @@
 ;; SnailsPac
 (use-package snails
   :ensure nil; local package
+  ;; :demand t
   :load-path "site-elisp/snails"
+  ;; :init
+  ;; (autoload 'snails "snails" nil t)
   :bind
   (:map shadow-leader-map
    ("sa" . snails))
@@ -147,21 +181,23 @@
   ;; Functions for specific backends
   (defun snails-current-project ()
     (interactive)
-    (snails '(snails-backend-projectile snails-backend-rg snails-backend-fd)))
-  (defun snails-active-recent-buffers ()
+    (snails '(snails-backend-projects snails-backend-projectile)))
+  (defun snails-rg ()
     (interactive)
-    (snails '(snails-backend-buffer snails-backend-recentf)))
+    (snails '(snails-backend-rg)))
+  (defun snails-fd ()
+    (interactive)
+    (snails '(snails-backend-fd)))
   (defun snails-everywhere ()
     (interactive)
-    (snails '(snails-backend-everything snails-backend-mdfind)))
+    (snails '(snails-backend-everything)))
+    ;; (snails '(snails-backend-everything snails-backend-mdfind)))
   :bind
   (("M-s s" . snails)
    ("M-s g" . snails-current-project)
-   ("M-s b" . snails-active-recent-buffers)
+   ("M-s b" . snails-fd)
    ("M-s e" . snails-everywhere)))
 ;; -SnailsPac
-
-
 
 (provide 'init-search)
 ;;; config-search.el ends here

@@ -36,6 +36,7 @@
   :mode (
 	 ("CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Origami - Does code folding, ie hide the body of an
 ;; if/else/for/function so that you can fit more code on your screen
