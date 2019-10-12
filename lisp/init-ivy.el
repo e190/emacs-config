@@ -208,7 +208,13 @@
     (defun my-swiper-toggle-rg-dwim ()
       "Toggle `rg-dwim' with current swiper input."
       (interactive)
-      (ivy-quit-and-run (rg-dwim default-directory)))
+      (let ((text (replace-regexp-in-string
+                  "\n" ""
+                    (replace-regexp-in-string "^.*Swiper: " ""
+                                              (thing-at-point 'line t)))))
+        (setq my-swiper-to-counsel-rg-search text)
+        (setq my-directory (ffip-get-project-root-directory))
+      (ivy-quit-and-run (rg my-swiper-to-counsel-rg-search "everything" (ffip-get-project-root-directory)))))
     (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
     (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map))
 
