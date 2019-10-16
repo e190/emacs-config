@@ -43,13 +43,6 @@
   ;; Controls position of the mode line tag for the current mode,
   ;; e.g. <N>, <I>, etc.  Before places it before the major-mode.
   (setq evil-mode-line-format 'before)
-  ;;; modify evil-state-tag
-  (setq evil-normal-state-tag   (propertize "[Normal]")
-        evil-emacs-state-tag    (propertize "[Emacs]")
-        evil-insert-state-tag   (propertize "[Insert]")
-        evil-motion-state-tag   (propertize "[Motion]")
-        evil-visual-state-tag   (propertize "[Visual]")
-        evil-operator-state-tag (propertize "[Operator]"))
 
   ;; Cursor colors.
   (setq evil-normal-state-cursor '("DarkGoldenrod2" box))

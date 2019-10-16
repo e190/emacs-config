@@ -113,33 +113,6 @@
                               (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select)))
   )
 
-
-(use-package find-file-in-project
-  :defer t
-  :ensure t
-  :bind
-  (:map shadow-leader-map
-  ("p SPC" . find-file-in-project-by-selected)
-  ("pc" . find-file-in-current-directory)
-  ("pd" . ffip-show-diff)
-  ("pf" . find-file-in-project)
-  ("ps" . ffip-save-ivy-last)
-  ("pr" . ffip-ivy-resume)
-  ("pa" . find-file-in-project-at-point))
-  :config
-  (setq ffip-use-rust-fd t)
-
-  ;; ffip-diff-mode (read only) evil setup
-  (defun ffip-diff-mode-hook-setup ()
-    (evil-local-set-key 'normal "q" (lambda () (interactive) (quit-window t)))
-    (evil-local-set-key 'normal (kbd "RET") 'ffip-diff-find-file)
-    ;; "C-c C-a" is binding to `diff-apply-hunk' in `diff-mode'
-    (evil-local-set-key 'normal "a" 'ffip-diff-apply-hunk)
-    (evil-local-set-key 'normal "o" 'ffip-diff-find-file))
-  (add-hook 'ffip-diff-mode-hook 'ffip-diff-mode-hook-setup)
-)
-
-
 (use-package color-rg
   :demand t
   :ensure nil; local package

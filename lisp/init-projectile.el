@@ -43,25 +43,31 @@
     ;; FIXME: too slow while getting submodule files on Windows
     (setq projectile-git-submodule-command nil)))
 
-(with-eval-after-load 'counsel
-  (use-package counsel-projectile
-    :init
-    (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point))
-    (counsel-projectile-mode 1)
-    :bind
-    (:map shadow-leader-map
-    ("p SPC" . counsel-projectile)
-    ("pD" . counsel-projectile-dired)
-    ("pF" . counsel-projectile-find-file-dwim)
-    ("pb" . counsel-projectile-switch-to-buffer)
-    ("pd" . counsel-projectile-find-dir)
-    ("pf" . counsel-projectile-find-file)
-    ("pp" . counsel-projectile-switch-project)
-    ("pr" . counsel-projectile-rg)
-    ("pi" . counsel-projectile-git-grep))
-    :init
-    (with-eval-after-load 'projectile
-      (setq projectile-switch-project-action 'counsel-projectile-find-file))))
+(use-package find-file-in-project
+  :defer t
+  :ensure t
+  :bind
+  (:map shadow-leader-map
+  ("p SPC" . find-file-in-project-by-selected)
+  ("pc" . find-file-in-current-directory)
+  ("pd" . ffip-show-diff)
+  ("pf" . find-file-in-project)
+  ("ps" . ffip-save-ivy-last)
+  ("pr" . ffip-ivy-resume)
+  ("pa" . find-file-in-project-at-point))
+  :config
+  (setq ffip-use-rust-fd t)
+
+  ;; ffip-diff-mode (read only) evil setup
+  (defun ffip-diff-mode-hook-setup ()
+    (evil-local-set-key 'normal "q" (lambda () (interactive) (quit-window t)))
+    (evil-local-set-key 'normal (kbd "RET") 'ffip-diff-find-file)
+    ;; "C-c C-a" is binding to `diff-apply-hunk' in `diff-mode'
+    (evil-local-set-key 'normal "a" 'ffip-diff-apply-hunk)
+    (evil-local-set-key 'normal "o" 'ffip-diff-find-file))
+  (add-hook 'ffip-diff-mode-hook 'ffip-diff-mode-hook-setup)
+)
+
 
 (provide 'init-projectile)
 ;;; init-projectile ends here

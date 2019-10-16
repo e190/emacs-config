@@ -109,7 +109,7 @@
 (require 'init-markdown)
 (require 'init-search)
 (require 'init-window)
-;; (require 'init-projectile)
+(require 'init-projectile)
 (require 'init-lsp)
 (require 'init-prog)
 (require 'init-c)

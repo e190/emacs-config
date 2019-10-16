@@ -146,6 +146,7 @@
   :unless (display-graphic-p)
   :hook (after-init . display-time-mode)
   :init
+  (setq display-time-format "%Y-%m-%d %H:%M")
   (setq display-time-24hr-format t)
   (setq display-time-day-and-date t))
 
@@ -173,7 +174,6 @@
   (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
   (setq awesome-tab-label-fixed-length 14)
   (setq awesome-tab-face-height 100))
-
 
 (provide 'init-ui)
 ;;; init-ui.el ends here
