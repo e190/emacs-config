@@ -29,7 +29,7 @@
    ("fel" . counsel-find-library)
    ("ff" . counsel-find-file)
    ("fL" . counsel-locate)
-   ("fr" . counsel-recentf)
+   ("fr" . counsel-buffer-or-recentf)
 
    ;; help
    ("?"  . counsel-descbinds)
