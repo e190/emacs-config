@@ -50,16 +50,15 @@
               turn-on-symbol-overlay)
 
   :custom-face
-  ;; (symbol-overlay-default-face ((t (:inherit 'region))))
-  (symbol-overlay-default-face ((t (:background "dark gray" :foreground "black"))))
-  (symbol-overlay-face-1 ((t (:inherit 'highlight))))
-  (symbol-overlay-face-2 ((t (:inherit 'font-lock-builtin-face :inverse-video t))))
-  (symbol-overlay-face-3 ((t (:inherit 'warning :inverse-video t))))
-  (symbol-overlay-face-4 ((t (:inherit 'font-lock-constant-face :inverse-video t))))
-  (symbol-overlay-face-5 ((t (:inherit 'error :inverse-video t))))
-  (symbol-overlay-face-6 ((t (:inherit 'dired-mark :inverse-video t :bold nil))))
-  (symbol-overlay-face-7 ((t (:inherit 'success :inverse-video t))))
-  (symbol-overlay-face-8 ((t (:inherit 'dired-symlink :inverse-video t :bold nil))))
+  (symbol-overlay-default-face ((t (:inherit (region bold)))))
+  (symbol-overlay-face-1 ((t (:inherit (highlight bold)))))
+  (symbol-overlay-face-2 ((t (:inherit (font-lock-builtin-face bold) :inverse-video t))))
+  (symbol-overlay-face-3 ((t (:inherit (warning bold) :inverse-video t))))
+  (symbol-overlay-face-4 ((t (:inherit (font-lock-constant-face bold) :inverse-video t))))
+  (symbol-overlay-face-5 ((t (:inherit (error bold) :inverse-video t))))
+  (symbol-overlay-face-6 ((t (:inherit (dired-mark bold) :inverse-video t))))
+  (symbol-overlay-face-7 ((t (:inherit (success bold) :inverse-video t))))
+  (symbol-overlay-face-8 ((t (:inherit (dired-symlink bold) :inverse-video t))))
   :bind
   (("M-n" . symbol-overlay-jump-next)
   ("M-p" . symbol-overlay-jump-prev)
@@ -68,8 +67,8 @@
    ("hp" . symbol-overlay-put)
    ("hc" . symbol-overlay-remove-all)))
   :hook ((prog-mode . symbol-overlay-mode)
-        (iedit-mode . turn-off-symbol-overlay)
-        (iedit-mode-end . turn-on-symbol-overlay))
+        (evil-visual-beginning . turn-off-symbol-overlay)
+        (evil-normal-state-entry . turn-on-symbol-overlay))
 
   :init (setq symbol-overlay-idle-time 0.01)
   :config

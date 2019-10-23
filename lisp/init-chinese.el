@@ -61,6 +61,7 @@
     :ensure t
     :defer t
     :config (pyim-basedict-enable))
+
   (setq pyim-dcache-directory (expand-file-name "pyim" shadow-cache-dir))
   (setq default-input-method "pyim")
   ;; 使用 emacs thread 来生成 dcache。
@@ -69,11 +70,21 @@
   (setq pyim-default-scheme 'quanpin)
   ;; 显示6个候选词。
   (setq pyim-page-length 6)
+  ;; 开启拼音搜索
+  (pyim-isearch-mode 1)
   ;; 设置选词框的绘制方式
   (setq pyim-page-tooltip 'posframe)
   ;; 只能在字符串和 comment 中输入中文
   (setq-default pyim-english-input-switch-functions
-                '(pyim-probe-program-mode)))
+                '(pyim-probe-dynamic-english
+                  pyim-probe-isearch-mode
+                  pyim-probe-program-mode
+                  pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation))
+  (global-set-key (kbd "C-\\") 'toggle-input-method))
 
 (use-package pangu-spacing
   :defer t
