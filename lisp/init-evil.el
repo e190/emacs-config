@@ -135,13 +135,14 @@
   (kevin/reset-evil-mc-key-map))
 
 (use-package evil-escape
-  :defer t
+  :ensure t
   :after evil
   :diminish evil-escape-mode
   :config
   (evil-escape-mode)
   (setq-default evil-escape-key-sequence "jk")
-  (setq-default evil-escape-delay 0.3))
+  (setq-default evil-escape-delay 0.3)
+  (global-set-key (kbd "C-c C-g") 'evil-escape))
 
 (use-package ace-mc
   :after evil

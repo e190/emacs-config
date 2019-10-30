@@ -231,9 +231,8 @@
 
 (use-package company-ctags
   :after company
-  :ensure nil
+  :ensure t
   :if (eq shadow-lsp-mode 'ctags)
-  :load-path "site-lisp/company-ctags"
   :init
   :config
     (company-ctags-auto-setup))
