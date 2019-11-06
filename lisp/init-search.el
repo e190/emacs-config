@@ -104,26 +104,40 @@
 
   (add-hook 'rg-mode-hook #'(lambda ()
                               (interactive)
+                              ;; (switch-to-buffer-other-window "*rg*")
                               (setq compilation-scroll-output nil)
-                              (switch-to-buffer-other-window "*rg*")
                               (define-key rg-mode-map (kbd "SPC") shadow-leader-map)
                               (define-key rg-mode-map (kbd "g") 'evil-goto-first-line)
                               (define-key rg-mode-map (kbd "TAB") 'next-error-no-select)
                               (define-key rg-mode-map (kbd "<tab>") 'next-error-no-select)
-                              (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select)))
-  )
+                              (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select))))
 
 (use-package color-rg
   :demand t
   :ensure nil; local package
   :after counsel
   :load-path "site-lisp/color-rg"
+  :pretty-hydra
+  ((:title (pretty-hydra-title "color-rg Management" 'faicon "search")
+    :foreign-keys warn :quit-key "q")
+   ("Replace"
+     (("r" color-rg-replace-all-matches "replace-all-matches" :exit t))
+    "Filter"
+     (("f" color-rg-filter-match-results "filter-match-results" :exit t)
+     ("F" color-rg-filter-mismatch-results "filter-mismatch-results" :exit t)
+     ("x" color-rg-filter-match-files "filter-match-files" :exit t)
+     ("X" color-rg-filter-mismatch-files "filter-mismatch-files" :exit t)
+     ("u" color-rg-unfilter "unfilter" :exit t))
+    "Actions"
+     (("c" color-rg-rerun-toggle-case "rerun-toggle-case" :exit t)
+     ("s" color-rg-rerun-regexp "rerun-regexp" :exit t)
+     ("d" color-rg-rerun-change-dir "change-dir" :exit t)
+     ("z" color-rg-rerun-change-globs "change-globs" :exit t)
+     ("Z" color-rg-rerun-change-exclude-files "change-exclude-files" :exit t))))
   :bind
-  ("M-s p" . color-rg-search-input-in-projcet)
-  ;; ("M-s p" . color-rg-search-project)
   (:map shadow-leader-map
   ("sc" . color-rg-search-input)
-  ("sp" . color-rg-search-project)
+  ("sp" . color-rg-search-input-in-project)
   ("ss" . color-rg-search-symbol))
   :config
     ;; `color-rg' do not kill any buffer
@@ -131,7 +145,9 @@
   ;; (define-key isearch-mode-map (kbd "M-s e") 'isearch-toggle-color-rg)
   (with-eval-after-load 'evil
     (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)
-    (evil-define-key 'normal color-rg-mode-map (kbd "q") 'quit-window)))
+    (evil-define-key 'normal color-rg-mode-map (kbd "e") 'color-rg-switch-to-edit-mode)
+    (evil-define-key 'normal color-rg-mode-map (kbd "q") 'quit-window)
+    (evil-define-key 'normal color-rg-mode-map (kbd "?") 'color-rg-hydra/body)))
 
 ;; SnailsPac
 (use-package snails

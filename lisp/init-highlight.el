@@ -48,17 +48,7 @@
   :diminish
   :functions (turn-off-symbol-overlay
               turn-on-symbol-overlay)
-
-  :custom-face
-  (symbol-overlay-default-face ((t (:inherit (region bold)))))
-  (symbol-overlay-face-1 ((t (:inherit (highlight bold)))))
-  (symbol-overlay-face-2 ((t (:inherit (font-lock-builtin-face bold) :inverse-video t))))
-  (symbol-overlay-face-3 ((t (:inherit (warning bold) :inverse-video t))))
-  (symbol-overlay-face-4 ((t (:inherit (font-lock-constant-face bold) :inverse-video t))))
-  (symbol-overlay-face-5 ((t (:inherit (error bold) :inverse-video t))))
-  (symbol-overlay-face-6 ((t (:inherit (dired-mark bold) :inverse-video t))))
-  (symbol-overlay-face-7 ((t (:inherit (success bold) :inverse-video t))))
-  (symbol-overlay-face-8 ((t (:inherit (dired-symlink bold) :inverse-video t))))
+  :custom-face (symbol-overlay-default-face ((t (:inherit (region bold)))))
   :bind
   (("M-n" . symbol-overlay-jump-next)
   ("M-p" . symbol-overlay-jump-prev)
@@ -70,7 +60,16 @@
         (evil-visual-beginning . turn-off-symbol-overlay)
         (evil-normal-state-entry . turn-on-symbol-overlay))
 
-  :init (setq symbol-overlay-idle-time 0.01)
+  :init (setq symbol-overlay-idle-time 0.1
+              symbol-overlay-faces
+              '((:inherit (highlight bold))
+                (:inherit (font-lock-builtin-face bold) :inverse-video t)
+                (:inherit (warning bold) :inverse-video t)
+                (:inherit (font-lock-constant-face bold) :inverse-video t)
+                (:inherit (error bold) :inverse-video t)
+                (:inherit (dired-mark bold) :inverse-video t)
+                (:inherit (success bold) :inverse-video t)
+                (:inherit (font-lock-keyword-face bold) :inverse-video t)))
   :config
     ;; Disable symbol highlighting while selecting
     (defun turn-off-symbol-overlay (&rest _)
