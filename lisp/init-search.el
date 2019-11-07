@@ -49,7 +49,7 @@
               shadow-rg-dwim-current-dir)
   :bind
   (:map shadow-leader-map
-        ("sd" . rg-dwim)
+        ("sr" . rg-dwim)
         ("si" . shadow-custumize-rg)
         ("sq" . shadow-rg-dwim-current-dir))
   :config
@@ -111,6 +111,20 @@
                               (define-key rg-mode-map (kbd "TAB") 'next-error-no-select)
                               (define-key rg-mode-map (kbd "<tab>") 'next-error-no-select)
                               (define-key rg-mode-map (kbd "<backtab>") 'previous-error-no-select))))
+
+
+(use-package deadgrep
+  :ensure t
+  :bind
+  (:map shadow-leader-map
+  ("sd" . deadgrep)
+  ("sk" . deadgrep-kill-all-buffers))
+  :config
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result-other-window)
+    (evil-define-key 'normal deadgrep-mode-map (kbd "q") 'quit-window)
+    (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-forward-match)
+    (evil-define-key 'normal deadgrep-mode-map (kbd "<backtab>") 'deadgrep-backward-match)))
 
 (use-package color-rg
   :demand t

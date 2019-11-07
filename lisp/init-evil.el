@@ -150,6 +150,10 @@
   (define-key evil-visual-state-map (kbd "mm") 'ace-mc-add-multiple-cursors)
   (define-key evil-visual-state-map (kbd "ms") 'ace-mc-add-single-cursor))
 
+;; https://github.com/hlissner/evil-snipe
+;; It provides 2-character motions for quickly (and more accurately) jumping around
+;; text, compared to evil's built-in f/F/t/T motions, incrementally highlighting
+;; candidate targets as you type.
 (use-package evil-snipe
   :ensure t
   :after evil

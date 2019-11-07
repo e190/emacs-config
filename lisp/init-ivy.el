@@ -46,7 +46,6 @@
    ("/"  . counsel-rg)
    ("si" . swiper-isearch)
    ("sb" . swiper-all)
-   ("sr" . swiper-isearch-backward)
    ("sg" . shadow-counsel-git-fast)
    ("se" . shadow-counsel-rg-current-dir)
 
