@@ -16,6 +16,8 @@
 
   (setq doom-modeline-major-mode-color-icon t
         doom-modeline-minor-modes nil
+        doom-modeline-evil-state-icon nil
+        doom-modeline-unicode-fallback nil
         doom-modeline-buffer-file-name-style 'truncate-except-project
         doom-modeline-mu4e nil)
   :bind ("C-<f6>" . doom-modeline-hydra/body)

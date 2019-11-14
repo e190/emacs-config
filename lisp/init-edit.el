@@ -99,7 +99,6 @@
   (setq maple-iedit-evil-keybind t
         maple-iedit-ignore-case t)
 
-  (maple-iedit-init)
   (defhydra maple/iedit ()
     ("a" maple-iedit-match-all "all match")
     ("n" maple-iedit-match-next "next")
@@ -138,6 +137,19 @@
    ("mw" . er/mark-word)
    ("ms" . er/mark-symbol)
    ("mp" . er/mark-inside-pairs)))
+
+(use-package anzu
+  :hook (after-init . global-anzu-mode)
+  :config
+  (setq anzu-cons-mode-line-p nil
+        anzu-kode-lighter ""
+        anzu-search-threshold 1000
+        anzu-replace-to-string-separator " → ")
+  ;; (use-package evil-anzu :after evil :demand)
+  :custom-face
+  (anzu-replace-to ((t (:inherit query-replace))))
+  :bind (:map query-replace-map
+              ([return] . 'automatic)))
 
 (provide 'init-edit)
 ;;; init-edit.el ends here

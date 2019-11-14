@@ -161,8 +161,11 @@
   :config
   (evil-snipe-mode +1)
   (evil-snipe-override-mode +1)
-  ;; fix problems with magit buffer
-  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode))
+   ;; fix problems with magit buffer
+  (add-hook 'rg-mode-hook #'turn-off-evil-snipe-mode)
+  (add-hook 'rg-mode-hook #'turn-off-evil-snipe-override-mode)
+  (add-hook 'magit-mode-hook #'turn-off-evil-snipe-mode)
+  (add-hook 'magit-mode-hook #'turn-off-evil-snipe-override-mode))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here
