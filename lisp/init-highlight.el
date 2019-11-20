@@ -8,10 +8,9 @@
 ;; Highlight the current line
 (use-package hl-line
   :ensure nil
-  :hook (after-init . global-hl-line-mode)
-  :config
-  ;; (set-face-attribute hl-line-face nil :underline "red")
-  (custom-set-faces '(hl-line ((t (:background "grey13"))))))
+  :custom-face (hl-line ((t ,@(and emacs/>=27p '(:extend t)))))
+  :hook (after-init . global-hl-line-mode))
+;;   (custom-set-faces '(hl-line ((t (:background "grey13"))))))
 
 ;; Beacon flashes the cursor whenever you adjust position.
 (use-package beacon

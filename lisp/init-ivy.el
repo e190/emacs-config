@@ -53,7 +53,10 @@
 
   :map counsel-mode-map
   ([remap swiper] . counsel-grep-or-swiper)
+  ([remap swiper-backward] . counsel-grep-or-swiper-backward)
+  ([remap cd] . counsel-cd)
   ([remap dired] . counsel-dired)
+  ([remap set-variable] . counsel-set-variable)
   ("C-x C-r" . counsel-recentf)
   ("C-x j" . counsel-mark-ring)
   ("C-c c e" . counsel-colors-emacs)
@@ -261,6 +264,38 @@
   :hook (after-init . amx-mode)
   :init
   (setq amx-save-file (concat shadow-cache-dir "/amx-items")))
+
+  ;; Better sorting and filtering
+(use-package prescient
+  :commands prescient-persist-mode
+  :init
+  (setq prescient-filter-method '(literal regexp initialism fuzzy))
+  (prescient-persist-mode 1))
+
+(use-package ivy-prescient
+  :commands ivy-prescient-re-builder
+  :custom-face
+  (ivy-minibuffer-match-face-1 ((t (:inherit font-lock-doc-face :foreground nil))))
+  :init
+  (defun ivy-prescient-non-fuzzy (str)
+    (let ((prescient-filter-method '(literal regexp)))
+      (ivy-prescient-re-builder str)))
+
+  (setq ivy-prescient-retain-classic-highlighting t
+        ivy-re-builders-alist '((counsel-ag . ivy-prescient-non-fuzzy)
+                                (counsel-rg . ivy-prescient-non-fuzzy)
+                                (counsel-pt . ivy-prescient-non-fuzzy)
+                                (counsel-grep . ivy-prescient-non-fuzzy)
+                                (counsel-yank-pop . ivy-prescient-non-fuzzy)
+                                (swiper . ivy-prescient-non-fuzzy)
+                                (swiper-isearch . ivy-prescient-non-fuzzy)
+                                (swiper-all . ivy-prescient-non-fuzzy)
+                                (insert-char . ivy-prescient-non-fuzzy)
+                                (t . ivy-prescient-re-builder))
+        ivy-prescient-sort-commands '(:not swiper swiper-isearch ivy-switch-buffer
+                                      counsel-grep counsel-ag counsel-yank-pop))
+
+  (ivy-prescient-mode 1))
 
 ;; More friendly display transformer for Ivy
 (use-package ivy-rich

@@ -1,3 +1,4 @@
+
 ;; init-ui.el --- Better lookings and appearances.	-*- lexical-binding: t -*-
 
 ;;; Commentary:
@@ -172,7 +173,8 @@
     (define-key evil-normal-state-map (kbd ",th") 'awesome-tab-forward)
     (define-key evil-normal-state-map (kbd ",tl") 'awesome-tab-backward))
   (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
-  (setq awesome-tab-label-fixed-length 14)
+  ;; (setq awesome-tab-label-fixed-length 14)
+  (setq awesome-tab-style 'alternate)
   (setq awesome-tab-face-height 100))
 
 (provide 'init-ui)
