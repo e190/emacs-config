@@ -119,12 +119,21 @@
   (:map shadow-leader-map
   ("sd" . deadgrep)
   ("sk" . deadgrep-kill-all-buffers))
+  :pretty-hydra
+  ((:title (pretty-hydra-title "deadgrep Management" 'faicon "search")
+    :foreign-keys warn :quit-key "q")
+    ("Actions"
+    (("e" deadgrep-edit-mode "edit-mode" :exit t)
+     ("k" deadgrep-kill-process "kill-process" :exit t)
+     ("g" deadgrep-restart "deadgrep-restart" :exit t))))
   :config
   (with-eval-after-load 'evil
     (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result-other-window)
     (evil-define-key 'normal deadgrep-mode-map (kbd "q") 'quit-window)
     (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-forward-match)
-    (evil-define-key 'normal deadgrep-mode-map (kbd "<backtab>") 'deadgrep-backward-match)))
+    (evil-define-key 'normal deadgrep-mode-map (kbd "<backtab>") 'deadgrep-backward-match)
+    (evil-define-key 'normal deadgrep-edit-mode-map (kbd "C-c C-g") 'deadgrep-mode)
+    (evil-define-key 'normal deadgrep-mode-map (kbd "?") 'deadgrep-hydra/body)))
 
 (use-package color-rg
   :demand t
