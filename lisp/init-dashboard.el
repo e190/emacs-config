@@ -56,8 +56,8 @@
   (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!"
         dashboard-startup-banner (expand-file-name "img/dashLogo.png" user-emacs-directory)
         dashboard-items '((recents . 10)
-                                (bookmarks . 5)
-                                (projects . 5))
+                          (bookmarks . 5)
+                          (projects . 5))
 
         dashboard-set-init-info t
         dashboard-set-file-icons t

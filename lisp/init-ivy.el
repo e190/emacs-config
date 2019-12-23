@@ -30,6 +30,7 @@
    ("ff" . counsel-find-file)
    ("fL" . counsel-locate)
    ("fr" . counsel-buffer-or-recentf)
+   ("fR" . recentf-open-files)
 
    ;; help
    ("?"  . counsel-descbinds)
@@ -91,6 +92,10 @@
         ivy-count-format "(%d/%d) "
         ivy-on-del-error-function nil
         ivy-initial-inputs-alist nil)
+
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+  ;; ensure recentf-list loaded on startup
+  (with-eval-after-load 'counsel (recentf-mode))
 
   (defun my-ivy-format-function-arrow (cands)
     "Transform CANDS into a string for minibuffer."

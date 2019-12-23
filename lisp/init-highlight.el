@@ -106,5 +106,51 @@
   (dolist (keyword '("WORKAROUND" "HACK" "TRICK"))
     (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces)))
 
+;; Pulse current line
+(use-package pulse
+  :ensure nil
+  :custom-face
+  (pulse-highlight-start-face ((t (:inherit region))))
+  (pulse-highlight-face ((t (:inherit region))))
+  :hook (((dumb-jump-after-jump
+           imenu-after-jump) . my-recenter-and-pulse)
+         ((bookmark-after-jump
+           magit-diff-visit-file
+           next-error) . my-recenter-and-pulse-line))
+  :init
+  (with-no-warnings
+    (defun my-pulse-momentary-line (&rest _)
+      "Pulse the current line."
+      (pulse-momentary-highlight-one-line (point)))
+
+    (defun my-pulse-momentary (&rest _)
+      "Pulse the region or the current line."
+      (if (fboundp 'xref-pulse-momentarily)
+          (xref-pulse-momentarily)
+        (my-pulse-momentary-line)))
+
+    (defun my-recenter-and-pulse(&rest _)
+      "Recenter and pulse the region or the current line."
+      (recenter)
+      (my-pulse-momentary))
+
+    (defun my-recenter-and-pulse-line (&rest _)
+      "Recenter and pulse the current line."
+      (recenter)
+      (my-pulse-momentary-line))
+
+    (dolist (cmd '(recenter-top-bottom
+                   other-window windmove-do-window-select
+                   ace-window aw--select-window
+                   pager-page-down pager-page-up
+                   treemacs-select-window
+                   symbol-overlay-basic-jump))
+      (advice-add cmd :after #'my-pulse-momentary-line))
+
+    (dolist (cmd '(pop-to-mark-command
+                   pop-global-mark
+                   goto-last-change))
+      (advice-add cmd :after #'my-recenter-and-pulse))))
+
 (provide 'init-highlight)
 ;;; init-highlight.el ends here

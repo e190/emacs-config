@@ -14,7 +14,7 @@
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
   		      charset
-  		      (font-spec :family "Microsoft Yahei" :size 16)))
+  		      (font-spec :family "Microsoft Yahei" :size 12)))
 
 ;; Start a clean slate.
 (blink-cursor-mode -1)

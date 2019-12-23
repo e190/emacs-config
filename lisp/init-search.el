@@ -77,8 +77,7 @@
                       things
                     input))
           (root-dir-origin (shell-command-to-string "git rev-parse --show-toplevel"))
-          (root-dir (replace-regexp-in-string "\n" "" root-dir-origin))
-          )
+          (root-dir (replace-regexp-in-string "\n" "" root-dir-origin)))
 
       ;; save current point for jump back
       (deactivate-mark)
