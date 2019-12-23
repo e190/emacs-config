@@ -22,11 +22,16 @@
   :defer t)
 
 (use-package recentf
-  :ensure nil ; built-in package
+  :ensure nil
   :hook (after-init . recentf-mode)
-  :init
-  (setq recentf-max-saved-items 200)
-  (setq recentf-save-file (concat shadow-cache-dir "/recentf")))
+  :init (setq recentf-max-saved-items 300
+              recentf-exclude
+              '("\\.?cache" ".cask" "url" "COMMIT_EDITMSG\\'" "bookmarks"
+                "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+                "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
+                "^/tmp/" "^/var/folders/.+$" ; "^/ssh:"
+                (lambda (file) (file-in-directory-p file package-user-dir))))
+  :config (push (expand-file-name recentf-save-file) recentf-exclude))
 
 ;; Save point position between sessions.
 (use-package saveplace
