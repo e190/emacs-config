@@ -89,41 +89,45 @@
   (setq ivy-use-selectable-prompt t
         ivy-use-virtual-buffers t    ; Enable bookmarks and recentf
         ivy-height 10
+        ivy-fixed-height-minibuffer t
         ivy-count-format "(%d/%d) "
         ivy-on-del-error-function nil
         ivy-initial-inputs-alist nil)
 
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
   ;; ensure recentf-list loaded on startup
-  (with-eval-after-load 'counsel (recentf-mode))
+  ;; (with-eval-after-load 'counsel (recentf-mode))
 
-  (defun my-ivy-format-function-arrow (cands)
-    "Transform CANDS into a string for minibuffer."
-    (ivy--format-function-generic
-     (lambda (str)
-       (concat (if (display-graphic-p)
-                   (all-the-icons-octicon "chevron-right" :height 0.8 :v-adjust -0.05)
-                 ">")
-               (propertize " " 'display `(space :align-to 2))
-               (ivy--add-face str 'ivy-current-match)))
-     (lambda (str)
-       (concat (propertize " " 'display `(space :align-to 2)) str))
-     cands
-     "\n"))
+  (with-no-warnings
+    (defun my-ivy-format-function-arrow (cands)
+      "Transform CANDS into a string for minibuffer."
+      (ivy--format-function-generic
+       (lambda (str)
+         (concat (if (display-graphic-p)
+                     (all-the-icons-octicon "chevron-right" :height 0.8 :v-adjust -0.05)
+                   ">")
+                 (propertize " " 'display `(space :align-to 2))
+                 (ivy--add-face str 'ivy-current-match)))
+       (lambda (str)
+         (concat (propertize " " 'display `(space :align-to 2)) str))
+       cands
+       "\n"))
+    (setq ivy-format-functions-alist '((counsel-describe-face . counsel--faces-format-function)
+                                       (t . my-ivy-format-function-arrow))))
+
   (setq ivy-format-functions-alist '((counsel-describe-face . counsel--faces-format-function)
                                      (t . my-ivy-format-function-arrow)))
   (setq swiper-action-recenter t)
 
   (setq counsel-find-file-at-point t
         counsel-yank-pop-separator "\n────────\n")
-  :config
   ;; Use faster search tools: ripgrep or the silver search
-  (let ((cmd (cond ((executable-find "rg")
-                    "rg -S --no-heading --line-number --color never '%s' %s")
-                   ((executable-find "ag")
-                    "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
-                   (t counsel-grep-base-command))))
-    (setq counsel-grep-base-command cmd))
+  (when (executable-find "rg")
+    (setq counsel-grep-base-command "rg -S --no-heading --line-number --color never '%s' %s")
+    (when (and sys/macp (executable-find "gls"))
+      (setq counsel-find-file-occur-use-find nil
+            counsel-find-file-occur-cmd
+            "gls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 gls -d --group-directories-first")))
 
   (when (executable-find "fd")
     (defun cm/counsel-locate-cmd-fd (input)
@@ -132,6 +136,7 @@
                (ivy--regex input t))))
     (setq counsel-locate-cmd 'cm/counsel-locate-cmd-fd))
 
+  :config
   ;; Pre-fill search keywords
   ;; @see https://www.reddit.com/r/emacs/comments/b7g1px/withemacs_execute_commands_like_marty_mcfly/
   (defvar my-ivy-fly-commands
@@ -151,20 +156,28 @@
       counsel-ag
       counsel-rg
       counsel-pt))
+  (defvar-local my-ivy-fly--travel nil)
 
   (defun my-ivy-fly-back-to-present ()
     (cond ((and (memq last-command my-ivy-fly-commands)
                 (equal (this-command-keys-vector) (kbd "M-p")))
-           ;; repeat one time to get straight to the first history item
-           (setq unread-command-events
-                 (append unread-command-events
-                         (listify-key-sequence (kbd "M-p")))))
-          ((memq this-command '(self-insert-command
-                                yank
-                                ivy-yank-word
-                                counsel-yank-pop))
-           (delete-region (point)
-                          (point-max)))))
+            ;; repeat one time to get straight to the first history item
+            (setq unread-command-events
+                  (append unread-command-events
+                          (listify-key-sequence (kbd "M-p")))))
+          ((or (memq this-command '(self-insert-command
+                                    ivy-forward-char end-of-line mwim-end-of-line
+                                    mwim-end-of-code-or-line mwim-end-of-line-or-code
+                                    yank ivy-yank-word counsel-yank-pop))
+                (equal (this-command-keys-vector) (kbd "M-n")))
+            (unless my-ivy-fly--travel
+              (delete-region (point) (point-max))
+              (when (memq this-command '(ivy-forward-char
+                                        end-of-line mwim-end-of-line
+                                        mwim-end-of-code-or-line
+                                        mwim-end-of-line-or-code ))
+                (insert (ivy-cleanup-string ivy-text)))
+              (setq my-ivy-fly--travel t)))))
 
   (defun my-ivy-fly-time-travel ()
     (when (memq this-command my-ivy-fly-commands)
@@ -256,16 +269,9 @@
     :bind (:map ivy-minibuffer-map
             ("M-o" . ivy-dispatching-done-hydra))))
 
-;; counsel-M-x will use smex if available.
-;; (use-package smex
-;;   :defer t
-;;   :init
-;;   (setq smex-save-file (concat shadow-cache-dir "/smex-items")))
-
 ;; Enchanced M-x
 ;; https://github.com/DarwinAwardWinner/amx
 (use-package amx
-  ;; :defer t
   :hook (after-init . amx-mode)
   :init
   (setq amx-save-file (concat shadow-cache-dir "/amx-items")))
@@ -277,31 +283,39 @@
   (setq prescient-filter-method '(literal regexp initialism fuzzy))
   (prescient-persist-mode 1))
 
-(use-package ivy-prescient
-  :commands ivy-prescient-re-builder
-  :custom-face
-  (ivy-minibuffer-match-face-1 ((t (:inherit font-lock-doc-face :foreground nil))))
-  :init
-  (defun ivy-prescient-non-fuzzy (str)
-    (let ((prescient-filter-method '(literal regexp)))
-      (ivy-prescient-re-builder str)))
+  (use-package ivy-prescient
+    :commands ivy-prescient-re-builder
+    :custom-face
+    (ivy-minibuffer-match-face-1 ((t (:inherit font-lock-doc-face :foreground nil))))
+    :init
+    (defun ivy-prescient-non-fuzzy (str)
+      "Generate an Ivy-formatted non-fuzzy regexp list for the given STR.
+This is for use in `ivy-re-builders-alist'."
+      (let ((prescient-filter-method '(literal regexp)))
+        (ivy-prescient-re-builder str)))
 
-  (setq ivy-prescient-retain-classic-highlighting t
-        ivy-re-builders-alist '((counsel-ag . ivy-prescient-non-fuzzy)
-                                (counsel-rg . ivy-prescient-non-fuzzy)
-                                (counsel-pt . ivy-prescient-non-fuzzy)
-                                (counsel-grep . ivy-prescient-non-fuzzy)
-                                (counsel-yank-pop . ivy-prescient-non-fuzzy)
-                                (swiper . ivy-prescient-non-fuzzy)
-                                (swiper-isearch . ivy-prescient-non-fuzzy)
-                                (swiper-all . ivy-prescient-non-fuzzy)
-                                (insert-char . ivy-prescient-non-fuzzy)
-                                (t . ivy-prescient-re-builder))
-        ivy-prescient-sort-commands '(:not swiper swiper-isearch ivy-switch-buffer
-                                      counsel-grep counsel-ag counsel-yank-pop))
+    (setq ivy-prescient-retain-classic-highlighting t
+          ivy-re-builders-alist
+          '((counsel-ag . ivy-prescient-non-fuzzy)
+            (counsel-rg . ivy-prescient-non-fuzzy)
+            (counsel-pt . ivy-prescient-non-fuzzy)
+            (counsel-grep . ivy-prescient-non-fuzzy)
+            (counsel-imenu . ivy-prescient-non-fuzzy)
+            (counsel-yank-pop . ivy-prescient-non-fuzzy)
+            (swiper . ivy-prescient-non-fuzzy)
+            (swiper-isearch . ivy-prescient-non-fuzzy)
+            (swiper-all . ivy-prescient-non-fuzzy)
+            (lsp-ivy-workspace-symbol . ivy-prescient-non-fuzzy)
+            (lsp-ivy-global-workspace-symbol . ivy-prescient-non-fuzzy)
+            (insert-char . ivy-prescient-non-fuzzy)
+            (counsel-unicode-char . ivy-prescient-non-fuzzy)
+            (t . ivy-prescient-re-builder))
+          ivy-prescient-sort-commands
+          '(:not swiper swiper-isearch ivy-switch-buffer
+            counsel-grep counsel-git-grep counsel-ag counsel-imenu
+            counsel-yank-pop counsel-recentf counsel-buffer-or-recentf))
 
-  (ivy-prescient-mode 1))
-
+    (ivy-prescient-mode 1))
 ;; More friendly display transformer for Ivy
 (use-package ivy-rich
   :defines (all-the-icons-icon-alist
