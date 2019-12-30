@@ -46,11 +46,6 @@
   :hook (after-init . dashboard-setup-startup-hook)
   :bind (("<f2>" . open-dashboard)
          :map dashboard-mode-map
-         ("H" . browse-homepage)
-         ("O" . dashboard-open-init-file)
-         ("R" . restore-session)
-         ("q" . quit-dashboard)
-         ("h" . dashboard-hydra/body)
          ("?" . dashboard-hydra/body))
   :config
   (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!"
@@ -77,6 +72,15 @@
                                                            :face 'error))
                                     ((char-displayable-p ?🧡) "🧡 ")
                                     (t (propertize ">" 'face 'font-lock-doc-face))))
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal dashboard-mode-map (kbd "j") 'evil-next-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "k") 'evil-previous-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "H") 'browse-homepage)
+    (evil-define-key 'normal dashboard-mode-map (kbd "O") 'dashboard-open-init-file)
+    (evil-define-key 'normal dashboard-mode-map (kbd "R") 'restore-session)
+    (evil-define-key 'normal dashboard-mode-map (kbd "q") 'quit-dashboard)
+    (evil-define-key 'normal dashboard-mode-map (kbd "h") 'dashboard-hydra/body))
+
   (defun dashboard-insert-buttons (_list-size)
     (insert "\n")
     (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 51) 2))) ?\ ))
