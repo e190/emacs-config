@@ -26,6 +26,7 @@
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 
+;; Title
 ;; Sets a more useful frame title, showing either a file or a buffer
 ;; name (if the buffer isn't visiting a file).
 (setq frame-title-format
@@ -34,9 +35,8 @@
 		   (abbreviate-file-name (buffer-file-name))
 		 "%b"))))
 
-;; Title
-(setq frame-title-format '("Shadow Emacs - %b")
-      icon-title-format frame-title-format)
+;; (setq frame-title-format '("Shadow Emacs - %b")
+;;       icon-title-format frame-title-format)
 
 (when sys/mac-x-p
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))

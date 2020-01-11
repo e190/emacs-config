@@ -1,13 +1,12 @@
 ;; init-dashboard.el --- Initialize dashboard configurations.	-*- lexical-binding: t -*-
 
 ;;; Code:
+(eval-when-compile
+  (require 'init-constants))
 
 (use-package dashboard
-  :ensure t
-  :diminish page-break-lines-mode
-  :preface
-  (defvar homepage-url "https://github.com/e190/emacs-config")
-
+  :diminish (dashboard-mode page-break-lines-mode)
+  :defines persp-special-last-buffer
   :functions (all-the-icons-faicon
               all-the-icons-material
               open-custom-file
@@ -16,6 +15,7 @@
               persp-switch-to-buffer
               winner-undo
               widget-forward)
+  :custom-face (dashboard-heading ((t (:inherit (font-lock-string-face bold)))))
   :pretty-hydra
   ((:title (pretty-hydra-title "Dashboard" 'material "dashboard" :height 1.1 :v-adjust -0.225)
     :color pink :quit-key "q")
@@ -42,15 +42,15 @@
     (("<f2>" open-dashboard "open" :exit t)
       ("g" dashboard-refresh-buffer "refresh" :exit t)
       ("Q" quit-dashboard "quit" :exit t))))
-  :init (setq initial-buffer-choice (lambda () (get-buffer dashboard-buffer-name)))
-  :hook (after-init . dashboard-setup-startup-hook)
-  :bind (("<f2>" . open-dashboard)
-         :map dashboard-mode-map
-         ("?" . dashboard-hydra/body))
+  :bind ("<f2>" . open-dashboard)
+  :hook (dashboard-mode . (lambda () (setq-local frame-title-format "Shadow's Emacs")))
+  :init (dashboard-setup-startup-hook)
   :config
-  (setq dashboard-banner-logo-title "Happy Hacking, Emacs ♥ You!"
-        dashboard-startup-banner (expand-file-name "img/dashLogo.png" user-emacs-directory)
-        dashboard-items '((recents . 10)
+  (setq dashboard-banner-logo-title "Emacs ♥ You - Enjoy Programming & Writing"
+        dashboard-startup-banner (or Shadow-logo 'official)
+        ;; dashboard-center-content t
+        dashboard-show-shortcuts nil
+        dashboard-items '((recents  . 10)
                           (bookmarks . 5)
                           (projects . 5))
 
@@ -66,76 +66,89 @@
         dashboard-set-footer t
         dashboard-footer (format "Powered by Shadow, %s" (format-time-string "%Y"))
         dashboard-footer-icon (cond ((display-graphic-p)
-                                     (all-the-icons-faicon "heart"
-                                                           :height 1.1
-                                                           :v-adjust -0.05
-                                                           :face 'error))
+                                      (all-the-icons-faicon "heart"
+                                                            :height 1.1
+                                                            :v-adjust -0.05
+                                                            :face 'error))
                                     ((char-displayable-p ?🧡) "🧡 ")
-                                    (t (propertize ">" 'face 'font-lock-doc-face))))
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal dashboard-mode-map (kbd "j") 'evil-next-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "k") 'evil-previous-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "<down>") 'evil-next-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "<up>") 'evil-previous-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "H") 'browse-homepage)
-    (evil-define-key 'normal dashboard-mode-map (kbd "O") 'dashboard-open-init-file)
-    (evil-define-key 'normal dashboard-mode-map (kbd "R") 'restore-session)
-    (evil-define-key 'normal dashboard-mode-map (kbd "q") 'quit-dashboard)
-    (evil-define-key 'normal dashboard-mode-map (kbd "h") 'dashboard-hydra/body))
+                                    (t (propertize ">" 'face 'font-lock-doc-face)))
 
-  (defun dashboard-insert-buttons (_list-size)
-    (insert "\n")
-    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 51) 2))) ?\ ))
-    (widget-create 'url-link
-                   :tag (propertize "Homepage" 'face 'font-lock-keyword-face)
-                   :help-echo "Open Emacs Github page"
-                   :mouse-face 'highlight
-                   homepage-url)
-    (insert " ")
-    (widget-create 'push-button
-                   :help-echo "Open Personal Configurations"
-                   :action (lambda (&rest _) (shadow/open-init-file))
-                   :mouse-face 'highlight
-                   :button-prefix ""
-                   :button-suffix ""
-                   (propertize "Open Config" 'face 'font-lock-keyword-face))
-    (insert " ")
-    (widget-create 'push-button
-                   :help-echo "Restore previous session"
-                   :action (lambda (&rest _) (restore-session))
-                   :mouse-face 'highlight
-                   :button-prefix ""
-                   :button-suffix ""
-                   (propertize "Restore Session" 'face 'font-lock-keyword-face))
-    (insert "\n")
-    (insert "\n")
-    (insert (make-string (max 0 (floor (/ (- dashboard-banner-length 48) 2))) ?\ )))
-  (add-to-list 'dashboard-item-generators  '(buttons . dashboard-insert-buttons))
-  (add-to-list 'dashboard-items '(buttons))
+        dashboard-set-navigator t
+        dashboard-navigator-buttons
+        `(((,(when (display-graphic-p)
+                (all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0))
+            "Homepage" "Browse homepage"
+            (lambda (&rest _) (browse-url Shadow-homepage)))
+            (,(when (display-graphic-p)
+                (all-the-icons-material "restore" :height 1.35 :v-adjust -0.24))
+            "Restore" "Restore previous session"
+            (lambda (&rest _) (restore-session)))
+            (,(when (display-graphic-p)
+                (all-the-icons-octicon "tools" :height 1.0 :v-adjust 0.0))
+            "Settings" "Open custom file"
+            (lambda (&rest _) (find-file custom-file)))
+            (,(when (display-graphic-p)
+                (all-the-icons-material "update" :height 1.35 :v-adjust -0.24))
+            "Update" "Update Shadow Emacs"
+            (lambda (&rest _) (shadow-update)))
+            (,(if (display-graphic-p)
+                  (all-the-icons-faicon "question" :height 1.2 :v-adjust -0.1)
+                "?")
+            "" "Help (?/h)"
+            (lambda (&rest _) (dashboard-hydra/body))
+            font-lock-string-face))))
 
-  (dashboard-insert-startupify-lists)
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal dashboard-mode-map
-       (kbd "?") 'dashboard-hydra/body)
-       "r" 'dashboard-goto-recent-files)
+  (defun my-banner-path (&rest _)
+    "Return the full path to banner."
+    (expand-file-name "banner.txt" user-emacs-directory))
+  (advice-add #'dashboard-get-banner-path :override #'my-banner-path)
+
+  ;; WORKAROUND: fix differnct background color of the banner image.
+  ;; @see https://github.com/emacs-dashboard/emacs-dashboard/issues/203
+  (defun my-dashboard-insert-image-banner (banner)
+    "Display an image BANNER."
+    (when (file-exists-p banner)
+      (let* ((title dashboard-banner-logo-title)
+              (spec (create-image banner))
+              (size (image-size spec))
+              (width (car size))
+              (left-margin (max 0 (floor (- dashboard-banner-length width) 2))))
+        (goto-char (point-min))
+        (insert "\n")
+        (insert (make-string left-margin ?\ ))
+        (insert-image spec)
+        (insert "\n\n")
+        (when title
+          (dashboard-center-line title)
+          (insert (format "%s\n\n" (propertize title 'face 'dashboard-banner-logo-title)))))))
+  (advice-add #'dashboard-insert-image-banner :override #'my-dashboard-insert-image-banner)
+
+  (defvar dashboard-recover-layout-p nil
+    "Wether recovers the layout.")
 
   (defun open-dashboard ()
     "Open the *dashboard* buffer and jump to the first widget."
     (interactive)
+    ;; Check if need to recover layout
+    (if (> (length (window-list-1))
+            ;; exclude `treemacs' window
+            (if (and (fboundp 'treemacs-current-visibility)
+                    (eq (treemacs-current-visibility) 'visible))
+                2
+              1))
+        (setq dashboard-recover-layout-p t))
+
+    (delete-other-windows)
+
+    ;; Refresh dashboard buffer
     (if (get-buffer dashboard-buffer-name)
         (kill-buffer dashboard-buffer-name))
     (dashboard-insert-startupify-lists)
     (switch-to-buffer dashboard-buffer-name)
+
+    ;; Jump to the first section
     (goto-char (point-min))
-    (dashboard-goto-recent-files)
-    (if (> (length (window-list-1))
-           ;; exclude `treemacs' window
-           (if (and (fboundp 'treemacs-current-visibility)
-                    (eq (treemacs-current-visibility) 'visible))
-               2
-             1))
-        (setq dashboard-recover-layout-p t))
-    (delete-other-windows))
+    (dashboard-goto-recent-files))
 
   (defun restore-session ()
     "Restore last session."
@@ -145,16 +158,18 @@
       (condition-case-unless-debug err
           (persp-load-state-from-file)
         (error
-         (message "Error: Unable to restore last session -- %s" err)))
+          (message "Error: Unable to restore last session -- %s" err)))
+      (quit-window t)
       (when (persp-get-buffer-or-null persp-special-last-buffer)
-        (persp-switch-to-buffer persp-special-last-buffer))))
+        (persp-switch-to-buffer persp-special-last-buffer))
+      (message "Done")))
 
   (defun quit-dashboard ()
     "Quit dashboard window."
     (interactive)
     (quit-window t)
     (when (and dashboard-recover-layout-p
-               (bound-and-true-p winner-mode))
+                (bound-and-true-p winner-mode))
       (winner-undo)
       (setq dashboard-recover-layout-p nil)))
 
@@ -172,7 +187,17 @@
     "Go to bookmarks."
     (interactive)
     (funcall (local-key-binding "m")))
-  )
+
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal dashboard-mode-map (kbd "j") 'evil-next-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "k") 'evil-previous-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "<down>") 'evil-next-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "<up>") 'evil-previous-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "O") 'shadow/open-init-file)
+    (evil-define-key 'normal dashboard-mode-map (kbd "R") 'restore-session)
+    (evil-define-key 'normal dashboard-mode-map (kbd "q") 'quit-dashboard)
+    (evil-define-key 'normal dashboard-mode-map (kbd "h") 'dashboard-hydra/body)
+    (evil-define-key 'normal dashboard-mode-map (kbd "?") 'dashboard-hydra/body)))
 
 (provide 'init-dashboard)
 

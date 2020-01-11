@@ -17,9 +17,13 @@ Similar to `before-init-time'")
   "This directory for cache files.")
 
 ;;--------------------------------------------
-(defconst centaur-homepage
-  "https://github.com/seagle0128/.emacs.d"
+(defconst Shadow-homepage
+  "https://github.com/e190/emacs-config"
   "The Github page of Centuar Emacs.")
+
+(defcustom Shadow-logo (expand-file-name "img/dashLogo.png" user-emacs-directory)
+  "Set Centaur logo. nil means official logo."
+  :type 'string)
 
 (defconst *sys/gui*
   (display-graphic-p)
@@ -68,6 +72,11 @@ Similar to `before-init-time'")
 (defconst emacs/>=25.2p
   (or emacs/>=26p
       (and (= emacs-major-version 25) (>= emacs-minor-version 2)))
+  "Emacs is 25.2 or above.")
+
+(defconst emacs/>=25.3p
+  (or emacs/>=26p
+      (and (= emacs-major-version 25) (>= emacs-minor-version 3)))
   "Emacs is 25.2 or above.")
 
 ;;------------------------------------------------------

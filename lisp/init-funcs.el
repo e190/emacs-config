@@ -180,7 +180,7 @@ Dedicated (locked) windows are left untouched."
           (shell-command "git pull")
           (message "Update finished. Restart Emacs to complete the process."))
       (message "\"%s\" doesn't exist." dir))))
-(defalias 'shadow-update-config 'update-config)
+(defalias 'shadow-update-config #'update-config)
 
 (declare-function upgrade-packages 'init-package)
 (defalias 'shadow-update-packages 'upgrade-packages)

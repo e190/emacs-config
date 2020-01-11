@@ -152,14 +152,14 @@
               ([return] . 'automatic)))
 
 ;; Redefine M-< and M-> for some modes
-;;(when emacs/>=25.3p
+(when emacs/>=25.3p
   (use-package beginend
     :diminish (beginend-mode beginend-global-mode)
     :hook (after-init . beginend-global-mode)
     :config
     (mapc (lambda (pair)
             (add-hook (car pair) (lambda () (diminish (cdr pair)))))
-          beginend-modes))
+          beginend-modes)))
 
 (provide 'init-edit)
 ;;; init-edit.el ends here

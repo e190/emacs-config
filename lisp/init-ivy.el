@@ -285,24 +285,25 @@
     :bind (:map ivy-minibuffer-map
             ("M-o" . ivy-dispatching-done-hydra))))
 
-;; Enchanced M-x
-;; https://github.com/DarwinAwardWinner/amx
-(use-package amx
-  :hook (after-init . amx-mode)
-  :init
-  (setq amx-save-file (concat shadow-cache-dir "/amx-items")))
+  ;; Enchanced M-x
+  ;; https://github.com/DarwinAwardWinner/amx
+  (use-package amx
+    :hook (after-init . amx-mode)
+    :init
+    (setq amx-save-file (concat shadow-cache-dir "/amx-items")))
 
-  ;; Better sorting and filtering
-(use-package prescient
-  :commands prescient-persist-mode
-  :init
-  (setq prescient-filter-method '(literal regexp initialism fuzzy))
-  (prescient-persist-mode 1))
+   ;; Better sorting and filtering
+  (use-package prescient
+    :commands prescient-persist-mode
+    :init
+    (setq prescient-filter-method '(literal regexp initialism fuzzy))
+    (prescient-persist-mode 1))
 
   (use-package ivy-prescient
     :commands ivy-prescient-re-builder
     :custom-face
     (ivy-minibuffer-match-face-1 ((t (:inherit font-lock-doc-face :foreground nil))))
+    :hook (after-init . ivy-prescient-mode)
     :init
     (defun ivy-prescient-non-fuzzy (str)
       "Generate an Ivy-formatted non-fuzzy regexp list for the given STR.
@@ -329,9 +330,9 @@ This is for use in `ivy-re-builders-alist'."
           ivy-prescient-sort-commands
           '(:not swiper swiper-isearch ivy-switch-buffer
             counsel-grep counsel-git-grep counsel-ag counsel-imenu
-            counsel-yank-pop counsel-recentf counsel-buffer-or-recentf))
+            counsel-yank-pop counsel-recentf counsel-buffer-or-recentf)))
 
-    (ivy-prescient-mode 1))
+    ;; (ivy-prescient-mode 1))
 ;; More friendly display transformer for Ivy
 (use-package ivy-rich
   :defines (all-the-icons-icon-alist
