@@ -75,6 +75,8 @@
   (with-eval-after-load 'evil
     (evil-define-key 'normal dashboard-mode-map (kbd "j") 'evil-next-line-first-non-blank)
     (evil-define-key 'normal dashboard-mode-map (kbd "k") 'evil-previous-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "<down>") 'evil-next-line-first-non-blank)
+    (evil-define-key 'normal dashboard-mode-map (kbd "<up>") 'evil-previous-line-first-non-blank)
     (evil-define-key 'normal dashboard-mode-map (kbd "H") 'browse-homepage)
     (evil-define-key 'normal dashboard-mode-map (kbd "O") 'dashboard-open-init-file)
     (evil-define-key 'normal dashboard-mode-map (kbd "R") 'restore-session)

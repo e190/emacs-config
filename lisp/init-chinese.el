@@ -6,49 +6,79 @@
 (eval-when-compile
   (require 'init-constants))
 
+;; Youdao Dictionary
 (use-package youdao-dictionary
-  :defer t
-  :ensure t
-  :functions (posframe-show
-              posframe-hide)
-  :commands (youdao-dictionary-mode
-             youdao-dictionary--region-or-word
-             youdao-dictionary--format-result)
-  :bind ("C-c y" . 'youdao-dictionary-search-at-point+)
-  :config
-  ;; Enable Cache
-  (setq url-automatic-caching t)
-  ;; Set file path for saving search history
-  (setq youdao-dictionary-search-history-file (expand-file-name "youdao" shadow-cache-dir))
-  ;; Enable Chinese word segmentation support
-  (setq youdao-dictionary-use-chinese-word-segmentation t)
-  (with-eval-after-load 'posframe
-    (defun youdao-dictionary-search-at-point-posframe ()
-      "Search word at point and display result with posframe."
-      (interactive)
-      (let ((word (youdao-dictionary--region-or-word)))
-        (if word
-            (progn
-              (with-current-buffer (get-buffer-create youdao-dictionary-buffer-name)
-                (let ((inhibit-read-only t))
-                  (erase-buffer)
-                  (youdao-dictionary-mode)
-                  (insert (youdao-dictionary--format-result word))
-                  (goto-char (point-min))
-                  (set (make-local-variable 'youdao-dictionary-current-buffer-word) word)))
-              (posframe-show youdao-dictionary-buffer-name :position (point))
-              (unwind-protect
-                  (push (read-event) unread-command-events)
-                (posframe-hide youdao-dictionary-buffer-name)))
-          (message "Nothing to look up")))))
+  :commands youdao-dictionary-play-voice-of-current-word
+  :bind (("C-c y" . my-youdao-search-at-point)
+         ("C-c Y" . youdao-dictionary-search-at-point)
+         :map youdao-dictionary-mode-map
+         ("h" . youdao-dictionary-hydra/body)
+         ("?" . youdao-dictionary-hydra/body))
+  :init
+  (setq url-automatic-caching t
+        youdao-dictionary-use-chinese-word-segmentation t) ; 中文分词
 
-  (defun my-youdao-search-at-point ()
-    (interactive)
-    (if (display-graphic-p)
-        (if (fboundp 'youdao-dictionary-search-at-point-posframe)
-            (youdao-dictionary-search-at-point-posframe)
-          (youdao-dictionary-search-at-point-tooltip))
-      (youdao-dictionary-search-at-point))))
+  (with-no-warnings
+    (defun my-youdao-search-at-point ()
+      "Search word at point and display result with `posframe', `pos-tip', or buffer."
+      (interactive)
+      (if (display-graphic-p)
+          (if emacs/>=26p
+              (youdao-dictionary-search-at-point-posframe)
+            (youdao-dictionary-search-at-point-tooltip))
+        (youdao-dictionary-search-at-point))))
+  :config
+  (with-eval-after-load 'hydra
+    (defhydra youdao-dictionary-hydra (:color blue)
+      ("p" youdao-dictionary-play-voice-of-current-word "play voice of current word")
+      ("y" youdao-dictionary-play-voice-at-point "play voice at point")
+      ("q" quit-window "quit")
+      ("C-g" nil nil)
+      ("h" nil nil)
+      ("?" nil nil))))
+;; (use-package youdao-dictionary
+;;   :defer t
+;;   :ensure t
+;;   :functions (posframe-show
+;;               posframe-hide)
+;;   :commands (youdao-dictionary-mode
+;;              youdao-dictionary--region-or-word
+;;              youdao-dictionary--format-result)
+;;   :bind ("C-c y" . 'youdao-dictionary-search-at-point+)
+;;   :config
+;;   ;; Enable Cache
+;;   (setq url-automatic-caching t)
+;;   ;; Set file path for saving search history
+;;   (setq youdao-dictionary-search-history-file (expand-file-name "youdao" shadow-cache-dir))
+;;   ;; Enable Chinese word segmentation support
+;;   (setq youdao-dictionary-use-chinese-word-segmentation t)
+;;   (with-eval-after-load 'posframe
+;;     (defun youdao-dictionary-search-at-point-posframe ()
+;;       "Search word at point and display result with posframe."
+;;       (interactive)
+;;       (let ((word (youdao-dictionary--region-or-word)))
+;;         (if word
+;;             (progn
+;;               (with-current-buffer (get-buffer-create youdao-dictionary-buffer-name)
+;;                 (let ((inhibit-read-only t))
+;;                   (erase-buffer)
+;;                   (youdao-dictionary-mode)
+;;                   (insert (youdao-dictionary--format-result word))
+;;                   (goto-char (point-min))
+;;                   (set (make-local-variable 'youdao-dictionary-current-buffer-word) word)))
+;;               (posframe-show youdao-dictionary-buffer-name :position (point))
+;;               (unwind-protect
+;;                   (push (read-event) unread-command-events)
+;;                 (posframe-hide youdao-dictionary-buffer-name)))
+;;           (message "Nothing to look up")))))
+
+;;   (defun my-youdao-search-at-point ()
+;;     (interactive)
+;;     (if (display-graphic-p)
+;;         (if (fboundp 'youdao-dictionary-search-at-point-posframe)
+;;             (youdao-dictionary-search-at-point-posframe)
+;;           (youdao-dictionary-search-at-point-tooltip))
+;;       (youdao-dictionary-search-at-point))))
 
 ;; ** 设置拼音输入法
 (use-package pyim

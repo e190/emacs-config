@@ -52,6 +52,8 @@
       "perspective" :toggle doom-modeline-persp-name)
      ("G" (setq doom-modeline-github (not doom-modeline-github))
       "github" :toggle doom-modeline-github)
+     ("N" (setq doom-modeline-gnus (not doom-modeline-gnus))
+      "gnus" :toggle doom-modeline-gnus)
      ("U" (setq doom-modeline-mu4e (not doom-modeline-mu4e))
       "mu4e" :toggle doom-modeline-mu4e)
      ("R" (setq doom-modeline-irc (not doom-modeline-irc))
@@ -102,6 +104,11 @@
            neotree-mode
            treemacs-mode)
           . hide-mode-line-mode)))
+
+;; A minor-mode menu for mode-line
+(when emacs/>=25.2p
+  (use-package minions
+    :hook (doom-modeline-mode . minions-mode)))
 
 (provide 'init-mode-line)
 ;;; init-mode-line.el ends here

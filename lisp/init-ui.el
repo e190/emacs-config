@@ -34,6 +34,21 @@
 		   (abbreviate-file-name (buffer-file-name))
 		 "%b"))))
 
+;; Title
+(setq frame-title-format '("Shadow Emacs - %b")
+      icon-title-format frame-title-format)
+
+(when sys/mac-x-p
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+              (let ((bg (frame-parameter nil 'background-mode)))
+                (set-frame-parameter nil 'ns-appearance bg)
+                (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
+
+;; Inhibit resizing frame
+(setq frame-inhibit-implied-resize t)
 ;; 定义窗口位置
 (set-frame-position (selected-frame) 0 0)
 

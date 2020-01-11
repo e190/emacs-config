@@ -123,7 +123,7 @@
         counsel-yank-pop-separator "\n────────\n")
   ;; Use faster search tools: ripgrep or the silver search
   (when (executable-find "rg")
-    (setq counsel-grep-base-command "rg -S --no-heading --line-number --color never '%s' %s")
+    (setq counsel-grep-base-command "rg -S --no-heading --line-number --color never %s %s")
     (when (and sys/macp (executable-find "gls"))
       (setq counsel-find-file-occur-use-find nil
             counsel-find-file-occur-cmd
@@ -208,14 +208,12 @@
   (defun my-swiper-toggle-counsel-rg ()
     "Toggle `counsel-rg' with current swiper input."
     (interactive)
-    (let ((text (replace-regexp-in-string
-                 "\n" ""
-                   (replace-regexp-in-string "^.*Swiper: " ""
-                                             (thing-at-point 'line t)))))
-	  (setq my-swiper-to-counsel-rg-search text)
-      (ivy-quit-and-run
-        (counsel-rg my-swiper-to-counsel-rg-search))))
+    (ivy-quit-and-run
+      (if (eq (ivy-state-caller ivy-last) 'swiper-isearch)
+          (counsel-rg ivy-text default-directory)
+        (swiper-isearch ivy-text))))
   (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
+  (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg counsel-ag-map)
 
   ;; (defun swiper-toggle-color-rg ()
   ;;   "Toggle `color-rg' with current swiper input."
@@ -238,7 +236,23 @@
     (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
     (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim ivy-minibuffer-map))
 
-  (defun shadow-counsel-git-fast ()
+  (defun my-swiper-toggle-swiper-isearch ()
+    "Toggle `swiper' and `swiper-isearch' with the current input."
+    (interactive)
+    (ivy-quit-and-run
+      (if (eq (ivy-state-caller ivy-last) 'swiper-isearch)
+          (swiper ivy-text)
+        (swiper-isearch ivy-text))))
+  (bind-key "<s-return>" #'my-swiper-toggle-swiper-isearch swiper-map)
+
+  (defun my-counsel-find-file-toggle-fzf ()
+    "Toggle `counsel-fzf' with the current `counsel-find-file' input."
+    (interactive)
+    (ivy-quit-and-run
+      (counsel-fzf (or ivy-text "") default-directory)))
+  (bind-key "<C-return>" #'my-counsel-find-file-toggle-fzf counsel-find-file-map)
+
+   (defun shadow-counsel-git-fast ()
     "use ripgrep as the backed for counsel-git"
     (interactive)
     (let ((counsel-git-cmd "rg --files"))
@@ -266,6 +280,8 @@
   ;; A hydra for better `ivy' experience
   ;; Add help menu by pressing C-o in minibuffer.
   (use-package ivy-hydra
+    :commands ivy-hydra-read-action
+    :init (setq ivy-read-action-function #'ivy-hydra-read-action)
     :bind (:map ivy-minibuffer-map
             ("M-o" . ivy-dispatching-done-hydra))))
 

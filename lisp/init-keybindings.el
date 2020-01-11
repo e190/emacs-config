@@ -14,10 +14,9 @@
 (use-package which-key
   :diminish which-key-mode
   :init
-  (setq which-key-idle-delay 0.5)
   ;; Minibuffer feels much faster than using windows.
   (setq which-key-popup-type 'minibuffer)
-  :config
+  ;; :bind (:map help-map ("C-h" . which-key-C-h-dispatch))
   ;; Shows available keybindings after you start typing.
   (which-key-mode 1))
 
