@@ -192,6 +192,12 @@ Dedicated (locked) windows are left untouched."
   (upgrade-packages nil))
 (defalias 'shadow-update 'update-config-and-packages)
 
+;; Browse the homepage
+(defun browse-homepage ()
+  "Browse the Github page of Centaur Emacs."
+  (interactive)
+  (browse-url Shadow-homepage))
+
 ;; Create a new scratch buffer
 (defun create-scratch-buffer ()
   "Create a scratch buffer."
