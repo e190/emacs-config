@@ -65,7 +65,7 @@
 (eval-when-compile
   (require 'use-package)
 
-;; ;; Should set before loading `use-package'
+  ;; Should set before loading `use-package'
   (setq use-package-always-ensure t)
   ;; (setq use-package-always-defer t)
   (setq use-package-expand-minimally t)
@@ -101,10 +101,12 @@
     (paradox-enable)))
 
 ;; Update GPG keyring for GNU ELPA
-(use-package gnu-elpa-keyring-update)
+(use-package gnu-elpa-keyring-update
+  :defer t)
 
 ;; Auto update packages
 (use-package auto-package-update
+  :defer t
   :init
   (setq auto-package-update-delete-old-versions t
         auto-package-update-hide-results t)
@@ -112,8 +114,7 @@
 
 (use-package esup
   :defer t
-  :ensure t
-  )
+  :ensure t)
 
 (provide 'init-packages)
 ;;; core-packages.el ends here

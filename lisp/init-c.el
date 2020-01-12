@@ -31,6 +31,23 @@
     :init (cl-pushnew 'company-c-headers company-backends))
   )
 
+;;; C/C++ headers completion
+;; (use-package company-c-headers
+;;   :ensure t
+;;   :init (progn
+;; 	  (cond ((sys/linuxp)
+;; 		 (setq company-c-headers-path-system '("/usr/include/c++/7" "/usr/include" "/usr/local/include")))
+;; 		((sys/macp)
+;; 		 (setq company-c-headers-path-system '("/usr/local/include/c++/8.3.0"
+;; 						       "/usr/include"
+;; 						       "/usr/local/include"
+;; 						       "/usr/local/opt"
+;; 						       "/Library/Developer/CommandLineTools/usr/include/c++/v1")))
+;; 		((eq system-type 'windows-nt)
+;; 		 ))
+;; 	  (run-with-idle-timer samray-idle-time nil (lambda () (add-to-list 'company-backends 'company-c-headers)))
+;; 	  )
+;;   )
 (use-package cmake-mode
   :ensure t
   :mode (

@@ -26,7 +26,7 @@
    ("SPC" . counsel-M-x)
 
    ;; files
-   ("fel" . counsel-find-library)
+   ("fl" . counsel-find-library)
    ("ff" . counsel-find-file)
    ("fL" . counsel-locate)
    ("fr" . counsel-buffer-or-recentf)

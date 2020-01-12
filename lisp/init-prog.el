@@ -1,3 +1,4 @@
+;; init-prog.el --- Initialize flycheck configurations.	-*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 ;; General programming configurations.

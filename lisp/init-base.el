@@ -54,5 +54,10 @@
     (setq show-trailing-whitespace t)
     (add-hook 'before-save-hook #'delete-trailing-whitespace nil t)))
 
+(use-package restart-emacs
+  :bind(
+  :map shadow-leader-map
+      ("qr" . restart-emacs)))
+
 (provide 'init-base)
 ;;; init-base.el ends here

@@ -5,20 +5,58 @@
   (require 'init-constants))
 
 (use-package evil-leader
+  :disabled
   :after evil
-  :config
+  :init
+  (setq evil-want-keybinding nil)
   (global-evil-leader-mode t)
-  (evil-leader/set-leader "<SPC>")
-  (setq evil-leader/no-prefix-mode-rx '("magit-.*-mode" "gnus-.*-mode")))
+  (evil-leader/set-leader "<SPC>"))
 
 (use-package evil
   :hook (after-init . evil-mode)
   :init
+  (setq evil-magic t
+        evil-echo-state t
+        evil-default-state 'normal
+        ;; 使能C-u 往上翻
+        evil-want-C-u-scroll t
+        evil-want-Y-yank-to-eol t
+        evil-want-integration t
+        evil-want-keybinding nil
+        evil-want-visual-char-semi-exclusive t
+        evil-indent-convert-tabs t
+        evil-ex-search-vim-style-regexp t
+        evil-ex-substitute-global t
+        evil-ex-visual-char-range t  ; column range for ex commands
+        evil-insert-skip-empty-lines t
+        ;; more vim-like behavior
+        evil-symbol-word-search t
+        ;; don't activate mark on shift-click
+        shift-select-mode nil
+        evil-cross-lines t
+        evil-move-cursor-back t ;; move back the cursor one position when exiting insert mode
+        ;; Prevents esc-key from translating to meta-key in terminal mode.
+        evil-esc-delay 0.01
+        ;; It's better that the default value is too small than too big.
+        evil-shift-width 2
+        ;; Controls position of the mode line tag for the current mode,
+        ;; e.g. <N>, <I>, etc.  Before places it before the major-mode.
+        evil-mode-line-format 'after)
+  ;; evil cursor color
+  (setq evil-default-cursor '("red" box)
+        evil-normal-state-cursor '("DarkGoldenrod2" box)
+        evil-insert-state-cursor '("chartreuse3" (bar . 2))
+        evil-emacs-state-cursor '("SkyBlue2" box)
+        evil-hybrid-state-cursor '("SkyBlue2" (bar . 2))
+        evil-replace-state-cursor '("chocolate" (hbar . 2))
+        evil-evilified-state-cursor '("LightGoldenrod3" box)
+        evil-visual-state-cursor '("gray" (hbar . 2))
+        evil-motion-state-cursor '("plum3" box)
+        evil-lisp-state-cursor '("HotPink1" box)
+        evil-iedit-state-cursor '("firebrick1" box)
+        evil-iedit-state-cursor-insert '("firebrick1" (bar . 2)))
   ;; Must be set before evil is loaded.
-  (setq evil-respect-visual-line-mode t)
-  ;; 使能C-u 往上翻
-  (setq evil-want-C-u-scroll t)
-  ;; (evil-mode 1)
+  ;; (setq evil-respect-visual-line-mode t)
   :config
   ;; Set SPACE to invoke `abn-leader-map' in modes except emacs and insert.
   (evil-define-key '(normal visual motion) 'global
@@ -28,34 +66,6 @@
   (evil-define-key '(normal insert visual motion emacs) 'global
     (kbd shadow-emacs-leader-key) shadow-leader-map)
 
-  ;; Prevents esc-key from translating to meta-key in terminal mode.
-  (setq evil-esc-delay 0)
-
-  ;; It's better that the default value is too small than too big.
-  (setq-default evil-shift-width 2)
-
-  ;; * and # search using symbols.
-  (setq-default evil-symbol-word-search t)
-
-  ;; evil-want-Y-yank-to-eol must be set via customize to have an effect.
-  (customize-set-variable 'evil-want-Y-yank-to-eol t)
-
-  ;; Controls position of the mode line tag for the current mode,
-  ;; e.g. <N>, <I>, etc.  Before places it before the major-mode.
-  (setq evil-mode-line-format 'before)
-
-  ;; Cursor colors.
-  (setq evil-normal-state-cursor '("DarkGoldenrod2" box))
-  (setq evil-insert-state-cursor '("chartreuse3" (bar . 2)))
-  (setq evil-emacs-state-cursor '("SkyBlue2" box))
-  (setq evil-hybrid-state-cursor '("SkyBlue2" (bar . 2)))
-  (setq evil-replace-state-cursor '("chocolate" (hbar . 2)))
-  (setq evil-evilified-state-cursor '("LightGoldenrod3" box))
-  (setq evil-visual-state-cursor '("gray" (hbar . 2)))
-  (setq evil-motion-state-cursor '("plum3" box))
-  (setq evil-lisp-state-cursor '("HotPink1" box))
-  (setq evil-iedit-state-cursor '("firebrick1" box))
-  (setq evil-iedit-state-cursor-insert '("firebrick1" (bar . 2)))
 
   ;; evil insert state keybinds
   (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
@@ -138,8 +148,8 @@
   :ensure t
   :after evil
   :diminish evil-escape-mode
+  :hook (evil-mode . evil-escape-mode)
   :config
-  (evil-escape-mode)
   (setq-default evil-escape-key-sequence "jk")
   (setq-default evil-escape-delay 0.3)
   (global-set-key (kbd "C-c C-g") 'evil-escape))

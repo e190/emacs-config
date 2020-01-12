@@ -162,66 +162,6 @@
   :config
   (add-to-list 'company-backends 'company-ycmd))
 
-(use-package flycheck
-  :ensure t
-  :diminish flycheck-mode
-  :commands (hydra-flycheck/body)
-  :hook (after-init . global-flycheck-mode)
-  :bind
-  (:map shadow-leader-map
-        ("ec" . #'flycheck-buffer)
-        ("el" . #'flycheck-list-errors)
-        ("ep" . #'flycheck-previous-error)
-        ("en" . #'flycheck-next-error))
-
-  ;; (defhydra hydra-flycheck (:color red
-  ;;                                   :hint nil)
-  ;;   "
-  ;;   ^
-  ;;   ^Flycheck^        ^Errors^          ^Checker^
-  ;;   ^────────^────────^──────^──────────^───────^───────────
-  ;;   _q_ quit          _c_ check         _s_ select
-  ;;   _v_ verify setup  _n_ next          _d_ disable
-  ;;   _m_ manual        _p_ previous      _?_ describe
-  ;;                   _l_ list
-  ;;   ^^                  ^^                  ^^
-  ;;   "
-  ;;   ("q" nil exit: t)
-  ;;   ("c" flycheck-buffer exit: t)
-  ;;   ("d" flycheck-disable-checker exit: t)
-  ;;   ("l" flycheck-list-errors exit: t)
-  ;;   ("m" flycheck-manual exit: t)
-  ;;   ("n" flycheck-next-error exit: t)
-  ;;   ("p" flycheck-previous-error exit: t)
-  ;;   ("s" flycheck-select-checker exit: t)
-  ;;   ("v" flycheck-verify-setup exit: t)
-  ;;   ("?" flycheck-describe-checker exit: t))
-
-  :config
-  (setq flycheck-emacs-lisp-check-declare t)
-  (setq flycheck-indication-mode 'right-fringe)
-  (setq flycheck-emacs-lisp-load-path 'inherit)
-  (setq flycheck-highlighting-mode 'symbols)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (setq-default flycheck-disabled-checkers '(emacs-lisp emacs-lisp-checkdoc)))
-
-;;; C/C++ headers completion
-;; (use-package company-c-headers
-;;   :ensure t
-;;   :init (progn
-;; 	  (cond ((sys/linuxp)
-;; 		 (setq company-c-headers-path-system '("/usr/include/c++/7" "/usr/include" "/usr/local/include")))
-;; 		((sys/macp)
-;; 		 (setq company-c-headers-path-system '("/usr/local/include/c++/8.3.0"
-;; 						       "/usr/include"
-;; 						       "/usr/local/include"
-;; 						       "/usr/local/opt"
-;; 						       "/Library/Developer/CommandLineTools/usr/include/c++/v1")))
-;; 		((eq system-type 'windows-nt)
-;; 		 ))
-;; 	  (run-with-idle-timer samray-idle-time nil (lambda () (add-to-list 'company-backends 'company-c-headers)))
-;; 	  )
-;;   )
 (use-package popup
   :defer t)
 

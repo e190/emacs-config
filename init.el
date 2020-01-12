@@ -80,10 +80,10 @@
 ;; Must come first
 (require 'init-constants)
 (require 'init-packages)
-(require 'init-base)
 (require 'init-funcs)
 (require 'init-hydra)
 (require 'init-keybindings)
+(require 'init-base)
 (require 'init-evil)
 (require 'init-ui)
 (require 'init-theme)
@@ -113,6 +113,7 @@
 (require 'init-lsp)
 (require 'init-prog)
 (require 'init-c)
+(require 'init-flycheck)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

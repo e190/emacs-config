@@ -174,6 +174,9 @@
       scroll-margin 0
       scroll-conservatively 100000)
 
+(use-package posframe
+  :defer t)
+
 (use-package awesome-tab
   :ensure nil
   :load-path "site-lisp/awesome-tab"

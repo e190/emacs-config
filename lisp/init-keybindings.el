@@ -7,69 +7,70 @@
 (eval-when-compile
   (require 'init-constants))
 
-(defvar shadow-leader-map (make-sparse-keymap)
-  "Base keymap for all leader key commands.")
+(use-package bind-key)
+
+(use-package general
+  :config
+  (general-evil-setup t)
+  (general-create-definer shadow/set-leader-keys-for-major-mode
+    :states '(normal visual)
+    :keymaps 'override ; keybindings that should not be overriden
+    :prefix shadow-major-mode-leader-key)
+  (general-create-definer shadow/define-leader-keys
+    :states '(normal insert emacs visual)
+    :prefix shadow-leader-key
+    :keymaps 'override ; keybindings that should not be overriden
+    :non-normal-prefix shadow-emacs-leader-key))
 
 ;; Display available keybindings in popup
 (use-package which-key
   :diminish which-key-mode
+  :hook (after-init . which-key-mode)
   :init
   ;; Minibuffer feels much faster than using windows.
   (setq which-key-popup-type 'minibuffer)
   ;; :bind (:map help-map ("C-h" . which-key-C-h-dispatch))
   ;; Shows available keybindings after you start typing.
-  (which-key-mode 1))
+  (defun shadow-declare-prefix (prefix name)
+    "Declare a which-key PREFIX.
+  PREFIX is a string describing a key sequence.  NAME is a string
+  used as the prefix command."
+      (let* ((full-prefix (concat shadow-leader-key " " prefix))
+            (full-prefix-emacs (concat shadow-emacs-leader-key " " prefix)))
+        (which-key-add-key-based-replacements
+          full-prefix name
+          full-prefix-emacs name)))
+
+  (defun shadow/declare-prefix-for-mode (mode prefix name)
+    "Declare a prefix PREFIX. MODE is the mode in which this prefix command should
+  be added. PREFIX is a string describing a key sequence. NAME is a symbol name
+  used as the prefix command."
+      (let* ((full-prefix (concat shadow-major-mode-leader-key " " prefix)))
+        (which-key-add-major-mode-key-based-replacements mode full-prefix name)))
+  :config
+  (setq which-key-idle-delay 0.3
+        which-key-compute-remaps t
+        which-key-min-display-lines 1
+        which-key-add-column-padding 1
+        which-key-max-display-columns nil
+        which-key-sort-uppercase-first nil
+        which-key-side-window-max-width 0.33
+        which-key-side-window-max-height 0.25
+        which-key-sort-order #'which-key-prefix-then-key-order)
+  (which-key-setup-side-window-bottom)
+  (add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
+  (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil)))
+  ;; rename winum-select-window-1 entry to 1..9
+  (add-to-list 'which-key-replacement-alist '(("\\(.*\\)1" . "winum-select-window-1") . ("\\11..9" . "window 1..9")))
+  ;; hide winum-select-window-[2-9] entries
+  (add-to-list 'which-key-replacement-alist '((nil . "winum-select-window-[2-9]") . t))
+  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold))
 
 ;; I always hit this by mistake to get to `describe-char' and I'm tired of
 ;; seeing the GNU license.
 (global-set-key (kbd "C-h C-c") 'describe-key-briefly)
-
-(defun shadow-declare-prefix (prefix name)
-  "Declare a which-key PREFIX.
-PREFIX is a string describing a key sequence.  NAME is a string
-used as the prefix command."
-  (let* ((command name)
-	 (full-prefix (concat shadow-leader-key " " prefix))
-	 (full-prefix-emacs (concat shadow-emacs-leader-key " " prefix))
-	 (full-prefix-lst (listify-key-sequence (kbd full-prefix)))
-	 (full-prefix-emacs-lst (listify-key-sequence
-				 (kbd full-prefix-emacs))))
-    (which-key-declare-prefixes
-      full-prefix-emacs name
-      full-prefix name)))
-(put 'shadow-declare-prefix 'lisp-indent-function 'defun)
-
-(defun shadow/declare-prefix-for-mode (mode prefix name)
-  "Declare a prefix PREFIX. MODE is the mode in which this prefix command should
-be added. PREFIX is a string describing a key sequence. NAME is a symbol name
-used as the prefix command."
-  (let  ((command (intern (concat (symbol-name mode) name)))
-	 (full-prefix (concat shadow-leader-key " " prefix))
-	 (full-prefix-emacs (concat shadow-emacs-leader-key " " prefix)))
-
-    (which-key-declare-prefixes-for-mode mode
-      full-prefix-emacs name
-      full-prefix name)))
-
-(put 'abn/declare-prefix-for-mode 'lisp-indent-function 'defun)
-
-(defun shadow//define-keys (keymap key def &rest bindings)
-  "In KEYMAP define KEY to DEF as well as all BINDINGS.
-`kbd' is applied to all KEYs.  BINDINGS is additional KEY-DEF pairs.
-Always defines C-g as `keyboard-quit'."
-  (declare (indent 1))
-  (define-key keymap (kbd "C-g") 'keyboard-quit)
-  (while key
-    (define-key keymap (kbd key) def)
-    (setq key (pop bindings))
-    (setq def (pop bindings))))
-
-(defun shadow/define-leader-keys (key def &rest bindings)
-  "Set KEY to DEF in `abn-leader-map'.
-BINDINGS is additional key-definition pairs.  `kbd' is used for
-every KEY."
-  (declare (indent 0))
-  (apply 'shadow//define-keys shadow-leader-map key def bindings))
 
 ;; Instantly display current keystrokes in mini buffer
 (setq echo-keystrokes 0.02)
@@ -90,7 +91,7 @@ every KEY."
   (kbd "<escape>") 'keyboard-escape-quit)
 
 (setq shadow-key-binding-prefixes
-      '((","   "leader")
+  '((","   "leader")
 	("a"   "applications")
 	("b"   "buffers")
 	("c"   "copy/comments")
@@ -109,11 +110,6 @@ every KEY."
 	("z"   "zoom")))
 (mapc (lambda (x) (apply #'shadow-declare-prefix x))
       shadow-key-binding-prefixes)
-
-(use-package restart-emacs
-  :bind
-  (:map shadow-leader-map
-        ("qr" . restart-emacs)))
 
 ;; (bind-key "C-c C-l" #'reload-init-file)
 (shadow/define-leader-keys "rl" 'reload-init-file)
