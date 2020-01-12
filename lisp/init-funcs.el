@@ -5,6 +5,13 @@
 
 ;;; Code:
 
+;; Suppress warnings
+(declare-function async-inject-variables 'async)
+(declare-function chart-bar-quickie 'chart)
+(declare-function flycheck-buffer 'flycheck)
+(declare-function flymake-start 'flymake)
+(declare-function upgrade-packages 'init-package)
+
 (defun shadow/alternate-window ()
   "Switch back and forth between current and last window in the
 current frame."
@@ -143,6 +150,26 @@ Dedicated (locked) windows are left untouched."
        (progn . ,forms)
        (message "%f" (- (float-time) ,temp-var)))))
 
+;; Dos2Unix/Unix2Dos
+(defun dos2unix ()
+  "Convert the current buffer to UNIX file format."
+  (interactive)
+  (set-buffer-file-coding-system 'undecided-unix nil))
+
+(defun unix2dos ()
+  "Convert the current buffer to DOS file format."
+  (interactive)
+  (set-buffer-file-coding-system 'undecided-dos nil))
+
+(defun delete-carrage-returns ()
+  "Delete `^M' characters in the buffer.
+Same as `replace-string C-q C-m RET RET'."
+  (interactive)
+  (save-excursion
+    (goto-char 0)
+    (while (search-forward "\r" nil :noerror)
+      (replace-match ""))))
+
 ;; Open custom file
 (defun open-custom-file()
   "Open custom.el if exists, otherwise create it."
@@ -160,7 +187,6 @@ Dedicated (locked) windows are left untouched."
   "Reload Emacs configurations."
   (interactive)
   (load-file user-init-file))
-(bind-key "C-c C-l" #'reload-init-file)
 
 ;;;###autoload
 (defun shadow/open-init-file ()
@@ -182,19 +208,59 @@ Dedicated (locked) windows are left untouched."
       (message "\"%s\" doesn't exist." dir))))
 (defalias 'shadow-update-config #'update-config)
 
-(declare-function upgrade-packages 'init-package)
-(defalias 'shadow-update-packages 'upgrade-packages)
+(defun update-packages (&optional sync)
+  "Refresh package contents and update all packages.
 
-(defun update-config-and-packages()
-  "Update confgiurations and packages."
+If SYNC is non-nil, the updating process is synchronous."
   (interactive)
-  (update-config)
-  (upgrade-packages nil))
-(defalias 'shadow-update 'update-config-and-packages)
+  (message "Updating packages...")
+  (if (and (not sync)
+           (require 'async nil t))
+      (async-start
+       `(lambda ()
+          ,(async-inject-variables "\\`\\(load-path\\)\\'")
+          (require 'init-funcs)
+          (require 'init-packages)
+          (upgrade-packages)
+          (with-current-buffer auto-package-update-buffer-name
+            (buffer-string)))
+       (lambda (result)
+         (message "%s" result)
+         (message "Updating packages...done")))
+    (progn
+      (upgrade-packages)
+      (message "Updating packages...done"))))
+(defalias 'shadow-update-packages #'update-packages)
+
+(defun update-config-and-packages(&optional sync)
+  "Update confgiurations and packages.
+
+If SYNC is non-nil, the updating process is synchronous."
+  (interactive)
+  (message "This will update Shadow Emacs to the latest")
+  (if (and (not sync)
+           (require 'async nil t))
+      (async-start
+       `(lambda ()
+          ,(async-inject-variables "\\`\\(load-path\\)\\'")
+          (require 'init-funcs)
+          (require 'init-packages)
+          (update-config)
+          (update-packages t)
+          (with-current-buffer auto-package-update-buffer-name
+            (buffer-string)))
+       (lambda (result)
+         (message "%s" result)
+         (message "Done. Restart to complete process")))
+    (progn
+      (update-config)
+      (update-packages t)
+      (message "Done. Restart to complete process"))))
+(defalias 'shadow-update #'update-config-and-packages)
 
 ;; Browse the homepage
 (defun browse-homepage ()
-  "Browse the Github page of Centaur Emacs."
+  "Browse the Github page of Shadow Emacs."
   (interactive)
   (browse-url Shadow-homepage))
 

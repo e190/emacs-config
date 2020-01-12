@@ -115,6 +115,8 @@ every KEY."
   (:map shadow-leader-map
         ("qr" . restart-emacs)))
 
+;; (bind-key "C-c C-l" #'reload-init-file)
+(shadow/define-leader-keys "rl" 'reload-init-file)
 
 (provide 'init-keybindings)
 ;;; init-keybindings.el ends here

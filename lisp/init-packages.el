@@ -103,6 +103,13 @@
 ;; Update GPG keyring for GNU ELPA
 (use-package gnu-elpa-keyring-update)
 
+;; Auto update packages
+(use-package auto-package-update
+  :init
+  (setq auto-package-update-delete-old-versions t
+        auto-package-update-hide-results t)
+  (defalias 'upgrade-packages #'auto-package-update-now))
+
 (use-package esup
   :defer t
   :ensure t
