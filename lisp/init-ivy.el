@@ -294,6 +294,7 @@
 
    ;; Better sorting and filtering
   (use-package prescient
+    :defer t
     :commands prescient-persist-mode
     :init
     (setq prescient-filter-method '(literal regexp initialism fuzzy))
@@ -744,6 +745,49 @@ This is for use in `ivy-re-builders-alist'."
   ;;              'counsel-etags-after-update-tags-hook tags-file)
   ;;             (unless counsel-etags-quiet-when-updating-tags
   ;;               (message "%s is updated!" tags-file))))))
+  (defun my-counsel-imenu ()
+    "Jump to a buffer position indexed by imenu."
+    (interactive)
+    (let* ((cands (counsel--imenu-candidates))
+          (pre-selected (thing-at-point 'symbol))
+          (pos (point))
+          closest)
+      (dolist (c cands)
+        (let* ((item (cdr c))
+              (m (cdr item)))
+          (when (and m (<= (marker-position m) pos))
+            (cond
+            ((not closest)
+              (setq closest item))
+            ((< (- pos (marker-position m))
+                (- pos (marker-position (cdr closest))))
+              (setq closest item))))))
+      (if closest (setq pre-selected (car closest)))
+      (ivy-read "imenu items: " cands
+                :preselect pre-selected
+                :require-match t
+                :action #'counsel-imenu-action
+                :keymap counsel-imenu-map
+                :history 'counsel-imenu-history
+                :caller 'counsel-imenu)))
+
+  (defun my-use-tags-as-imenu-function-p ()
+    "Can use tags file to build imenu function"
+    (and (locate-dominating-file default-directory "TAGS")
+        ;; ctags needs extra setup to extract typescript tags
+        (file-exists-p counsel-etags-ctags-options-file)
+        (memq major-mode '(cc-mode
+                            js-mode))))
+
+  (defun my-imenu-or-list-tag-in-current-file ()
+    "Combine the power of counsel-etags and imenu."
+    (interactive)
+    (cond
+    ((my-use-tags-as-imenu-function-p)
+      (let* ((imenu-create-index-function 'counsel-etags-imenu-default-create-index-function))
+        (my-counsel-imenu)))
+    (t
+      (my-counsel-imenu))))
   )
 
 

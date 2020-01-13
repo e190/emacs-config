@@ -125,14 +125,17 @@
     (("e" deadgrep-edit-mode "edit-mode" :exit t)
      ("k" deadgrep-kill-process "kill-process" :exit t)
      ("g" deadgrep-restart "deadgrep-restart" :exit t))))
+  :general
+  (general-nmap deadgrep-mode-map
+    ;; Lower keys for commands not operating on all the marked files
+    "RET" 'deadgrep-visit-result-other-window
+    "q" 'quit-window
+    "TAB" 'deadgrep-forward-match
+    "<backtab>" 'deadgrep-backward-match
+    "?" 'deadgrep-hydra/body)
   :config
   (with-eval-after-load 'evil
-    (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result-other-window)
-    (evil-define-key 'normal deadgrep-mode-map (kbd "q") 'quit-window)
-    (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-forward-match)
-    (evil-define-key 'normal deadgrep-mode-map (kbd "<backtab>") 'deadgrep-backward-match)
-    (evil-define-key 'normal deadgrep-edit-mode-map (kbd "C-c C-g") 'deadgrep-mode)
-    (evil-define-key 'normal deadgrep-mode-map (kbd "?") 'deadgrep-hydra/body)))
+    (evil-define-key 'normal deadgrep-edit-mode-map (kbd "C-c C-g") 'deadgrep-mode)))
 
 (use-package color-rg
   :demand t
@@ -161,15 +164,16 @@
   ("sc" . color-rg-search-input)
   ("sp" . color-rg-search-input-in-project)
   ("ss" . color-rg-search-symbol))
+  :general
+  (general-nmap color-rg-mode-map
+    ;; Lower keys for commands not operating on all the marked files
+    "RET" 'color-rg-open-file
+    "q" 'quit-window
+    "e" 'color-rg-switch-to-edit-mode
+    "?" 'color-rg-hydra/body)
   :config
     ;; `color-rg' do not kill any buffer
-  (setq color-rg-kill-temp-buffer-p nil)
-  ;; (define-key isearch-mode-map (kbd "M-s e") 'isearch-toggle-color-rg)
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal color-rg-mode-map (kbd "RET") 'color-rg-open-file)
-    (evil-define-key 'normal color-rg-mode-map (kbd "e") 'color-rg-switch-to-edit-mode)
-    (evil-define-key 'normal color-rg-mode-map (kbd "q") 'quit-window)
-    (evil-define-key 'normal color-rg-mode-map (kbd "?") 'color-rg-hydra/body)))
+  (setq color-rg-kill-temp-buffer-p nil))
 
 ;; SnailsPac
 (use-package snails
@@ -214,4 +218,4 @@
 ;; -SnailsPac
 
 (provide 'init-search)
-;;; config-search.el ends here
+;;; init-search.el ends here

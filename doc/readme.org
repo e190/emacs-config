@@ -267,6 +267,10 @@ macs company实现补全的候选来源，叫company-backends；是一个emacs�
                                           )))
 
 (setq company-backends shadow/company-global-backends))
+
+https://github.com/redguardtoo/counsel-etags
+
+find /usr/include | ctags -e -L -
 #+END_SRC
 *** counsel-gtags + company-gtags
 https://www.gnu.org/software/global/download.html
