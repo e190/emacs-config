@@ -197,4 +197,4 @@
   )
 
   (provide 'init-org)
-;;; config-org.el ends here
+;;; init-org.el ends here

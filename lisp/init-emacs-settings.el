@@ -169,4 +169,4 @@
 ;; -SmoothScroll
 
 (provide 'init-emacs-settings)
-;;; core-emacs-settings.el ends here
+;;; init-emacs-settings.el ends here

@@ -7,11 +7,6 @@
 (eval-when-compile
   (require 'init-constants))
 
-(use-package auto-compile
-  :config
-  (auto-compile-on-load-mode)
-  (auto-compile-on-save-mode))
-
 ;; Reverts buffers automatically when underlying files are changed externally.
 (use-package autorevert
   :diminish auto-revert-mode

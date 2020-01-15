@@ -4,6 +4,9 @@
 ;;
 ;;; Code:
 
+(eval-when-compile
+  (require 'init-constants))
+
 (defun shadow/alternate-buffer (&optional window)
   "Switch back and forth between current and last buffer in the
 current window."

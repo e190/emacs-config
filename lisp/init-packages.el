@@ -109,6 +109,7 @@
   :defer t
   :init
   (setq auto-package-update-delete-old-versions t
+        auto-package-update-last-update-day-filename (concat shadow-cache-dir "/.last-package-update-day")
         auto-package-update-hide-results t)
   (defalias 'upgrade-packages #'auto-package-update-now))
 
@@ -117,4 +118,4 @@
   :ensure t)
 
 (provide 'init-packages)
-;;; core-packages.el ends here
+;;; init-packages.el ends here

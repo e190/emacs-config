@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'init-constants))
+
 ;; Highlight the current line
 (use-package hl-line
   :ensure nil

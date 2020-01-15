@@ -36,49 +36,6 @@
       ("C-g" nil nil)
       ("h" nil nil)
       ("?" nil nil))))
-;; (use-package youdao-dictionary
-;;   :defer t
-;;   :ensure t
-;;   :functions (posframe-show
-;;               posframe-hide)
-;;   :commands (youdao-dictionary-mode
-;;              youdao-dictionary--region-or-word
-;;              youdao-dictionary--format-result)
-;;   :bind ("C-c y" . 'youdao-dictionary-search-at-point+)
-;;   :config
-;;   ;; Enable Cache
-;;   (setq url-automatic-caching t)
-;;   ;; Set file path for saving search history
-;;   (setq youdao-dictionary-search-history-file (expand-file-name "youdao" shadow-cache-dir))
-;;   ;; Enable Chinese word segmentation support
-;;   (setq youdao-dictionary-use-chinese-word-segmentation t)
-;;   (with-eval-after-load 'posframe
-;;     (defun youdao-dictionary-search-at-point-posframe ()
-;;       "Search word at point and display result with posframe."
-;;       (interactive)
-;;       (let ((word (youdao-dictionary--region-or-word)))
-;;         (if word
-;;             (progn
-;;               (with-current-buffer (get-buffer-create youdao-dictionary-buffer-name)
-;;                 (let ((inhibit-read-only t))
-;;                   (erase-buffer)
-;;                   (youdao-dictionary-mode)
-;;                   (insert (youdao-dictionary--format-result word))
-;;                   (goto-char (point-min))
-;;                   (set (make-local-variable 'youdao-dictionary-current-buffer-word) word)))
-;;               (posframe-show youdao-dictionary-buffer-name :position (point))
-;;               (unwind-protect
-;;                   (push (read-event) unread-command-events)
-;;                 (posframe-hide youdao-dictionary-buffer-name)))
-;;           (message "Nothing to look up")))))
-
-;;   (defun my-youdao-search-at-point ()
-;;     (interactive)
-;;     (if (display-graphic-p)
-;;         (if (fboundp 'youdao-dictionary-search-at-point-posframe)
-;;             (youdao-dictionary-search-at-point-posframe)
-;;           (youdao-dictionary-search-at-point-tooltip))
-;;       (youdao-dictionary-search-at-point))))
 
 ;; ** 设置拼音输入法
 (use-package pyim
@@ -185,23 +142,6 @@
         (append cal-china-x-important-holidays
                 cal-china-x-general-holidays
                 holiday-other-holidays)))
-
-;; https://github.com/manateelazycat/company-english-helper
-;; (use-package company-english-helper
-;;   :ensure nil
-;;   :after company
-;;   :load-path "vendor/company-english-helper"
-;;   :bind ("C-c t e" . 'toggle-company-english-helper))
-
-;; https://github.com/manateelazycat/insert-translated-name
-;; (use-package insert-translated-name
-;;   :ensure nil
-;;   :load-path "vendor/insert-translated-name"
-;;   :bind ("C-c t t" . 'insert-translated-name-insert)
-;;   :config
-;;   (setq insert-translated-name-translate-engine 'youdao)
-;;   (defvar insert-translated-name-camel-style-mode-list
-;;     '(go-mode)))
 
 (provide 'init-chinese)
 ;;; init-chinese ends here

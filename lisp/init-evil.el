@@ -1,5 +1,8 @@
 ;; init-evil.el --- Initialize evil-mode configurations.	-*- lexical-binding: t -*-
 
+;;; Commentary:
+;;
+
 ;;; Code:
 (eval-when-compile
   (require 'init-constants))

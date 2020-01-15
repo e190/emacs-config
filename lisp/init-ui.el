@@ -1,4 +1,3 @@
-
 ;; init-ui.el --- Better lookings and appearances.	-*- lexical-binding: t -*-
 
 ;;; Commentary:

@@ -144,12 +144,6 @@ Dedicated (locked) windows are left untouched."
              (symbol-value golden-ratio-mode))
     (golden-ratio)))
 
-(defmacro shadow/ktop-watch (&rest forms)
-  (let ((temp-var (make-symbol "start")))
-    `(let ((,temp-var (float-time)))
-       (progn . ,forms)
-       (message "%f" (- (float-time) ,temp-var)))))
-
 ;; Dos2Unix/Unix2Dos
 (defun dos2unix ()
   "Convert the current buffer to UNIX file format."
@@ -186,7 +180,7 @@ Same as `replace-string C-q C-m RET RET'."
 (defun reload-init-file ()
   "Reload Emacs configurations."
   (interactive)
-  (load-file user-init-file))
+  (load user-init-file))
 
 ;;;###autoload
 (defun shadow/open-init-file ()
