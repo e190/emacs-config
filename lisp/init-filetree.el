@@ -65,20 +65,21 @@
           ;; ignore bazel file
           "^bazel-*"
           "^#.*#$"))
-  :config
-  (when (bound-and-true-p evil-mode)
-    (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-stretch-toggle)
-    (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-    (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
-    (evil-define-key 'normal neotree-mode-map (kbd "h") 'neotree-select-up-node)
-    (evil-define-key 'normal neotree-mode-map (kbd "l") 'neotree-change-root)
-    (evil-define-key 'normal neotree-mode-map (kbd "c") 'neotree-create-node)
-    (evil-define-key 'normal neotree-mode-map (kbd "C") 'neotree-copy-node)
-    (evil-define-key 'normal neotree-mode-map (kbd "d") 'neotree-delete-node)
-    (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
-    (evil-define-key 'normal neotree-mode-map (kbd "r") 'neotree-rename-node)
-    (evil-define-key 'normal neotree-mode-map (kbd "s") 'neotree-hidden-file-toggle)
-    (evil-define-key 'normal neotree-mode-map (kbd "?") 'neotree-hydra/body)))
+  :general
+  (general-nmap neotree-mode-map
+    ;; Lower keys for commands not operating on all the marked files
+    "TAB" 'neotree-stretch-toggle
+    "q" 'neotree-hide
+    "RET" 'neotree-enter
+    "h" 'neotree-select-up-node
+    "l" 'neotree-change-root
+    "c" 'neotree-create-node
+    "C" 'neotree-copy-node
+    "d" 'neotree-delete-node
+    "g" 'neotree-refresh
+    "r" 'neotree-rename-node
+    "s" 'neotree-hidden-file-toggle
+    "?" 'neotree-hydra/body))
 
 (provide 'init-filetree)
 ;;; init-filetree ends here

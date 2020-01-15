@@ -1,5 +1,7 @@
 ;; init-dashboard.el --- Initialize dashboard configurations.	-*- lexical-binding: t -*-
 
+;;; Commentary:
+;;
 ;;; Code:
 (eval-when-compile
   (require 'init-constants))
@@ -24,7 +26,8 @@
       ("H" browse-homepage "homepage" :exit t)
       ("R" restore-session "recover session" :exit t)
       ("L" persp-load-state-from-file "list sessions" :exit t)
-      ("S" open-custom-file "settings" :exit t))
+      ("S" open-custom-file "settings" :exit t)
+      ("O" shadow/open-init-file "init file" :exit t))
     "Section"
     (("}" dashboard-next-section "next")
       ("{" dashboard-previous-section "previous")
@@ -45,6 +48,18 @@
   :bind ("<f2>" . open-dashboard)
   :hook (dashboard-mode . (lambda () (setq-local frame-title-format "Shadow's Emacs")))
   :init (dashboard-setup-startup-hook)
+  :general
+  (general-nmap dashboard-mode-map
+    ;; Lower keys for commands not operating on all the marked files
+    "j" 'evil-next-line-first-non-blank
+    "k" 'evil-previous-line-first-non-blank
+    "<down>" 'evil-next-line-first-non-blank
+    "<up>" 'evil-previous-line-first-non-blank
+    "O" 'shadow/open-init-file
+    "R" 'restore-session
+    "q" 'quit-dashboard
+    "h" 'dashboard-hydra/body
+    "?" 'dashboard-hydra/body)
   :config
   (setq dashboard-banner-logo-title "Emacs ♥ You - Enjoy Programming & Writing"
         dashboard-startup-banner (or Shadow-logo 'official)
@@ -186,18 +201,7 @@
   (defun dashboard-goto-bookmarks ()
     "Go to bookmarks."
     (interactive)
-    (funcall (local-key-binding "m")))
-
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal dashboard-mode-map (kbd "j") 'evil-next-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "k") 'evil-previous-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "<down>") 'evil-next-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "<up>") 'evil-previous-line-first-non-blank)
-    (evil-define-key 'normal dashboard-mode-map (kbd "O") 'shadow/open-init-file)
-    (evil-define-key 'normal dashboard-mode-map (kbd "R") 'restore-session)
-    (evil-define-key 'normal dashboard-mode-map (kbd "q") 'quit-dashboard)
-    (evil-define-key 'normal dashboard-mode-map (kbd "h") 'dashboard-hydra/body)
-    (evil-define-key 'normal dashboard-mode-map (kbd "?") 'dashboard-hydra/body)))
+    (funcall (local-key-binding "m"))))
 
 (provide 'init-dashboard)
 

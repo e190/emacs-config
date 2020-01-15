@@ -13,7 +13,7 @@ Similar to `before-init-time'")
   "The home of my site-lisp functionality.")
 (add-to-list 'load-path shadow-site-lisp-dir)
 
-(defvar shadow-cache-dir (expand-file-name "~/.emacs.d/.cache")
+(defvar shadow-cache-dir (expand-file-name ".cache" user-emacs-directory)
   "This directory for cache files.")
 
 ;;--------------------------------------------
