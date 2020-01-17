@@ -82,12 +82,20 @@ Similar to `before-init-time'")
 ;;------------------------------------------------------
 (defcustom shadow-mail-address "e190@163.com"
   "Default email address."
+  :group 'shadow
   :type 'string
   )
 
+(defcustom shadow-dashboard t
+  "Use dashboard at startup or not.
+If Non-nil, use dashboard, otherwise will restore previous session."
+  :group 'shadow
+  :type 'boolean)
+
 (defcustom shadow-lsp-mode 'ctags
  "Set language server."
- :type '(choice
+  :group 'shadow
+  :type '(choice
          (const :tag "LSP Mode" 'lsp-mode)
          (const :tag "eglot" 'eglot)
          (const :tag "ctags" 'ctags)
@@ -96,6 +104,7 @@ Similar to `before-init-time'")
 
 (defcustom shadow-theme 'default
   "Set color theme."
+  :group 'shadow
   :type '(choice
           (const :tag "Default theme" default)
           (const :tag "Classic theme" classic)
@@ -107,16 +116,13 @@ Similar to `before-init-time'")
 
 (defcustom shadow-package-archives 'emacs-china
   "Set package archives from which to fetch."
+  :group 'shadow
   :type '(choice
           (const :tag "Melpa" melpa)
           (const :tag "Melpa Mirror" melpa-mirror)
           (const :tag "Emacs-China" emacs-china)
           (const :tag "Netease" netease)
           (const :tag "Tuna" tuna)))
-
-(defvar shadow-font "DejaVu Sans Mono 10"
-  "The default font size to use for everything.
-   available : Consolas, DejaVu Sans Mono")
 
 (defvar shadow-leader-key "SPC"
   "The leader key in Evil normal, visual and motion states.")
@@ -136,6 +142,28 @@ pressing `<leader> m`. Set it to `nil` to disable it.")
 
 (defvar shadow-leader-map (make-sparse-keymap)
   "Base keymap for all leader key commands.")
+
+;; Load `custom-file'
+;; If it doesn't exist, copy from the template, then load it.
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+(let ((custom-example-file
+       (expand-file-name "custom-example.el" user-emacs-directory)))
+  (if (and (file-exists-p custom-example-file)
+           (not (file-exists-p custom-file)))
+      (copy-file custom-example-file custom-file)))
+
+(if (file-exists-p custom-file)
+    (load custom-file))
+
+;; Load `custom-post.el'
+;; Put personal configurations to override defaults here.
+(add-hook 'after-init-hook
+          (lambda ()
+            (let ((file
+                   (expand-file-name "custom-post.el" user-emacs-directory)))
+              (if (file-exists-p file)
+                  (load file)))))
 
 (provide 'init-constants)
 ;;; init-constants.el ends here

@@ -12,6 +12,20 @@
 (declare-function flymake-start 'flymake)
 (declare-function upgrade-packages 'init-package)
 
+;; Font
+(defun font-installed-p (font-name)
+  "Check if font with FONT-NAME is available."
+  (find-font (font-spec :name font-name)))
+
+;; File and buffer
+(defun revert-this-buffer ()
+  "Revert the current buffer."
+  (interactive)
+  (unless (minibuffer-window-active-p (selected-window))
+    (revert-buffer t t)
+    (message "Reverted this buffer.")))
+(global-set-key (kbd "s-r") #'revert-this-buffer)
+
 (defun shadow/alternate-window ()
   "Switch back and forth between current and last window in the
 current frame."
@@ -389,6 +403,26 @@ If SYNC is non-nil, the updating process is synchronous."
       (setq font-setting (format "%s-%d" font-name font-size))
       (set-frame-font font-setting nil t)
       (add-to-list 'default-frame-alist (cons 'font font-setting)))))
+
+;; 自定义窗口大小
+(defun set-frame-size-according-to-resolution ()
+  (interactive)
+  (if sys/win32p
+  (progn
+    ;; use 120 char wide window for largeish displays
+    ;; and smaller 80 column windows for smaller displays
+    ;; pick whatever numbers make sense for you
+    (if (> (x-display-pixel-width) 1280)
+           (add-to-list 'default-frame-alist (cons 'width 180))
+           (add-to-list 'default-frame-alist (cons 'width 80)))
+    ;; for the height, subtract a couple hundred pixels
+    ;; from the screen height (for panels, menubars and
+    ;; whatnot), then divide by the height of a char to
+    ;; get the height we want
+    (add-to-list 'default-frame-alist
+         (cons 'height (/ (- (x-display-pixel-height) 140)
+                          (frame-char-height))))
+    )))
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

@@ -16,9 +16,9 @@
   :hook (after-init . projectile-mode)
   :init
   (setq projectile-mode-line-prefix ""
+        projectile-sort-order 'recentf
         projectile-completion-system 'ivy
         projectile-enable-caching t
-        projectile-sort-order 'recentf
         projectile-cache-file (concat shadow-cache-dir "/projectile.cache")
         projectile-known-projects-file (concat shadow-cache-dir "/projectile-bookmarks.eld")
         projectile-use-git-grep t)

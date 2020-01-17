@@ -4,6 +4,8 @@
 ;;
 
 ;;; Code:
+(eval-when-compile
+  (require 'init-constants))
 
 (defun shadow//make-cache-dir (dir)
   "Create DIR in `shadow-cache-dir', making parents and returning DIR."
@@ -152,21 +154,23 @@
       sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
       sentence-end-double-space nil)
 
-;; SmoothScroll
-;; Vertical Scroll
-(setq scroll-step 1)
-(setq scroll-margin 1)
-(setq scroll-conservatively 101)
-(setq scroll-up-aggressively 0.01)
-(setq scroll-down-aggressively 0.01)
-(setq auto-window-vscroll nil)
-(setq fast-but-imprecise-scrolling nil)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
-;; Horizontal Scroll
-(setq hscroll-step 1)
-(setq hscroll-margin 1)
+;; Mouse & Smooth Scroll
+;; Scroll one line at a time (less "jumpy" than defaults)
+(setq scroll-step 1
+      scroll-margin 0
+      scroll-conservatively 100000
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01
+      auto-window-vscroll nil
+      fast-but-imprecise-scrolling nil
+      mouse-wheel-scroll-amount '(1 ((shift) . 1))
+      mouse-wheel-progressive-speed nil
+      ;; Horizontal Scroll
+      hscroll-step 1
+      hscroll-margin 1)
 ;; -SmoothScroll
+
+
 
 (provide 'init-emacs-settings)
 ;;; init-emacs-settings.el ends here

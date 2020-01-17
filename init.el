@@ -53,12 +53,6 @@
             (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
             (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
 
-;;----------------------------------------------------------------------------
-;; Load custom file first.
-;;----------------------------------------------------------------------------
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file 'no-error 'no-message)
-
 ;; Load path
 ;; Optimize: Force "lisp"" and "site-lisp" at the head to reduce the startup time.
 (defun update-load-path (&rest _)
@@ -78,9 +72,9 @@
 
 (update-load-path)
 ;; Must come first
+(require 'init-funcs)
 (require 'init-constants)
 (require 'init-packages)
-(require 'init-funcs)
 (require 'init-hydra)
 (require 'init-keybindings)
 (require 'init-base)
@@ -90,6 +84,7 @@
 (require 'init-mode-line)
 (require 'init-edit)
 (require 'init-emacs-settings)
+(require 'init-persp)
 ;; Modules
 (require 'init-ivy)
 (require 'init-company)

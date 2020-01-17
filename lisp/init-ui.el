@@ -7,14 +7,6 @@
 (eval-when-compile
   (require 'init-constants))
 
-(set-face-attribute 'default nil :font shadow-font)
-
-;; Setting Chinese Font
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font)
-  		      charset
-  		      (font-spec :family "Microsoft Yahei" :size 12)))
-
 ;; Start a clean slate.
 (blink-cursor-mode -1)
 (menu-bar-mode -1)
@@ -45,33 +37,6 @@
               (let ((bg (frame-parameter nil 'background-mode)))
                 (set-frame-parameter nil 'ns-appearance bg)
                 (setcdr (assq 'ns-appearance default-frame-alist) bg)))))
-
-;; Inhibit resizing frame
-(setq frame-inhibit-implied-resize t)
-;; 定义窗口位置
-(set-frame-position (selected-frame) 0 0)
-
-;; 自定义窗口大小
-(defun set-frame-size-according-to-resolution ()
-  (interactive)
-  (if sys/win32p
-  (progn
-    ;; use 120 char wide window for largeish displays
-    ;; and smaller 80 column windows for smaller displays
-    ;; pick whatever numbers make sense for you
-    (if (> (x-display-pixel-width) 1280)
-           (add-to-list 'default-frame-alist (cons 'width 180))
-           (add-to-list 'default-frame-alist (cons 'width 80)))
-    ;; for the height, subtract a couple hundred pixels
-    ;; from the screen height (for panels, menubars and
-    ;; whatnot), then divide by the height of a char to
-    ;; get the height we want
-    (add-to-list 'default-frame-alist
-         (cons 'height (/ (- (x-display-pixel-height) 140)
-                          (frame-char-height))))
-    )))
-
-(set-frame-size-according-to-resolution)
 
 ;; Control over modes displayed in the modeline.
 (use-package diminish)
@@ -165,14 +130,6 @@
   (setq display-time-24hr-format t)
   (setq display-time-day-and-date t))
 
-;; Mouse & Smooth Scroll
-;; Scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
-(setq scroll-step 1
-      scroll-margin 0
-      scroll-conservatively 100000)
-
 (use-package posframe
   :defer t)
 
@@ -180,17 +137,17 @@
   :ensure nil
   :load-path "site-lisp/awesome-tab"
   :hook (after-init . awesome-tab-mode)
+  :bind
+  (:map shadow-leader-map
+    ("tt" . awesome-tab-switch-group)
+    ("ta" . awesome-tab-select-beg-tab)
+    ("te" . awesome-tab-select-end-tab)
+    ("t<" . awesome-tab-move-current-tab-to-left)
+    ("t>" . awesome-tab-move-current-tab-to-right)
+    ("tf" . awesome-tab-forward)
+    ("tb" . awesome-tab-backward))
   :config
-  (with-eval-after-load 'evil
-    (define-key evil-normal-state-map (kbd ",tt") 'awesome-tab-switch-group)
-    (define-key evil-normal-state-map (kbd ",ta") 'awesome-tab-select-beg-tab)
-    (define-key evil-normal-state-map (kbd ",te") 'awesome-tab-select-end-tab)
-    (define-key evil-normal-state-map (kbd ",t<") 'awesome-tab-move-current-tab-to-left)
-    (define-key evil-normal-state-map (kbd ",t>") 'awesome-tab-move-current-tab-to-right)
-    (define-key evil-normal-state-map (kbd ",th") 'awesome-tab-forward)
-    (define-key evil-normal-state-map (kbd ",tl") 'awesome-tab-backward))
   (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
-  ;; (setq awesome-tab-label-fixed-length 14)
   (setq awesome-tab-style 'alternate)
   (setq awesome-tab-face-height 100))
 
