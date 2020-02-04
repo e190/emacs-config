@@ -1,4 +1,4 @@
-;;; core-constants.el --- Locations of everything
+;;; init-constants.el --- Locations of everything
 
 ;;; Commentary:
 ;;
@@ -102,17 +102,30 @@ If Non-nil, use dashboard, otherwise will restore previous session."
          (const :tag "gtags" 'gtags)
          nil))
 
+(defcustom shadow-theme-alist
+  '((default  . doom-one)
+    (classic  . doom-molokai)
+    (colorful . doom-snazzy)
+    (dark     . doom-dark+)
+    (light    . doom-one-light)
+    (day      . doom-acario-light)
+    (night    . doom-city-lights))
+  "The color theme list."
+  :group 'shadow
+  :type '(alist :key-type (symbol :tag "Theme name")
+                :value-type (symbol :tag "Internal theme name")))
+
 (defcustom shadow-theme 'default
   "Set color theme."
   :group 'shadow
-  :type '(choice
-          (const :tag "Default theme" default)
-          (const :tag "Classic theme" classic)
-          (const :tag "Doom theme" doom)
-          (const :tag "Dark theme" dark)
-          (const :tag "Light theme" light)
-          (const :tag "Daylight theme" daylight)
-          symbol))
+  :type `(choice ,@(mapcar
+                    (lambda (item)
+                      (let ((name (car item)))
+                        (list 'const
+                              :tag (capitalize (symbol-name name))
+                              name)))
+                    shadow-theme-alist)
+                 symbol))
 
 (defcustom shadow-package-archives 'emacs-china
   "Set package archives from which to fetch."

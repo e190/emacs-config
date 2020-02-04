@@ -7,6 +7,8 @@
 (eval-when-compile
   (require 'init-constants))
 
+(defvar shadow-theme-alist)
+
 ;; Theme
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
@@ -16,30 +18,24 @@
   (run-hooks 'after-load-theme-hook))
 (advice-add #'load-theme :after #'run-after-load-theme-hook)
 
-(defun standardize-theme (theme)
-  "Standardize THEME."
-  (pcase theme
-    ('default 'doom-one)
-    ('classic 'doom-molokai)
-    ('doom 'doom-one)
-    ('dark 'doom-Iosvkem)
-    ('light 'doom-one-light)
-    ('daylight 'doom-tomorrow-day)
-    (_ (or theme 'doom-one))))
+(defun shadow--real-theme (theme)
+  "Return real THEME name."
+  (alist-get theme shadow-theme-alist 'doom-one))
 
 (defun is-doom-theme-p (theme)
   "Check whether the THEME is a doom theme. THEME is a symbol."
-  (string-prefix-p "doom" (symbol-name (standardize-theme theme))))
+  (string-prefix-p "doom" (symbol-name (shadow--real-theme theme))))
 
 (defun shadow-load-theme (theme)
   "Set color THEME."
   (interactive
    (list
     (intern (completing-read "Load theme: "
-                             '(default classic dark light daylight)))))
-  (let ((theme (standardize-theme theme)))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme t)))
+                             (mapcar #'car shadow-theme-alist)))))
+  (setq shadow-theme theme)
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme (shadow--real-theme theme) t))
+(global-set-key (kbd "C-c T") #'shadow-load-theme)
 
 (if (is-doom-theme-p shadow-theme)
     (progn
@@ -85,4 +81,4 @@
     (shadow-load-theme shadow-theme)))
 
 (provide 'init-theme)
-;;; config-theme.el ends here
+;;; init-theme.el ends here
