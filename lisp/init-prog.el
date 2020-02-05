@@ -38,6 +38,21 @@
   ;; (set-face-background 'indent-guide-face "dimgray")
   (setq indent-guide-delay 0.1))
 
+;; https://github.com/ankurdave/color-identifiers-mode
+(use-package color-identifiers-mode
+  :hook (after-init . global-color-identifiers-mode)
+  :config
+  (defun myfunc-color-identifiers-mode-hook ()
+  (face-remap-add-relative 'font-lock-keyword-face '((:weight bold)))
+  (face-remap-add-relative 'font-lock-comment-face '((:slant italic)))
+  (face-remap-add-relative 'font-lock-builtin-face '((:weight bold)))
+  (face-remap-add-relative 'font-lock-preprocessor-face '((:weight bold)))
+  (face-remap-add-relative 'font-lock-function-name-face '((:slant italic)))
+  (face-remap-add-relative 'font-lock-string-face '((:slant italic)))
+  (face-remap-add-relative 'font-lock-constant-face '((:weight bold))))
+
+  (add-hook 'color-identifiers-mode-hook 'myfunc-color-identifiers-mode-hook))
+
 (provide 'init-prog)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-prog.el ends here
