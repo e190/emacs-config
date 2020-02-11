@@ -35,8 +35,8 @@
       "buffer state" :toggle doom-modeline-buffer-state-icon)
      ("d" (setq doom-modeline-buffer-modification-icon (not doom-modeline-buffer-modification-icon))
       "modification" :toggle doom-modeline-buffer-modification-icon)
-     ("p" (setq doom-modeline-persp-name-icon (not doom-modeline-persp-name-icon))
-      "perspective" :toggle doom-modeline-persp-name-icon))
+     ("v" (setq doom-modeline-modal-icon (not doom-modeline-modal-icon))
+      "modal" :toggle doom-modeline-modal-icon))
     "Segment"
     (("M" (setq doom-modeline-minor-modes (not doom-modeline-minor-modes))
       "minor modes" :toggle doom-modeline-minor-modes)
@@ -58,6 +58,8 @@
       "mu4e" :toggle doom-modeline-mu4e)
      ("R" (setq doom-modeline-irc (not doom-modeline-irc))
       "irc" :toggle doom-modeline-irc)
+     ("F" (setq doom-modeline-irc-buffers (not doom-modeline-irc-buffers))
+      "irc buffers" :toggle doom-modeline-irc-buffers)
      ("S" (setq doom-modeline-checker-simple-format (not doom-modeline-checker-simple-format))
       "simple checker" :toggle doom-modeline-checker-simple-format)
      ("V" (setq doom-modeline-env-version (not doom-modeline-env-version))
@@ -92,7 +94,38 @@
       :toggle (eq doom-modeline-buffer-file-name-style 'file-name))
      ("b" (setq doom-modeline-buffer-file-name-style 'buffer-name)
       "buffer name"
-      :toggle (eq doom-modeline-buffer-file-name-style 'buffer-name))))))
+      :toggle (eq doom-modeline-buffer-file-name-style 'buffer-name)))
+    "Project Detection"
+    (("p f" (setq doom-modeline-project-detection 'ffip)
+      "ffip"
+      :toggle (eq doom-modeline-project-detection 'ffip))
+     ("p t" (setq doom-modeline-project-detection 'projectile)
+      "projectile"
+      :toggle (eq doom-modeline-project-detection 'projectile))
+     ("p p" (setq doom-modeline-project-detection 'project)
+      "project"
+      :toggle (eq doom-modeline-project-detection 'project))
+     ("p n" (setq doom-modeline-project-detection nil)
+      "disable"
+      :toggle (eq doom-modeline-project-detection nil)))
+    "Misc"
+    (("g" (progn
+            (message "Fetching GitHub notifications...")
+            (run-with-timer 300 nil #'doom-modeline--github-fetch-notifications)
+            (browse-url "https://github.com/notifications"))
+      "github notifications" :exit t)
+     ("e" (if (bound-and-true-p flycheck-mode)
+              (flycheck-list-errors)
+            (flymake-show-diagnostics-buffer))
+      "list errors" :exit t)
+     ("B" (if (bound-and-true-p grip-mode)
+              (grip-browse-preview)
+            (message "Not in preview"))
+      "browse preview" :exit t)
+     ("z h" (counsel-read-setq-expression 'doom-modeline-height) "set height")
+     ("z w" (counsel-read-setq-expression 'doom-modeline-bar-width) "set bar width")
+     ("z g" (counsel-read-setq-expression 'doom-modeline-github-interval) "set github interval")
+     ("z n" (counsel-read-setq-expression 'doom-modeline-gnus-timer) "set gnus interval")))))
 (defun mode-line-height ()
   "Get current height of mode-line."
   (- (elt (window-pixel-edges) 3)

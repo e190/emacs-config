@@ -151,17 +151,17 @@
   (add-hook 'find-file-hook #'kevin/enable-smerge-mode-maybe)
   )
 
-
-;; Highlight uncommitted changes
+;; Highlight uncommitted changes using VC
 (use-package diff-hl
-  :defines (diff-hl-margin-symbols-alist desktop-minor-mode-table)
-  :commands diff-hl-magit-post-refresh
-  :functions  my-diff-hl-fringe-bmp-function
-  :custom-face (diff-hl-change ((t (:foreground ,(face-background 'highlight)))))
+  :custom-face
+  (diff-hl-change ((t (:foreground ,(face-background 'highlight) :background nil))))
+  (diff-hl-insert ((t (:background nil))))
+  (diff-hl-delete ((t (:background nil))))
   :bind (:map diff-hl-command-map
          ("SPC" . diff-hl-mark-hunk))
   :hook ((after-init . global-diff-hl-mode)
          (dired-mode . diff-hl-dired-mode))
+  :init (setq diff-hl-draw-borders nil)
   :config
   ;; Highlight on-the-fly
   (diff-hl-flydiff-mode 1)

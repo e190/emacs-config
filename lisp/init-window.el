@@ -360,20 +360,6 @@
                "*LV*"
                "*which-key*"))
     (add-to-list 'golden-ratio-exclude-buffer-names n)))
-;; (use-package centered-cursor-mode
-;;   :defer t
-;;   :ensure t
-;;   :commands (centered-cursor-mode global-centered-cursor-mode)
-;;   :diminish centered-cursor-mode "⊝"
-;;   :init
-;;   (shadow/define-leader-keys "t-" 'centered-cursor-mode)
-;;   (setq ccm-recenter-at-end-of-file t
-;;         ccm-ignored-commands '(mouse-drag-region
-;;                                mouse-set-point
-;;                                widget-button-click
-;;                                scroll-bar-toolkit-scroll
-;;                                evil-mouse-drag-region))
-;;   (global-centered-cursor-mode +1))
 
 (provide 'init-window)
 ;;; init-window.el ends here

@@ -29,8 +29,7 @@
    ("fl" . counsel-find-library)
    ("ff" . counsel-find-file)
    ("fL" . counsel-locate)
-   ("fr" . counsel-buffer-or-recentf)
-   ("fR" . recentf-open-files)
+   ("fr" . counsel-recentf)
 
    ;; help
    ("?"  . counsel-descbinds)
@@ -58,6 +57,7 @@
   ([remap cd] . counsel-cd)
   ([remap dired] . counsel-dired)
   ([remap set-variable] . counsel-set-variable)
+  ([remap recentf-open-files] . counsel-recentf)
   ("C-x C-r" . counsel-recentf)
   ("C-x j" . counsel-mark-ring)
   ("C-c c e" . counsel-colors-emacs)
@@ -95,6 +95,10 @@
         ivy-count-format "(%d/%d) "
         ivy-on-del-error-function nil
         ivy-initial-inputs-alist nil)
+
+  ;; Better performance on Windows
+  (when sys/win32p
+    (setq ivy-dynamic-exhibit-delay-ms 200))
 
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
   ;; ensure recentf-list loaded on startup
