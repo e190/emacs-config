@@ -62,30 +62,31 @@
         (evil-visual-beginning . turn-off-symbol-overlay)
         (evil-normal-state-entry . turn-on-symbol-overlay))
 
-  :init (setq symbol-overlay-idle-time 0.1
-              symbol-overlay-faces
-              '((:inherit (highlight bold))
-                (:inherit (font-lock-builtin-face bold) :inverse-video t)
-                (:inherit (warning bold) :inverse-video t)
-                (:inherit (font-lock-constant-face bold) :inverse-video t)
-                (:inherit (error bold) :inverse-video t)
-                (:inherit (dired-mark bold) :inverse-video t)
-                (:inherit (success bold) :inverse-video t)
-                (:inherit (font-lock-keyword-face bold) :inverse-video t)))
+  :init (setq symbol-overlay-idle-time 0.1)
+  (with-eval-after-load 'all-the-icons
+    (setq symbol-overlay-faces
+          '((:inherit (all-the-icons-blue bold) :inverse-video t)
+            (:inherit (all-the-icons-pink bold) :inverse-video t)
+            (:inherit (all-the-icons-yellow bold) :inverse-video t)
+            (:inherit (all-the-icons-purple bold) :inverse-video t)
+            (:inherit (all-the-icons-red bold) :inverse-video t)
+            (:inherit (all-the-icons-orange bold) :inverse-video t)
+            (:inherit (all-the-icons-green bold) :inverse-video t)
+            (:inherit (all-the-icons-cyan bold) :inverse-video t))))
   :config
-    ;; Disable symbol highlighting while selecting
-    (defun turn-off-symbol-overlay (&rest _)
-      "Turn off symbol highlighting."
-      (interactive)
-      (symbol-overlay-mode -1))
-    (advice-add #'set-mark :after #'turn-off-symbol-overlay)
+  ;; Disable symbol highlighting while selecting
+  (defun turn-off-symbol-overlay (&rest _)
+    "Turn off symbol highlighting."
+    (interactive)
+    (symbol-overlay-mode -1))
+  (advice-add #'set-mark :after #'turn-off-symbol-overlay)
 
-    (defun turn-on-symbol-overlay (&rest _)
-      "Turn on symbol highlighting."
-      (interactive)
-      (when (derived-mode-p 'prog-mode)
-        (symbol-overlay-mode 1)))
-    (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay))
+  (defun turn-on-symbol-overlay (&rest _)
+    "Turn on symbol highlighting."
+    (interactive)
+    (when (derived-mode-p 'prog-mode)
+      (symbol-overlay-mode 1)))
+  (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay))
 
 ;; Colorize color names in buffers
 (use-package rainbow-mode

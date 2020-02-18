@@ -18,15 +18,14 @@
   (setq url-automatic-caching t
         youdao-dictionary-use-chinese-word-segmentation t) ; 中文分词
 
-  (with-no-warnings
-    (defun my-youdao-search-at-point ()
-      "Search word at point and display result with `posframe', `pos-tip', or buffer."
-      (interactive)
-      (if (display-graphic-p)
-          (if emacs/>=26p
-              (youdao-dictionary-search-at-point-posframe)
-            (youdao-dictionary-search-at-point-tooltip))
-        (youdao-dictionary-search-at-point))))
+  (defun my-youdao-search-at-point ()
+    "Search word at point and display result with `posframe', `pos-tip', or buffer."
+    (interactive)
+    (if (display-graphic-p)
+        (if emacs/>=26p
+            (youdao-dictionary-search-at-point-posframe)
+          (youdao-dictionary-search-at-point-tooltip))
+      (youdao-dictionary-search-at-point)))
   :config
   (with-eval-after-load 'hydra
     (defhydra youdao-dictionary-hydra (:color blue)

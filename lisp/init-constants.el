@@ -86,6 +86,11 @@ Similar to `before-init-time'")
   :type 'string
   )
 
+(defcustom shadow-icon (display-graphic-p)
+  "Display icons or not."
+  :group 'shadow
+  :type 'boolean)
+
 (defcustom shadow-dashboard t
   "Use dashboard at startup or not.
 If Non-nil, use dashboard, otherwise will restore previous session."

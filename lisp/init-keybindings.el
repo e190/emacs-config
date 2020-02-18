@@ -25,6 +25,7 @@
 ;; Display available keybindings in popup
 (use-package which-key
   :diminish which-key-mode
+  :bind ("C-h M-m" . which-key-show-major-mode)
   :hook (after-init . which-key-mode)
   :init
   ;; Minibuffer feels much faster than using windows.

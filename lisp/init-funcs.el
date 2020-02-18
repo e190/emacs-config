@@ -309,6 +309,12 @@ If SYNC is non-nil, the updating process is synchronous."
         (async-byte-recompile-directory dir)
       (byte-recompile-directory dir 0 t))))
 
+(defun icons-displayable-p ()
+  "Return non-nil if `all-the-icons' is displayable."
+  (and shadow-icon
+       (display-graphic-p)
+       (require 'all-the-icons nil t)))
+
 ;;;###autoload
 (defun shadow/revert-buffer-no-confirm ()
   "Revert buffer without confirm."
