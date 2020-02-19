@@ -10,6 +10,3 @@
 [submodule "emacs-maple-imenu"]
 	path = site-lisp/emacs-maple-imenu
 	url = https://github.com/honmaple/emacs-maple-imenu.git
-[submodule "awesome-tab"]
-	path = site-lisp/awesome-tab
-	url = https://github.com/manateelazycat/awesome-tab.git

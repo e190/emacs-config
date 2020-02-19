@@ -245,23 +245,33 @@
 (use-package posframe
   :defer t)
 
-(use-package awesome-tab
-  :ensure nil
-  :load-path "site-lisp/awesome-tab"
-  :hook (after-init . awesome-tab-mode)
-  :bind
-  (:map shadow-leader-map
-    ("tt" . awesome-tab-switch-group)
-    ("ta" . awesome-tab-select-beg-tab)
-    ("te" . awesome-tab-select-end-tab)
-    ("t<" . awesome-tab-move-current-tab-to-left)
-    ("t>" . awesome-tab-move-current-tab-to-right)
-    ("tf" . awesome-tab-forward)
-    ("tb" . awesome-tab-backward))
+(use-package centaur-tabs
+  :defer t
+  :ensure t
+  :hook (after-init . centaur-tabs-mode)
+  (maple-imenu-mode . centaur-tabs-local-mode)
+  (dired-mode . centaur-tabs-local-mode)
   :config
-  (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
-  (setq awesome-tab-style 'alternate)
-  (setq awesome-tab-face-height 100))
+  (setq centaur-tabs-cycle-scope 'tabs) ; Navigate through visible tabs only.
+  (setq centaur-tabs-style "chamfer")
+  (setq centaur-tabs-height 20)
+  (setq centaur-tabs-set-bar 'under)
+  ;; Note: If you're not using Spacmeacs, in order for the underline to display
+  ;; correctly you must add the following line:
+  (setq x-underline-at-descent-line t)
+  (setq centaur-tabs-set-icons t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward)
+  (:map shadow-leader-map
+    ("tt" . centaur-tabs-switch-group)
+    ("ta" . centaur-tabs-select-beg-tab)
+    ("te" . centaur-tabs-select-end-tab)
+    ("t<" . centaur-tabs-move-current-tab-to-left)
+    ("t>" . centaur-tabs-move-current-tab-to-right)
+    ("tf" . centaur-tabs-forward)
+    ("tb" . centaur-tabs-backward)))
+
 
 ;; (use-package sublimity
 ;;   ;; :hook (after-init . sublimity-mode)
