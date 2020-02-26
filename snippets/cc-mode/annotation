@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name:annotation
+# key:/*/
+# --
+/**
+ * ${1:note}
+ */

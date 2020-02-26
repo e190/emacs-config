@@ -20,7 +20,7 @@
 
 (defun shadow--real-theme (theme)
   "Return real THEME name."
-  (alist-get theme shadow-theme-alist 'doom-one))
+  (or (alist-get theme shadow-theme-alist) theme))
 
 (defun is-doom-theme-p (theme)
   "Check whether the THEME is a doom theme. THEME is a symbol."
@@ -40,6 +40,7 @@
 (if (is-doom-theme-p shadow-theme)
     (progn
       ;; Make certain buffers grossly incandescent
+      ;; Must before loading the theme
       (use-package solaire-mode
         :functions persp-load-state-from-file
         :hook (((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
@@ -52,10 +53,12 @@
         (advice-add #'persp-load-state-from-file
                     :after #'solaire-mode-restore-persp-mode-buffers))
       (use-package doom-themes
-        :hook (after-load-theme . (lambda ()
-                                    (set-face-foreground
-                                     'mode-line
-                                     (face-foreground 'default))))
+        :functions doom-themes-hide-modeline
+        :custom-face
+        (doom-modeline-buffer-file ((t (:inherit (mode-line bold)))))
+        :custom
+        (doom-dark+-blue-modeline t)
+        (doom-themes-treemacs-theme "doom-colors")
         :init (shadow-load-theme shadow-theme)
         :config
         ;; FIXME: @see https://github.com/hlissner/emacs-doom-themes/issues/317.
@@ -77,7 +80,7 @@
         (doom-themes-treemacs-config)))
   (progn
     (warn "The current theme may not be compatible with Centaur!")
-    (shadow-load-theme shadow-theme)))
+    (load-theme shadow-theme t)))
 
 (provide 'init-theme)
 ;;; init-theme.el ends here
