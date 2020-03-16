@@ -10,9 +10,11 @@
 (use-package company
   :ensure t
   :diminish company-mode "ⓒ"
+  :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
+  :commands company-abort
   :bind
-  (:map company-mode-map
-  ("M-/" . company-complete)
+  (("M-/" . company-complete)
+  :map company-mode-map
   ("<backtab>" . company-yasnippet)
   :map company-active-map
   ("C-s" . company-filter-candidates)
@@ -20,19 +22,18 @@
   ("C-p" . company-select-previous)
   ("<tab>" . company-complete-common-or-cycle)
   ("<backtab>" . my-company-yasnippet)
-  ;; ("C-c C-y" . my-company-yasnippet)
   ("C-g" . company-abort)
   ("C-/" . yas-expand-from-trigger-key)
-  ;; ("<tab>" . company-complete-common)
   :map company-search-map
   ("C-p" . company-select-previous)
   ("C-n" . company-select-next))
+  :hook (after-init . global-company-mode)
   :init
   (defun my-company-yasnippet ()
+    "Hide the current completeions and show snippets."
     (interactive)
     (company-abort)
     (call-interactively 'company-yasnippet))
-  (add-hook 'after-init-hook #'global-company-mode)
   (add-hook 'company-completion-started-hook
             (lambda (&rest ignore)
               (when (and (bound-and-true-p evil-mode) (evil-insert-state-p))
@@ -60,7 +61,44 @@
                                gud-mode))
 
   ;; (setq company-backends (delete 'company-capf company-backends))
-  (setq company-backends (delete 'company-ropemacs company-backends)))
+  (setq company-backends (delete 'company-ropemacs company-backends))
+
+  ;; `yasnippet' integration
+  (with-no-warnings
+    (defun company-backend-with-yas (backend)
+      "Add `yasnippet' to company backend."
+      (if (and (listp backend) (member 'company-yasnippet backend))
+          backend
+        (append (if (consp backend) backend (list backend))
+                '(:with company-yasnippet))))
+
+    (defun my-company-enbale-yas (&rest _)
+      "Enable `yasnippet' in `company'."
+      (setq company-backends (mapcar #'company-backend-with-yas company-backends)))
+    ;; Enable in current backends
+    (my-company-enbale-yas)
+    ;; Support `company-lsp'
+    (advice-add #'lsp--auto-configure :after #'my-company-enbale-yas)
+
+    (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
+      "Enable yasnippet but disable it inline."
+      (if (eq command 'prefix)
+          (when-let ((prefix (funcall fun 'prefix)))
+            (unless (memq (char-before (- (point) (length prefix))) '(?. ?> ?\())
+              prefix))
+        (progn
+          (when (and arg (not (get-text-property 0 'yas-annotation-patch arg)))
+            (let* ((name (get-text-property 0 'yas-annotation arg))
+                   (snip (format "%s (Snippet)" name))
+                   (len (length arg)))
+              (put-text-property 0 len 'yas-annotation snip arg)
+              (put-text-property 0 len 'yas-annotation-patch t arg)))
+          (funcall fun command arg))))
+    (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline))
+
+  ;; Better sorting and filtering
+  (use-package company-prescient
+    :init (company-prescient-mode 1))
 
   ;; Icons and quickhelp
   (when emacs/>=26p
@@ -153,7 +191,7 @@
       :bind (:map company-active-map
              ([remap company-show-doc-buffer] . company-quickhelp-manual-begin))
       :hook (global-company-mode . company-quickhelp-mode)
-      :init (setq company-quickhelp-delay 0.5))))
+      :init (setq company-quickhelp-delay 0.5)))))
 
 (use-package company-ycmd
   :defer t
