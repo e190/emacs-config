@@ -134,6 +134,7 @@
 (use-package hide-mode-line
   :hook (((completion-list-mode
            completion-in-region-mode
+           flycheck-error-list-mode
            neotree-mode
            treemacs-mode)
           . hide-mode-line-mode)))

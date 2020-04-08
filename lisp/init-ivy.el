@@ -434,7 +434,8 @@ This is for use in `ivy-re-builders-alist'."
 (use-package all-the-icons-ivy-rich
   :if (icons-displayable-p)
   :defer t
-  :init (all-the-icons-ivy-rich-mode 1))
+  :hook (ivy-mode . all-the-icons-ivy-rich-mode)
+  :init (setq all-the-icons-ivy-rich-icon-size 0.85))
 
 ;; More friendly display transformer for Ivy
 (use-package ivy-rich

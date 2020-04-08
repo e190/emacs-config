@@ -97,6 +97,8 @@ FACE defaults to inheriting from default and highlight."
 (use-package hungry-delete
   :defer t
   :ensure t
+  :bind (("C-c DEL" . hungry-delete-backward))
+  :bind (("C-c d" . hungry-delete-forward))
   :diminish hungry-delete-mode
   :init (add-hook 'after-init-hook #'global-hungry-delete-mode)
   (setq hungry-delete-chars-to-skip " \t\n\r\f\v"))

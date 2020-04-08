@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+#cotributor: Henrique Jung <henriquenj@gmail.com>
+# name: File description
+# key: \c_file
+# group: doxygen
+# --
+/**
+ *   \file ${1:`(file-name-nondirectory(buffer-file-name))`}
+ *   \brief ${2:A Documented file.}
+ *
+ *  ${3:Detailed description}
+ *   \Author:  Sniper <e190@163.com>
+ *   \Version: 1.0.0
+ *   \Date: ${4:year}:${5:month}:${6:day}
+*/

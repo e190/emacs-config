@@ -114,7 +114,9 @@ Create the *scratch* buffer first if needed."
   ;; Display icons for buffers
   (use-package all-the-icons-ibuffer
     :if (icons-displayable-p)
-    :init (all-the-icons-ibuffer-mode 1))
+    :init
+    (setq all-the-icons-ibuffer-icon-size 0.85)
+    (all-the-icons-ibuffer-mode 1))
 
   (with-eval-after-load 'counsel
     (defun my-ibuffer-find-file ()
@@ -140,8 +142,8 @@ Create the *scratch* buffer first if needed."
               (concat
                (all-the-icons-octicon "file-directory"
                                       :face ibuffer-filter-group-name-face
-                                      :v-adjust -0.05
-                                      :height 1.25)
+                                      :v-adjust 0.0
+                                      :height 1.0)
                " ")
             "Project: "))))
 
