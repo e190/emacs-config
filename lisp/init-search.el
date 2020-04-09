@@ -159,6 +159,7 @@
   (with-eval-after-load 'evil
     (evil-define-key 'normal deadgrep-edit-mode-map (kbd "C-c C-g") 'deadgrep-mode)))
 
+;; https://github.com/manateelazycat/color-r
 (use-package color-rg
   :demand t
   :ensure nil; local package
@@ -188,14 +189,16 @@
   ("ss" . color-rg-search-symbol))
   :general
   (general-nmap color-rg-mode-map
-    ;; Lower keys for commands not operating on all the marked files
-    "RET" 'color-rg-open-file
-    "q" 'quit-window
-    "e" 'color-rg-switch-to-edit-mode
     "?" 'color-rg-hydra/body)
   :config
     ;; `color-rg' do not kill any buffer
-  (setq color-rg-kill-temp-buffer-p nil))
+  (setq color-rg-kill-temp-buffer-p nil)
+  ;; https://emacs.stackexchange.com/a/10588/22102
+  (eval-after-load 'evil
+    '(progn
+      (evil-make-overriding-map color-rg-mode-map 'normal)
+      ;; force update evil keymaps after color-rg loaded
+      (add-hook 'color-rg-mode-hook #'evil-normalize-keymaps))))
 
 ;; SnailsPac
 (use-package snails
@@ -207,6 +210,10 @@
   :bind
   (:map shadow-leader-map
    ("sa" . snails))
+  (("M-s s" . snails)
+   ("M-s g" . snails-current-project)
+   ("M-s b" . snails-fd)
+   ("M-s e" . snails-everywhere))
   :custom-face
   (snails-content-buffer-face ((t (:background "#111" :height 110))))
   (snails-input-buffer-face ((t (:background "#222" :foreground "gold" :height 110))))
@@ -232,11 +239,11 @@
     (interactive)
     (snails '(snails-backend-everything)))
     ;; (snails '(snails-backend-everything snails-backend-mdfind)))
-  :bind
-  (("M-s s" . snails)
-   ("M-s g" . snails-current-project)
-   ("M-s b" . snails-fd)
-   ("M-s e" . snails-everywhere)))
+  (eval-after-load 'evil
+    '(progn
+      (evil-make-overriding-map snails-mode-map 'normal)
+      ;; force update evil keymaps after color-rg loaded
+      (add-hook 'snails-mode-hook #'evil-normalize-keymaps))))
 ;; -SnailsPac
 
 (provide 'init-search)
