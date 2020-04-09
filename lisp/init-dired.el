@@ -5,6 +5,7 @@
 
 ;;; Code:
 
+;; Directory operations
 (use-package dired
   :ensure nil ; built-in package
   :init
@@ -20,6 +21,19 @@
     "?" 'hydra-dired/body
     "q" 'quit-window)
   :config
+  (when (or (and sys/macp (executable-find "gls"))
+            (and (not sys/macp) (executable-find "ls")))
+    ;; Using `insert-directory-program'
+    (setq ls-lisp-use-insert-directory-program t)
+
+    ;; Show directory first
+    (setq dired-listing-switches "-alh --group-directories-first")
+
+    ;; Quick sort dired buffers via hydra
+    (use-package dired-quick-sort
+      :bind (:map dired-mode-map
+             ("S" . hydra-dired-quick-sort/body))))
+
   (defhydra hydra-dired (:hint nil :color pink)
     "
 ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
@@ -73,8 +87,6 @@ _v_iew             │ ^ ^              │                │                 �
     ("<escape>" nil)
     ("?" nil :color blue))
   (define-key dired-mode-map (kbd "SPC") shadow-leader-map)
-  ;; Show directory first
-  ;;  (setq dired-listing-switches "-alh --group-directories-first")
   (setq dired-dwim-target t)
   ;; Always delete and copy recursively
   (setq dired-recursive-deletes 'always)
