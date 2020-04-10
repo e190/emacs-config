@@ -170,7 +170,5 @@
       hscroll-margin 1)
 ;; -SmoothScroll
 
-
-
 (provide 'init-emacs-settings)
 ;;; init-emacs-settings.el ends here

@@ -15,15 +15,6 @@
   :hook (after-init . global-hl-line-mode))
 ;;   (custom-set-faces '(hl-line ((t (:background "grey13"))))))
 
-;; Beacon flashes the cursor whenever you adjust position.
-(use-package beacon
-  :ensure t
-  :diminish beacon-mode
-  :hook (after-init . beacon-mode)
-  :init
-  (setq beacon-color "red")
-  (setq beacon-size 80))
-
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -155,6 +146,21 @@
                    pop-global-mark
                    goto-last-change))
       (advice-add cmd :after #'my-recenter-and-pulse))))
+
+;; Highlight indent guide.
+(use-package highlight-indent-guides
+  :diminish highlight-indent-guides-mode
+  :hook ((prog-mode conf-mode protobuf-mode) . highlight-indent-guides-mode)
+  :config
+  ;; (add-hook 'focus-in-hook #'highlight-indent-guides-auto-set-faces)
+  ;; `highlight-indent-guides' breaks in these modes
+  ;; (add-hook 'visual-line-mode-hook #'kevin/disable-highlight-indent-guides)
+  ;; (add-hook 'org-indent-mode-hook #'kevin/disable-highlight-indent-guides)
+  (setq highlight-indent-guides-delay 0.5
+        highlight-indent-guides-method 'character
+        highlight-indent-guides-responsive 'top
+        highlight-indent-guides-auto-enabled nil)
+  (set-face-foreground 'highlight-indent-guides-character-face "dimgray"))
 
 (provide 'init-highlight)
 ;;; init-highlight.el ends here

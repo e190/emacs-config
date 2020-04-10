@@ -188,7 +188,7 @@
   :init
   (shadow/define-leader-keys "tl" 'imenu-list-smart-toggle)
   :config
-  (setq imenu-list-size     0.2)
+  (setq imenu-list-auto-resize t)
   (setq imenu-list-position 'right)
   (setq imenu-list-focus-after-activation t))
 
@@ -256,6 +256,10 @@
     ("t>" . centaur-tabs-move-current-tab-to-right)
     ("tf" . centaur-tabs-forward)
     ("tb" . centaur-tabs-backward)))
+
+;; (use-package yascroll
+;;   :ensure t
+;;   :hook (after-init . global-yascroll-bar-mode))
 
 ;; (use-package sublimity
 ;;   ;; :hook (after-init . sublimity-mode)

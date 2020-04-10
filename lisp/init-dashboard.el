@@ -82,6 +82,7 @@
                                     (registers . "database"))
 
           dashboard-set-footer t
+          ;; dashboard-footer-messages (list (format "Powered by Shadow, %s" (format-time-string "%Y")))
           dashboard-footer (format "Powered by Shadow, %s" (format-time-string "%Y"))
           dashboard-footer-icon (cond ((display-graphic-p)
                                         (all-the-icons-faicon "heart"

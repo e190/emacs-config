@@ -49,7 +49,6 @@
         :config
         (setq solaire-mode-remap-fringe nil)
         (solaire-global-mode 1)
-        (solaire-mode-swap-bg)
         (advice-add #'persp-load-state-from-file
                     :after #'solaire-mode-restore-persp-mode-buffers))
       (use-package doom-themes

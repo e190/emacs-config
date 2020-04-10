@@ -32,12 +32,6 @@
   (setq dumb-jump-prefer-searcher 'rg
         dumb-jump-selector 'ivy))
 
-(use-package indent-guide
-  :hook (after-init . indent-guide-global-mode)
-  :config
-  ;; (set-face-background 'indent-guide-face "dimgray")
-  (setq indent-guide-delay 0.1))
-
 ;; https://github.com/ankurdave/color-identifiers-mode
 (use-package color-identifiers-mode
   :hook (after-init . global-color-identifiers-mode)

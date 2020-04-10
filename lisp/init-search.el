@@ -189,6 +189,8 @@
   ("ss" . color-rg-search-symbol))
   :general
   (general-nmap color-rg-mode-map
+    "j" 'evil-next-line
+    "k" 'evil-previous-line
     "?" 'color-rg-hydra/body)
   :config
     ;; `color-rg' do not kill any buffer

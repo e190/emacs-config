@@ -90,12 +90,7 @@
   (fset 'evil-visual-update-x-selection 'ignore)
 
   ;; Major modes that should default to an insert state.
-  (add-to-list 'evil-insert-state-modes 'git-commit-mode)
-
-  ;; Sets more useful movement commands.
-  (shadow/define-leader-keys
-   "jt" 'evil-window-top
-   "jb" 'evil-window-bottom))
+  (add-to-list 'evil-insert-state-modes 'git-commit-mode))
 
 (use-package evil-surround
   :hook (evil-mode . global-evil-surround-mode))
@@ -169,16 +164,33 @@
 ;; candidate targets as you type.
 (use-package evil-snipe
   :ensure t
-  :after evil
+  ;; :after evil
+  :hook ((evil-mode . evil-snipe-mode)
+         (evil-mode . evil-snipe-override-mode))
   :diminish evil-snipe-local-mode
   :config
-  (evil-snipe-mode +1)
-  (evil-snipe-override-mode +1)
+  (setq evil-snipe-smart-case t
+        evil-snipe-scope 'line
+        evil-snipe-repeat-scope 'visible
+        evil-snipe-char-fold t)
+  ;; (evil-snipe-mode +1)
+  ;; (evil-snipe-override-mode +1)
+  (add-to-list 'evil-snipe-disabled-modes 'Info-mode nil #'eq)
    ;; fix problems with magit buffer
   (add-hook 'rg-mode-hook #'turn-off-evil-snipe-mode)
   (add-hook 'rg-mode-hook #'turn-off-evil-snipe-override-mode)
   (add-hook 'magit-mode-hook #'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook #'turn-off-evil-snipe-override-mode))
+
+(use-package evil-collection
+  :after evil
+  :custom (evil-collection-setup-minibuffer t)
+  :init
+  ;; The list of supported modes is configured by evil-collection-mode-list
+  (evil-collection-init 'view)
+  (evil-collection-init 'custom)
+  (evil-collection-init 'ibuffer)
+  (evil-collection-init 'calendar))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here
