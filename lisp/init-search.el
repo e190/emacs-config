@@ -10,12 +10,6 @@
   :defer t
   :ensure t
   :hook (after-init . avy-setup-default)
-  :bind
-  (:map shadow-leader-map
-   ("jc" . avy-goto-char-2)
-   ("jw" . avy-goto-word-or-subword-1)
-   ("jl" . avy-goto-line)
-   ("jp" . #'shadow/goto-match-parent))
   :config (setq avy-background t))
 
 ;; Search tools: `wgrep', `ag' and `rg'
@@ -48,11 +42,6 @@
   :functions (shadow-custumize-rg
               shadow-custumize-rg-dwim
               shadow-rg-dwim-current-dir)
-  :bind
-  (:map shadow-leader-map
-        ("sr" . rg-dwim)
-        ("si" . shadow-custumize-rg)
-        ("sq" . shadow-rg-dwim-current-dir))
   :config
   (setq rg-group-result t)
   (setq rg-show-columns t)
@@ -97,12 +86,23 @@
           user-input
         things)))
 
-  (defun shadow-custumize-rg ()
-    (interactive)
-    (let* ((string (shadow/read-from-minibuffer))
-           (root-dir-origin (shell-command-to-string "git rev-parse --show-toplevel"))
-           (root-dir (replace-regexp-in-string "\n" "" root-dir-origin)))
-      (rg string "everything" root-dir)))
+  ;; (defun shadow-custumize-rg ()
+  ;;   (interactive)
+  ;;   (let* ((string (shadow/read-from-minibuffer))
+  ;;          (root-dir-origin (shell-command-to-string "git rev-parse --show-toplevel"))
+  ;;          (root-dir (replace-regexp-in-string "\n" "" root-dir-origin)))
+  ;;     (rg string "everything" root-dir)))
+
+  (rg-define-search shadow-custumize-rg
+    :query ask
+    :format regexp
+    :files "everything"
+    :dir (let ((proj (projectile-project-root)))
+           (if proj
+               proj
+             default-directory))
+    :confirm prefix
+    :flags ("--hidden -g !.git"))
 
   (defun shadow-custumize-rg-dwim ()
     (interactive)
@@ -127,7 +127,6 @@
                               (interactive)
                               ;; (switch-to-buffer-other-window "*rg*")
                               (setq compilation-scroll-output nil)
-                              (define-key rg-mode-map (kbd "SPC") shadow-leader-map)
                               (define-key rg-mode-map (kbd "g") 'evil-goto-first-line)
                               (define-key rg-mode-map (kbd "TAB") 'next-error-no-select)
                               (define-key rg-mode-map (kbd "<tab>") 'next-error-no-select)
@@ -136,10 +135,6 @@
 
 (use-package deadgrep
   :ensure t
-  :bind
-  (:map shadow-leader-map
-  ("sd" . deadgrep)
-  ("sk" . deadgrep-kill-all-buffers))
   :pretty-hydra
   ((:title (pretty-hydra-title "deadgrep Management" 'faicon "search")
     :foreign-keys warn :quit-key "q")
@@ -182,11 +177,6 @@
      ("d" color-rg-rerun-change-dir "change-dir" :exit t)
      ("z" color-rg-rerun-change-globs "change-globs" :exit t)
      ("Z" color-rg-rerun-change-exclude-files "change-exclude-files" :exit t))))
-  :bind
-  (:map shadow-leader-map
-  ("sc" . color-rg-search-input)
-  ("sp" . color-rg-search-input-in-project)
-  ("ss" . color-rg-search-symbol))
   :general
   (general-nmap color-rg-mode-map
     "j" 'evil-next-line
@@ -210,8 +200,6 @@
   ;; :init
   ;; (autoload 'snails "snails" nil t)
   :bind
-  (:map shadow-leader-map
-   ("sa" . snails))
   (("M-s s" . snails)
    ("M-s g" . snails-current-project)
    ("M-s b" . snails-fd)

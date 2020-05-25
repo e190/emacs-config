@@ -36,7 +36,7 @@
   :hook ((window-setup . size-indication-mode)
          ((prog-mode markdown-mode conf-mode) . enable-trailing-whitespace))
   :init
-  (setq column-number-mode t
+  (setq column-number-mode t ;; Displays column number in the mode line.
         line-number-mode t
         ;; kill-whole-line t               ; Kill line including '\n'
         line-move-visual nil
@@ -50,10 +50,7 @@
     (setq show-trailing-whitespace t)
     (add-hook 'before-save-hook #'delete-trailing-whitespace nil t)))
 
-(use-package restart-emacs
-  :bind(
-  :map shadow-leader-map
-      ("qr" . restart-emacs)))
+(use-package restart-emacs)
 
 (provide 'init-base)
 ;;; init-base.el ends here

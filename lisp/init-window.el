@@ -4,7 +4,7 @@
 ;;
 
 ;;; Code:
-;; (require 'posframe)
+
 ;; Numbered window shortcuts
 (use-package winum
   :hook (after-init . winum-mode)
@@ -13,36 +13,7 @@
   (setq window-numbering-scope 'global)
   (setq winum-auto-setup-mode-line nil)
   (setq winum-ignored-buffers '(" *which-key*"))
-  (setq winum-auto-assign-0-to-minibuffer t)
-  (shadow/define-leader-keys
-   "w TAB"  'shadow/alternate-window
-   "w2"  'shadow/layout-double-columns
-   "w3"  'shadow/layout-triple-columns
-   "wb"  'shadow/switch-to-minibuffer-window
-   "wd"  'shadow/delete-window
-   "wt"  'shadow/toggle-current-window-dedication
-   "wf"  'follow-mode
-   "wF"  'make-frame
-   "wH"  'evil-window-move-far-left
-   "wh"  'evil-window-left
-   "wJ"  'evil-window-move-very-bottom
-   "wj"  'evil-window-down
-   "wK"  'evil-window-move-very-top
-   "wk"  'evil-window-up
-   "wL"  'evil-window-move-far-right
-   "wl"  'evil-window-right
-   "wm"  'shadow/toggle-maximize-buffer
-   "wr"  'shadow/rotate-windows-forward
-   "wR"  'shadow/rotate-windows-backward
-   "ws"  'split-window-below
-   "w-"  'shadow/split-window-below-and-focus
-   "wU"  'winner-redo
-   "wu"  'winner-undo
-   "wv"  'split-window-right
-   "w/"  'shadow/split-window-right-and-focus
-   "w="  'balance-windows
-   "w+"  'shadow/window-layout-toggle
-   "w_"  'shadow/maximize-horizontally))
+  (setq winum-auto-assign-0-to-minibuffer t))
 
 ;; Zoom window like tmux
 (use-package zoom-window
@@ -58,15 +29,12 @@
   (setq cwm-use-vertical-padding t)
   (setq cwm-frame-internal-border 15)
   (setq cwm-incremental-padding t)
-  (setq cwm-left-fringe-ratio 0)
-  (shadow/define-leader-keys "wc" #'centered-window-mode))
+  (setq cwm-left-fringe-ratio 0))
 
 ;; resize window
 (use-package resize-window
   :defer t
-  :ensure t
-  :init
-  (shadow/define-leader-keys "wr" #'resize-window))
+  :ensure t)
 
 ;; Restore old window configurations
 (use-package winner
@@ -84,8 +52,8 @@
                                 "*cvs*"
                                 "*Buffer List*"
                                 "*Ibuffer*"
-                                "*esh command on file*")))
-  ;; (add-hook 'after-init-hook #'winner-mode))
+                                "*esh command on file*"))
+  (add-hook 'after-init-hook #'winner-mode))
 
 ;; Quickly switch windows
 (use-package ace-window
@@ -147,10 +115,7 @@
   :custom-face
   (aw-leading-char-face ((t (:inherit font-lock-keyword-face :bold t :height 3.0))))
   (aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t))))
-  :bind (([remap other-window] . ace-window)
-        (:map shadow-leader-map
-        ("wo" . #'ace-window)
-        ("ww" . ace-window-hydra/body)))
+  :bind ([remap other-window] . ace-window)
   :hook (emacs-startup . ace-window-display-mode)
   :config (add-to-list 'aw-dispatch-alist '(?w ace-window-hydra/body) t))
 
@@ -192,7 +157,7 @@
       (when (and (called-interactively-p 'interactive)
                  (not (region-active-p)))
         (let (window buffer)
-          (if (one-window-p)
+
               (progn
                 (setq window (selected-window))
                 (when (equal (buffer-local-value 'shackle--current-popup-window
@@ -208,7 +173,7 @@
               (pop shackle--popup-window-list))))))
 
     (advice-add #'keyboard-quit :before #'shackle-close-popup-window-hack)
-    (advice-add #'shackle-display-buffer :around #'shackle-display-buffer-hack))
+    (advice-add #'shackle-display-buffer :around #'shackle-display-buffer-hack)
 
   ;; HACK: compatibility issuw with `org-switch-to-buffer-other-window'
   (advice-add #'org-switch-to-buffer-other-window :override #'switch-to-buffer-other-window)
@@ -284,8 +249,6 @@
 
 (use-package golden-ratio
   :diminish golden-ratio-mode "ⓖ"
-  :init
-  (shadow/define-leader-keys "tg" #'kevin/toggle-golden-ratio)
   :config
   ;; golden-ratio-exclude-modes
   (dolist (m '("bs-mode"

@@ -11,9 +11,6 @@
   :init
   (with-eval-after-load 'evil
     (evil-define-key 'normal dired-mode-map "gr" 'revert-buffer))
-  :bind
-  (:map shadow-leader-map
-   ("ad" . dired))
   :general
   (general-nmap dired-mode-map
     ;; Lower keys for commands not operating on all the marked files
@@ -86,7 +83,6 @@ _v_iew             │ ^ ^              │                │                 �
     ("q" nil)
     ("<escape>" nil)
     ("?" nil :color blue))
-  (define-key dired-mode-map (kbd "SPC") shadow-leader-map)
   (setq dired-dwim-target t)
   ;; Always delete and copy recursively
   (setq dired-recursive-deletes 'always)
@@ -151,11 +147,7 @@ _v_iew             │ ^ ^              │                │                 �
 
   (use-package dired-x
     :ensure nil ; built-in package
-    :bind
-    (:map shadow-leader-map
-    ("fj" . dired-jump)
-    ("jd" . dired-jump)
-    ("jD" . dired-jump-other-window))))
+    ))
 
 ;; `find-dired' alternative using `fd'
 (when (executable-find "fd")

@@ -13,8 +13,6 @@
 (use-package flycheck
   :diminish
   :hook (after-init . global-flycheck-mode)
-  :init
-  (shadow/define-leader-keys "fe" #'flycheck-hydra/body)
   :pretty-hydra
   ((:color red :quit-key "q")
    ("Flycheck"

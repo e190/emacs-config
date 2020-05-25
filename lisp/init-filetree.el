@@ -38,7 +38,6 @@
      ("gr" neotree-refresh "refresh")
      ("s" neotree-hidden-file-toggle "hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")"))))
   :init
-  (shadow/define-leader-keys "ft" 'neotree-toggle)
   (setq neo-create-file-auto-open t
         neo-auto-indent-point nil
         ;; neo-autorefresh t

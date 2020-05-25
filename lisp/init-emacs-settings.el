@@ -36,12 +36,8 @@
 ;; Silence ad-handle-definition about advised functions getting redefined.
 (setq ad-redefinition-action 'accept)
 
-;; Displays column number in the mode line.
-(setq column-number-mode t)
-
 ;; Deletes excess backup versions silently.
 (setq delete-old-versions t)
-
 
 ;; Encoding
 ;; UTF-8 as the default coding system
@@ -80,7 +76,9 @@
               grep-highlight-matches t
               grep-scroll-output t
               line-spacing 0
-              mouse-yank-at-point t
+              ;; 让光标无法离开视线
+              mouse-yank-at-point nil
+              tab-always-indent 'complete
               set-mark-command-repeat-pop t
               tooltip-delay 1.5
               truncate-partial-width-windows nil
@@ -88,6 +86,7 @@
               split-height-threshold nil   ; Disable vertical window splitting
               split-width-threshold nil    ; Disable horizontal window splitting
               majar-mode 'text-mode)
+
 ;; We don't share the file-system with anyone else.
 (setq create-lockfiles nil)
 
@@ -95,7 +94,7 @@
 (setq inhibit-startup-screen t)
 
 ;; Start with a blank canvas.
-(setq initial-scratch-message "")
+;; (setq initial-scratch-message "")
 
 ;; Warns when opening files bigger than 10MB.
 (setq large-file-warning-threshold (* 10 1024 1024))
@@ -124,8 +123,6 @@
 (setq-default sentence-end-double-space t)
 
 ;; Enables nice scrolling.
-(setq scroll-margin 0)
-(setq scroll-conservatively 100000)
 (setq scroll-preserve-screen-position 1)
 
 ;; Number backup files.
@@ -156,19 +153,44 @@
 
 ;; Mouse & Smooth Scroll
 ;; Scroll one line at a time (less "jumpy" than defaults)
-(setq scroll-step 1
-      scroll-margin 0
-      scroll-conservatively 100000
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01
-      auto-window-vscroll nil
-      fast-but-imprecise-scrolling nil
-      mouse-wheel-scroll-amount '(1 ((shift) . 1))
-      mouse-wheel-progressive-speed nil
-      ;; Horizontal Scroll
-      hscroll-step 1
-      hscroll-margin 1)
+;; (setq scroll-step 1
+;;       scroll-margin 0
+;;       scroll-conservatively 100000
+;;       scroll-up-aggressively 0.01
+;;       scroll-down-aggressively 0.01
+;;       auto-window-vscroll nil
+;;       fast-but-imprecise-scrolling nil
+;;       mouse-wheel-scroll-amount '(1 ((shift) . 1))
+;;       mouse-wheel-progressive-speed nil
+;;       ;; Horizontal Scroll
+;;       hscroll-step 1
+;;       hscroll-margin 1)
 ;; -SmoothScroll
+(use-package emacs
+  :config
+  (setq scroll-preserve-screen-position t)
+  (setq scroll-conservatively 1)        ; affects `scroll-step'
+  (setq scroll-margin 0)
+
+  (setq-default cursor-type 'box)
+  ;; (setq-default cursor-in-non-selected-windows '(bar . 2))
+  (setq-default blink-cursor-blinks 50)
+  (setq-default blink-cursor-interval 0.75)
+  (setq-default blink-cursor-delay 0.2)
+
+  ;; In Emacs 27, use Control + mouse wheel to scale text.
+  (setq mouse-wheel-scroll-amount
+        '(1
+          ((shift) . 5)
+          ((meta) . 0.5)
+          ((control) . text-scale)))
+  ;; (setq mouse-drag-copy-region t)
+  (setq make-pointer-invisible t)
+  (setq mouse-wheel-progressive-speed t)
+  (setq mouse-wheel-follow-mouse t)
+  :hook
+  (after-init-hook . blink-cursor-mode)
+  (after-init-hook . mouse-wheel-mode))
 
 (provide 'init-emacs-settings)
 ;;; init-emacs-settings.el ends here

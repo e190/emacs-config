@@ -87,9 +87,7 @@
                   (interactive)
                   (if (or (region-active-p) (looking-back "^\s*" 1))
                       (org-hydra/body)
-                    (self-insert-command 1))))
-          :map shadow-leader-map
-          ("os" . my-org-screenshot))
+                    (self-insert-command 1)))))
   :init
   (add-hook 'org-mode-hook (lambda ()
                              (org-indent-mode 1)

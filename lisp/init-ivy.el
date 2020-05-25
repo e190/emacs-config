@@ -22,35 +22,8 @@
    ("M-x" . counsel-M-x)
    ("C-c C-r" . ivy-resume)
 
-   :map shadow-leader-map
-   ("SPC" . counsel-M-x)
-
-   ;; files
-   ("fl" . counsel-find-library)
-   ("ff" . counsel-find-file)
-   ("fL" . counsel-locate)
-   ("fr" . counsel-recentf)
-
-   ;; help
-   ("?"  . counsel-descbinds)
-   ("hdf" . counsel-describe-function)
-   ("hdm" . describe-mode)
-   ("hdv" . counsel-describe-variable)
    ;; register/ring
-   ("ry" . counsel-yank-pop)
-
-   ;; jumping
-   ("ji" . counsel-imenu)
-
-   ;; search
-   ("/"  . counsel-rg)
-   ("si" . swiper-isearch)
-   ("sb" . swiper-all)
-   ("sg" . shadow-counsel-git-fast)
-   ("se" . shadow-counsel-rg-current-dir)
-
-   ("bb" . ivy-switch-buffer)
-
+   ;; ("ry" . counsel-yank-pop)
   :map counsel-mode-map
   ([remap swiper] . counsel-grep-or-swiper)
   ([remap swiper-backward] . counsel-grep-or-swiper-backward)

@@ -46,15 +46,6 @@
 (use-package find-file-in-project
   :defer t
   :ensure t
-  :bind
-  (:map shadow-leader-map
-  ("p SPC" . find-file-in-project-by-selected)
-  ("pc" . find-file-in-current-directory)
-  ("pd" . ffip-show-diff)
-  ("pf" . find-file-in-project)
-  ("ps" . ffip-save-ivy-last)
-  ("pr" . ffip-ivy-resume)
-  ("pa" . find-file-in-project-at-point))
   :config
   (setq ffip-use-rust-fd t)
 

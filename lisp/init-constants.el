@@ -142,25 +142,6 @@ If Non-nil, use dashboard, otherwise will restore previous session."
           (const :tag "Netease" netease)
           (const :tag "Tuna" tuna)))
 
-(defvar shadow-leader-key "SPC"
-  "The leader key in Evil normal, visual and motion states.")
-
-(defconst shadow-major-mode-leader-key ","
-  "Major mode leader key is a shortcut key which is the equivalent of
-pressing `<leader> m`. Set it to `nil` to disable it.")
-
-(defvar shadow-emacs-leader-key "M-m"
-  "The leader key accessible in the Evil Emacs and insert states.")
-
-(defvar shadow-ex-command-key ":"
-  "The key used for Vim Ex commands.")
-
-(defvar shadow-command-key "SPC"
-  "The key used for Emacs commands (M-x) (after pressing on the leader key).")
-
-(defvar shadow-leader-map (make-sparse-keymap)
-  "Base keymap for all leader key commands.")
-
 ;; Load `custom-file'
 ;; If it doesn't exist, copy from the template, then load it.
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

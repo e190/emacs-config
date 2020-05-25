@@ -103,10 +103,7 @@
         ("C-c i" . ggtags-find-tag-dwim)
         ("M-," . pop-tag-mark)
         ("C-c <" . ggtags-prev-mark)
-        ("C-c >" . ggtags-next-mark)
-        :map shadow-leader-map
-        ("tc" . ggtags-create-tags)
-        ("tu" . ggtags-update-tags)))
+        ("C-c >" . ggtags-next-mark)))
 
 (provide 'init-c)
 

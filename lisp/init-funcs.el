@@ -376,8 +376,7 @@ If SYNC is non-nil, the updating process is synchronous."
     (set-window-buffer nil buffer)
     ;; return buffer's window
     (get-buffer-window buffer)))
-
-(defun shadow/goto-match-parent ()
+(defun shadow/jump-match-delimiter ()
   "Go to the matching  if on (){}[], similar to vi style of %."
   (interactive)
   ;; first, check for "outside of bracket" positions expected by forward-sexp, etc

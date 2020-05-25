@@ -155,8 +155,8 @@
     :init
     (setq-default display-line-numbers-width 2)
     ;; (setq-default display-line-numbers-type 'relative)
-    (setq display-line-numbers-current-absolute t)
-    (shadow/define-leader-keys "tn" 'display-line-numbers-mode))
+    (setq display-line-numbers-current-absolute t))
+
   (use-package linum-off
     :demand
     :defines linum-format
@@ -177,16 +177,11 @@
       :init
       (setq linum-highlight-in-all-buffersp t))))
 
-;; Line and Column
-(setq-default fill-column 80)
-(setq column-number-mode t)
-(setq line-number-mode t)
-
 (use-package imenu-list
   :defer t
   :ensure t
-  :init
-  (shadow/define-leader-keys "tl" 'imenu-list-smart-toggle)
+  ;; :init
+  ;; (shadow/define-leader-keys "tl" 'imenu-list-smart-toggle)
   :config
   (setq imenu-list-auto-resize t)
   (setq imenu-list-position 'right)
@@ -202,8 +197,8 @@
   :ensure nil
   :load-path "site-lisp/emacs-maple-imenu"
   :commands (maple-imenu)
-  :init
-  (shadow/define-leader-keys "ti" 'maple-imenu)
+  ;; :init
+  ;; (shadow/define-leader-keys "ti" 'maple-imenu)
   :config
   (setq maple-imenu-autoresize t)
   ;; (setq maple-imenu-display-alist '((side . left) (slot . -1)))
@@ -247,15 +242,7 @@
   (setq centaur-tabs-set-icons t)
   :bind
   ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward)
-  (:map shadow-leader-map
-    ("tt" . centaur-tabs-switch-group)
-    ("ta" . centaur-tabs-select-beg-tab)
-    ("te" . centaur-tabs-select-end-tab)
-    ("t<" . centaur-tabs-move-current-tab-to-left)
-    ("t>" . centaur-tabs-move-current-tab-to-right)
-    ("tf" . centaur-tabs-forward)
-    ("tb" . centaur-tabs-backward)))
+  ("C-<next>" . centaur-tabs-forward))
 
 ;; (use-package yascroll
 ;;   :ensure t

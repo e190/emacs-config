@@ -7,14 +7,6 @@
 (eval-when-compile
   (require 'init-constants))
 
-(use-package evil-leader
-  :disabled
-  :after evil
-  :init
-  (setq evil-want-keybinding nil)
-  (global-evil-leader-mode t)
-  (evil-leader/set-leader "<SPC>"))
-
 (use-package evil
   :hook (after-init . evil-mode)
   :init
@@ -61,15 +53,6 @@
   ;; Must be set before evil is loaded.
   ;; (setq evil-respect-visual-line-mode t)
   :config
-  ;; Set SPACE to invoke `abn-leader-map' in modes except emacs and insert.
-  (evil-define-key '(normal visual motion) 'global
-    (kbd shadow-leader-key) shadow-leader-map)
-
-  ;; Set the M-m keybinding for `abn-leader-map' in all modes.
-  (evil-define-key '(normal insert visual motion emacs) 'global
-    (kbd shadow-emacs-leader-key) shadow-leader-map)
-
-
   ;; evil insert state keybinds
   (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (define-key evil-insert-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
@@ -103,10 +86,7 @@
 
 (use-package evil-nerd-commenter
   :ensure t
-  :after evil
-  :init
-  (shadow/define-leader-keys "ci" 'evilnc-comment-or-uncomment-lines
-                             "cl" 'evilnc-comment-or-uncomment-paragraphs))
+  :after evil)
 
 (use-package evil-mc
   :after evil
@@ -122,7 +102,7 @@
       (progn
         (evil-mc-mode 1)
         (message "evil mc mode enabled"))))
-  (shadow/define-leader-keys "tm" #'kevin/toggle-evil-mc)
+
   (defun kevin/reset-evil-mc-key-map ()
     (let ((keys '(("ma" . evil-mc-make-all-cursors)
                   ("mu" . evil-mc-undo-all-cursors)

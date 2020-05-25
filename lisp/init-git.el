@@ -15,24 +15,12 @@
    ("C-x g s" . magit-status)
    ("C-x g r" . magit-reflog)
    ("C-x g t" . magit-tag))
-  (:map shadow-leader-map
-   ("ga" . shadow/git-add-current-file)
-   ("gc" . shadow/git-checkout-current-file)
-   ("gd" . magit-diff-buffer-file)
-   ("gl" . magit-log-buffer-file)
-   ("gi" . magit-init)
-   ("gL" . magit-list-repositories)
-   ("gs" . magit-status)
-   ("gS" . magit-stage-file)
-   ("gU" . magit-unstage-file)
-   ("gv" . vc-annotate))
   :config
   ;; display buffer fullframe
   (setq magit-display-buffer-function #'shadow/magit-display-buffer-function)
   ;; `git-commit-mode'
   ;; see https://chris.beams.io/posts/git-commit/
-  (setq fill-column 72
-        git-commit-summary-max-length 50
+  (setq git-commit-summary-max-length 50
         git-commit-style-convention-checks '(overlong-summary-line non-empty-second-line)))
 
 (use-package evil-magit
@@ -92,12 +80,6 @@
          ("/\\.git/info/exclude\\'" . gitignore-mode)
          ("/git/ignore\\'" . gitignore-mode)))
 
-(use-package git-link
-  :defer t
-  :config
-  (shadow/define-leader-keys "gl" 'git-link-commit)
-  (setq git-link-open-in-browser t))
-
 (use-package smerge
   :ensure nil
   :commands (smerge-mode)
@@ -138,7 +120,6 @@
     ("r" smerge-resolve)
     ("R" smerge-kill-current)
     ("q" nil :color blue))
-  (shadow/define-leader-keys "gr" #'hydra-smerge-mode/body)
   (defun kevin/enable-smerge-mode-maybe ()
     "Auto-enable `smerge-mode' when merge conflict is detected."
     (save-excursion

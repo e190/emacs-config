@@ -20,9 +20,7 @@
          ([remap describe-function] . helpful-callable)
          ([remap describe-key] . helpful-key)
          :map emacs-lisp-mode-map
-         ("C-c C-d" . helpful-at-point-dwim)
-         :map shadow-leader-map
-         ("hh" . helpful-at-point-dwim))
+         ("C-c C-d" . helpful-at-point-dwim))
 
   :init
   (setq helpful-max-buffers 10)

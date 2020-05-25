@@ -83,20 +83,6 @@ Create the *scratch* buffer first if needed."
   (interactive)
   (switch-to-buffer (get-buffer-create "*scratch*")))
 
-(shadow/define-leader-keys
-        "TAB" 'shadow/alternate-buffer
-        "bd" 'kill-this-buffer
-        "be" 'shadow/safe-erase-buffer
-        "bn" 'next-buffer
-        "bm" 'shadow/kill-other-buffers
-        "bN" 'shadow/new-empty-buffer
-        "bP" 'shadow/copy-clipboard-to-whole-buffer
-        "bp" 'previous-buffer
-        "bR" 'shadow/safe-revert-buffer
-        "bs" 'shadow/switch-to-scratch-buffer
-        "bY" 'shadow/copy-whole-buffer-to-clipboard
-        "bw" 'read-only-mode)
-
 (use-package ibuffer
   :ensure nil
   :functions (all-the-icons-icon-for-file
@@ -106,8 +92,6 @@ Create the *scratch* buffer first if needed."
   :commands ibuffer-find-file
   :bind
   ("C-x C-b" . ibuffer)
-  (:map shadow-leader-map
-   ("bi" . ibuffer))
   :init
   (setq ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
   :config

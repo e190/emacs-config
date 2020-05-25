@@ -45,10 +45,7 @@
   :bind
   (("M-n" . symbol-overlay-jump-next)
   ("M-p" . symbol-overlay-jump-prev)
-  ([M-f3] . symbol-overlay-remove-all)
-  (:map shadow-leader-map
-   ("hp" . symbol-overlay-put)
-   ("hc" . symbol-overlay-remove-all)))
+  ([M-f3] . symbol-overlay-remove-all))
   :hook ((prog-mode . symbol-overlay-mode)
         (evil-visual-beginning . turn-off-symbol-overlay)
         (evil-normal-state-entry . turn-on-symbol-overlay))

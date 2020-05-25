@@ -114,7 +114,6 @@ FACE defaults to inheriting from default and highlight."
         undo-tree-enable-undo-in-region nil
         undo-tree-auto-save-history nil)
 
-  (shadow/define-leader-keys "tu" 'undo-tree-visualize)
   ;; HACK: keep the diff window
   (make-variable-buffer-local 'undo-tree-visualizer-diff)
   (setq-default undo-tree-visualizer-diff t))
@@ -157,29 +156,13 @@ FACE defaults to inheriting from default and highlight."
 
 (use-package thing-edit
   :ensure nil; local package
-  :load-path "site-lisp/thing-edit"
-  :bind
-  (:map shadow-leader-map
-   ("cw" . thing-copy-word)
-   ("cs" . thing-copy-symbol)
-   ("cx" . thing-copy-sexp)
-   ("cp" . thing-copy-parentheses)
-   ("ca" . thing-copy-to-line-beginning)
-   ("ce" . thing-copy-to-line-end)
-   ("rw" . thing-replace-word)
-   ("rs" . thing-replace-symbol)
-   ("rx" . thing-replace-sexp)
-   ("rp" . thing-replace-parentheses)))
+  :load-path "site-lisp/thing-edit")
 
 ;; Increase selected region by semantic units
 (use-package expand-region
   :bind
   ("C-=" . er/expand-region)
-  ("C--" . er/contract-region)
-  (:map shadow-leader-map
-   ("mw" . er/mark-word)
-   ("ms" . er/mark-symbol)
-   ("mp" . er/mark-inside-pairs)))
+  ("C--" . er/contract-region))
 
 (use-package anzu
   :hook (after-init . global-anzu-mode)
