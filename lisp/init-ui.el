@@ -178,13 +178,20 @@
       (setq linum-highlight-in-all-buffersp t))))
 
 (use-package imenu-list
-  :defer t
   :ensure nil
   :load-path "site-lisp/imenu-list"
   :config
   (setq imenu-list-auto-resize t)
   (setq imenu-list-position 'right)
-  (setq imenu-list-focus-after-activation t))
+  (setq imenu-list-focus-after-activation t)
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "RET") 'imenu-list-goto-entry)
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "SPC") 'imenu-list-display-entry)
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "n") 'next-line)
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "p") 'previous-line)
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "TAB") 'hs-toggle-hiding)
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "g") 'imenu-list-refresh)
+    (evil-define-key 'normal imenu-list-major-mode-map (kbd "q") 'imenu-list-quit-window)))
 
 (use-package imenu-anywhere
   :defer t
