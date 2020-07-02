@@ -216,7 +216,7 @@
     "t ;" 'toggle-frame-fullscreen
     "t b" 'toggle-scroll-bar
     "t f" 'neotree-toggle
-    "t i" 'maple-imenu
+    "t i" 'imenu-list-smart-toggle
     "t m" 'kevin/toggle-evil-mc
     "t n" 'display-line-numbers-mode
     "t s" 'symbol-overlay-mode

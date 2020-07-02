@@ -179,9 +179,8 @@
 
 (use-package imenu-list
   :defer t
-  :ensure t
-  ;; :init
-  ;; (shadow/define-leader-keys "tl" 'imenu-list-smart-toggle)
+  :ensure nil
+  :load-path "site-lisp/imenu-list"
   :config
   (setq imenu-list-auto-resize t)
   (setq imenu-list-position 'right)
@@ -191,26 +190,6 @@
   :defer t
   :config
   (setq imenu-anywhere-delimiter ": "))
-
-;; https://emacs-china.org/t/imenu-list-tagbar/7341
-(use-package maple-imenu
-  :ensure nil
-  :load-path "site-lisp/emacs-maple-imenu"
-  :commands (maple-imenu)
-  ;; :init
-  ;; (shadow/define-leader-keys "ti" 'maple-imenu)
-  :config
-  (setq maple-imenu-autoresize t)
-  ;; (setq maple-imenu-display-alist '((side . left) (slot . -1)))
-  (setq maple-imenu-display-alist '((side . right) (slot . -1)))
-  (defun maple-sidebar()
-    (interactive)
-    (maple-imenu)
-    (neotree-toggle))
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal maple-imenu-mode-map (kbd "q") 'quit-window))
-  (add-hook 'maple-imenu-mode-hook
-            (lambda() (setq-local maple-modeline-style 'sidebar))))
 
 ;; Display Time
 (use-package time
